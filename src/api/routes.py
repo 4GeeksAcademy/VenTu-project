@@ -1,22 +1,21 @@
-"""
-This module takes care of starting the API Server, Loading the DB and Adding the endpoints
-"""
-from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User
-from api.utils import generate_sitemap, APIException
-from flask_cors import CORS
+from flask import Flask, jsonify, request
+from .models import db, User, Client, Provider, TourPlan, Reservation
 
-api = Blueprint('api', __name__)
+# Ruta de prueba para listar usuarios
+@app.route("/users", methods=["GET"])
+def get_users():
+    users = User.query.all()
+    return jsonify([user.username for user in users])
 
-# Allow CORS requests to this API
-CORS(api)
+# Ruta para agregar un nuevo cliente
+@app.route("/clients", methods=["POST"])
+def add_client():
+    data = request.get_json()
+    user_id = data.get('user_id')
+    status = data.get('status')
+    
+    new_client = Client(user_id=user_id, status=status)
+    db.session.add(new_client)
+    db.session.commit()
 
-
-@api.route('/hello', methods=['POST', 'GET'])
-def handle_hello():
-
-    response_body = {
-        "message": "Hello! I'm a message that came from the backend, check the network tab on the google inspector and you will see the GET request"
-    }
-
-    return jsonify(response_body), 200
+    return jsonify({"message": "Client added successfully"}), 201
