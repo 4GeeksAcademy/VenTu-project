@@ -12,6 +12,7 @@ export const Navbar = () => {
                 <div>
                     <Link to="/" className="btn btn-outline-light">Inicio</Link>
                     <Link to="/about" className="btn btn-outline-light">Sobre Nosotros</Link>
+                    <Link to="/register" className="btn btn-outline-light">Registre</Link>
                 </div>
             </div>
         </nav>
