@@ -24,7 +24,6 @@ app.url_map.strict_slashes = False
 # Database configuration
 db_url = os.getenv("DATABASE_URL")
 if db_url is not None:
-    # Replace deprecated 'postgres://' with 'postgresql://' for SQLAlchemy
     app.config['SQLALCHEMY_DATABASE_URI'] = db_url.replace("postgres://", "postgresql://")
 else:
     # Fallback to SQLite if no database URL is provided
@@ -32,32 +31,25 @@ else:
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Initialize database and migrations
 MIGRATE = Migrate(app, db, compare_type=True)
 db.init_app(app)
 
-# Set up admin interface
 setup_admin(app)
 
-# Set up custom commands
 setup_commands(app)
 
-# Register the API routes with the blueprint
 app.register_blueprint(api, url_prefix='/api')
 
-# Handle errors with custom API exception
 @app.errorhandler(APIException)
 def handle_invalid_usage(error):
     return jsonify(error.to_dict()), error.status_code
 
-# Generate sitemap with all available endpoints (only in development mode)
 @app.route('/')
 def sitemap():
     if ENV == "development":
         return generate_sitemap(app)
     return send_from_directory(static_file_dir, 'index.html')
 
-# Serve any static file, including frontend assets
 @app.route('/<path:path>', methods=['GET'])
 def serve_any_other_file(path):
     if not os.path.isfile(os.path.join(static_file_dir, path)):
@@ -66,7 +58,6 @@ def serve_any_other_file(path):
     response.cache_control.max_age = 0  # Disable cache
     return response
 
-# Run the Flask app
 if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 3001))
     app.run(host='0.0.0.0', port=PORT, debug=ENV == "development")
