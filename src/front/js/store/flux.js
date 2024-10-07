@@ -1,7 +1,10 @@
+
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
 			message: null,
+			user: null,
+			token: localStorage.getItem("token") || null,
 			demo: [
 				{
 					title: "FIRST",
@@ -19,6 +22,32 @@ const getState = ({ getStore, getActions, setStore }) => {
 			// Use getActions to call a function within a fuction
 			exampleFunction: () => {
 				getActions().changeColor(0, "green");
+			},
+			register: async (email, fullName, password) => {
+				const resp = await fetch(process.env.BACKEND_URL + "/register/client", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify({
+						email: email,
+						full_name: fullName,
+						password: password
+					})
+				});
+				const data = await resp.json();
+
+				localStorage.setItem("token", data.token);
+
+				setStore({ user: data.user });
+				setStore({ token: data.token });
+
+				if (resp.ok) {
+					toast.success("User registered!");
+				}
+				else {
+					toast.error("Error registering user");
+				}
 			},
 
 			getMessage: async () => {
