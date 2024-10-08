@@ -1,34 +1,23 @@
+from flask import Flask
+from flask.cli import AppGroup
+from api.models import db, User, Client, Provider
 
-import click
-from api.models import db, User
-
-"""
-In this file, you can add as many commands as you want using the @app.cli.command decorator
-Flask commands are usefull to run cronjobs or tasks outside of the API but sill in integration 
-with youy database, for example: Import the price of bitcoin every night as 12am
-"""
 def setup_commands(app):
-    
-    """ 
-    This is an example command "insert-test-users" that you can run from the command line
-    by typing: $ flask insert-test-users 5
-    Note: 5 is the number of users to add
-    """
-    @app.cli.command("insert-test-users") # name of our command
-    @click.argument("count") # argument of out command
-    def insert_test_users(count):
-        print("Creating test users")
-        for x in range(1, int(count) + 1):
-            user = User()
-            user.email = "test_user" + str(x) + "@test.com"
-            user.password = "123456"
-            user.is_active = True
-            db.session.add(user)
-            db.session.commit()
-            print("User: ", user.email, " created.")
+    # Este grupo de comandos puede ejecutarse con `flask custom insert-test-data`
+    custom_commands = AppGroup('custom')
 
-        print("All test users created")
-
-    @app.cli.command("insert-test-data")
+    @custom_commands.command('insert-test-data')
     def insert_test_data():
-        pass
+        # Crear datos de prueba
+        user1 = User(username="testuser1", email="test1@example.com", password_hash="hash", role="client")
+        user2 = User(username="testuser2", email="test2@example.com", password_hash="hash", role="provider")
+        
+        client1 = Client(user=user1, status="active")
+        provider1 = Provider(user=user2)
+        
+        db.session.add_all([user1, user2, client1, provider1])
+        db.session.commit()
+        print("Test data inserted successfully!")
+
+    # Registrar el comando con la aplicación Flask
+    app.cli.add_command(custom_commands)
