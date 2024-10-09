@@ -1,75 +1,67 @@
-import React, { useState, useContext, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Context } from "../store/appContext";
-
+import React, { useState } from 'react';
 
 const Register = () => {
+  const [formData, setFormData] = useState({
+    nombre: '',
+    email: '',
+    password: ''
+  });
 
-    const { store, actions } = useContext(Context);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
 
-    const [user, setUser] = useState({});
-    const [showPassword, setShowPassword] = useState(false);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('Datos del formulario:', formData);
+    
+  };
 
-    const navigate = useNavigate();
-
-    const registerUser = async (user) => {
-        if (user.password !== user.passwordConfirm) {
-            toast.error("Passwords do not match");
-            return;
-        }
-        await actions.register(user.email, user.fullName, user.password);
-        navigate("/");
-    }
-
-    useEffect(() => {
-        if (store.token) {
-            navigate("/");
-        }
-    }, []);
-
-    return (
-        <div className="mx-auto my-auto flex flex-col">
-            <h1 className="text-center">Register</h1>
-            <div className="mb-3">
-                <label className="form-label">Email address</label>
-                <input type="email" className="form-control" onChange={(event) => setUser({
-                    ...user,
-                    email: event.target.value
-                })} />
-            </div>
-            <div className="mb-3">
-                <label className="form-label">Full Name</label>
-                <input type="email" className="form-control" onChange={(event) => setUser({
-                    ...user,
-                    fullName: event.target.value
-                })} />
-            </div>
-            <div className="mb-3">
-                <label className="form-label">Password</label>
-                <div className="d-flex">
-                    <input type={showPassword ? "text" : "password"} className="form-control" onChange={(event) => setUser({
-                        ...user,
-                        password: event.target.value
-                    })} />
-                    <button className="btn btn-success"
-                        onClick={() => setShowPassword(!showPassword)}
-                    >{showPassword ? "🔒" : "👀"}</button>
-                </div>
-                <label className="form-label">Confirm Password</label>
-                <div className="d-flex">
-                    <input type={showPassword ? "text" : "password"} className="form-control" onChange={(event) => setUser({
-                        ...user,
-                        passwordConfirm: event.target.value
-                    })} />
-                    <button className="btn btn-success"
-                        onClick={() => setShowPassword(!showPassword)}
-                    >{showPassword ? "🔒" : "👀"}</button>
-                </div>
-            </div>
-            <button onClick={() => registerUser(user)}
-                className="btn btn-success w-100 mt-2">Register</button>
+  return (
+    <div>
+      <h2>Registro de Usuario</h2>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="nombre">Nombre:</label>
+          <input
+            type="text"
+            id="nombre"
+            name="nombre"
+            value={formData.nombre}
+            onChange={handleChange}
+            required
+          />
         </div>
-    );
+        <div>
+          <label htmlFor="email">Email:</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div>
+          <label htmlFor="password">Contraseña:</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <button type="submit">Registrar</button>
+      </form>
+    </div>
+  );
 };
 
 export default Register;
