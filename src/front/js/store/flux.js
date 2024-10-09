@@ -24,15 +24,15 @@ const getState = ({ getStore, getActions, setStore }) => {
 				getActions().changeColor(0, "green");
 			},
 			register: async (email, fullName, password) => {
-				const resp = await fetch(process.env.BACKEND_URL + "/register/client", {
+				const resp = await fetch(process.env.BACKEND_URL + "/api/register/client", {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json"
 					},
 					body: JSON.stringify({
 						email: email,
-						full_name: fullName,
-						password: password
+						username: fullName,
+						password_hash: password
 					})
 				});
 				const data = await resp.json();
