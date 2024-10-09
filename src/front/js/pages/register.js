@@ -1,65 +1,106 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from "react";
+import { Context } from "../store/appContext";
+import { useParams, useNavigate } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
 const Register = () => {
-  const [formData, setFormData] = useState({
-    nombre: '',
-    email: '',
-    password: ''
-  });
+  const { store, actions } = useContext(Context);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { contact_id } = useParams();
+  const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Evitar el comportamiento por defecto del formulario
+
+    const contact = {
+      username: name,
+      email: email,
+      password_hash: password,
+    };
+
+    // Cambia esto para usar la acción de registro
+    if (contact_id !== undefined) {
+      // Si estás editando un contacto existente
+      actions.updateContact(contact, contact_id);
+    } else {
+      // Aquí llamamos a la acción de registro
+      await actions.register(contact.email, contact.username, contact.password_hash);
+    }
+
+    setName("");
+    setEmail("");
+    setPassword("");
+    navigate("/"); // Redirigir después del registro
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Datos del formulario:', formData);
-    
-  };
+  useEffect(() => {
+    if (Array.isArray(store.user)) {
+      const contacts = [...store.user];
+      if (contact_id !== undefined) {
+        const contact = contacts.find((item) => item.id === parseInt(contact_id));
+        setName(contact?.username);
+        setEmail(contact?.email);
+        setPassword(contact?.password);
+      }
+    }
+  }, [store.user, contact_id]);
 
   return (
-    <div>
-      <h2>Registro de Usuario</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="nombre">Nombre:</label>
-          <input
-            type="text"
-            id="nombre"
-            name="nombre"
-            value={formData.nombre}
-            onChange={handleChange}
-            required
-          />
+    <div className="container">
+      <div className="row">
+        <div className="col-m-12 ">
+          <h1 className="text-center">Bienvenido!</h1>
+          <h3 className="text-center">Inicia sesión o regístrate</h3>
         </div>
-        <div>
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
+        <div className="col-m-12">
+          <form onSubmit={handleSubmit}> {/* Agregar el evento onSubmit al formulario */}
+            <div className="mb-3">
+              <label htmlFor="formGroupExampleInput" className="form-label">Nombre completo</label>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Nombre completo"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
+
+            <div className="mb-3">
+              <label htmlFor="formGroupExampleInput" className="form-label">Email</label>
+              <input
+                type="email"
+                className="form-control"
+                placeholder="Enter email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+
+            <div className="mb-3">
+              <label htmlFor="formGroupExampleInput" className="form-label">Password</label>
+              <input
+                type="password"
+                className="form-control"
+                placeholder="Enter password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+
+            {/* Cambiar Link a un botón normal que llama a handleSubmit */}
+            <button type="submit" className="btn btn-primary w-100">
+              Register
+            </button>
+          </form>
+
+          {/* Enlace para regresar a contactos */}
+          <Link to="/" className="text-decoration-underline" onClick={() => navigate("/")}>
+            Or get back to contacts
+          </Link>
         </div>
-        <div>
-          <label htmlFor="password">Contraseña:</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <button type="submit">Registrar</button>
-      </form>
+      </div>
     </div>
   );
 };
