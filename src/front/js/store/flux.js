@@ -32,7 +32,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					body: JSON.stringify({
 						email: email,
 						username: fullName,
-						password_hash: password
+						password: password
 					})
 				});
 				const data = await resp.json();
@@ -51,14 +51,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			getMessage: async () => {
-				try{
+				try {
 					// fetching data from the backend
 					const resp = await fetch(process.env.BACKEND_URL + "/api/hello")
 					const data = await resp.json()
 					setStore({ message: data.message })
 					// don't forget to return something, that is how the async resolves
 					return data;
-				}catch(error){
+				} catch (error) {
 					console.log("Error loading message from backend", error)
 				}
 			},
