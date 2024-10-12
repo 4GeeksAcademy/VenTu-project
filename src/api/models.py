@@ -29,7 +29,8 @@ class User(db.Model):
             provider = Provider(user_id=self.id)
             db.session.add(provider)
         elif self.role == 'client':
-            client = Client(user_id=self.id, status="active")
+            client = Client(user_id=self.id, username=self.username, email=self.email, role=self.role, password_hash =self.password_hash, status="active")                                          
+                            
             db.session.add(client)
         db.session.commit()
 
@@ -38,6 +39,10 @@ class Client(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     status = db.Column(db.String(50), nullable=False)
+    username = db.Column(db.String(255), nullable=False)
+    email = db.Column(db.String(255), unique=True, nullable=False)
+    password_hash = db.Column(db.String(255), nullable=False)
+    role = db.Column(db.String(50), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     user = db.relationship('User', backref='client')
 
