@@ -5,7 +5,7 @@ from sqlalchemy.orm import validates
 db = SQLAlchemy()
 
 class User(db.Model):
-    __tablename__ = 'users'
+    __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(255), unique=True, nullable=False)
@@ -29,27 +29,32 @@ class User(db.Model):
             provider = Provider(user_id=self.id)
             db.session.add(provider)
         elif self.role == 'client':
-            client = Client(user_id=self.id, status="active")
+            client = Client(user_id=self.id, username=self.username, email=self.email, role=self.role, password_hash =self.password_hash, status="active")                                          
+                            
             db.session.add(client)
         db.session.commit()
 
 class Client(db.Model):
-    __tablename__ = 'clients'
+    __tablename__ = 'client'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     status = db.Column(db.String(50), nullable=False)
+    username = db.Column(db.String(255), nullable=False)
+    email = db.Column(db.String(255), unique=True, nullable=False)
+    password_hash = db.Column(db.String(255), nullable=False)
+    role = db.Column(db.String(50), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     user = db.relationship('User', backref='client')
 
 class Provider(db.Model):
-    __tablename__ = 'providers'
+    __tablename__ = 'provider'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     user = db.relationship('User', backref='provider')
 
 class TourPlan(db.Model):
-    __tablename__ = 'tour_plans'
+    __tablename__ = 'tour_plan'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text, nullable=False)
@@ -57,16 +62,16 @@ class TourPlan(db.Model):
     available_spots = db.Column(db.Integer, nullable=False)
     start_date = db.Column(db.DateTime, nullable=False)
     end_date = db.Column(db.DateTime, nullable=False)
-    provider_id = db.Column(db.Integer, db.ForeignKey('providers.id'), nullable=False)
+    provider_id = db.Column(db.Integer, db.ForeignKey('provider.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    provider = db.relationship('Provider', backref='tour_plans')
+    provider = db.relationship('Provider', backref='tour_plan')
 
 class Reservation(db.Model):
-    __tablename__ = 'reservations'
+    __tablename__ = 'reservation'
     id = db.Column(db.Integer, primary_key=True)
     reservation_date = db.Column(db.DateTime, default=datetime.utcnow)
     status = db.Column(db.String(50), nullable=False)
-    client_id = db.Column(db.Integer, db.ForeignKey('clients.id'), nullable=False)
-    tour_plan_id = db.Column(db.Integer, db.ForeignKey('tour_plans.id'), nullable=False)
-    client = db.relationship('Client', backref='reservations')
-    tour_plan = db.relationship('TourPlan', backref='reservations')
+    client_id = db.Column(db.Integer, db.ForeignKey('client.id'), nullable=False)
+    tour_plan_id = db.Column(db.Integer, db.ForeignKey('tour_plan.id'), nullable=False)
+    client = db.relationship('Client', backref='reservation')
+    tour_plan = db.relationship('TourPlan', backref='reservation')
