@@ -131,7 +131,14 @@ def delete_provider(provider_id):
 @api.route('/clients', methods=['GET'])
 def get_clients():
     clients = Client.query.all()
-    result = [{"id": client.id, "user_id": client.user_id, "status": client.status} for client in clients]
+    result = [{"id": client.id,
+                "user_id": client.user_id,
+                "status": client.status,
+                "username": client.username,
+                "email":client.email,
+                "password":client.password_hash,
+                "role":client.role
+                } for client in clients]
     return jsonify(result), 200
 
 @api.route('/clients/<int:client_id>', methods=['DELETE'])
