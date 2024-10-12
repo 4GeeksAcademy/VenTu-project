@@ -135,8 +135,7 @@ def get_clients():
                 "user_id": client.user_id,
                 "status": client.status,
                 "username": client.username,
-                "email":client.email,
-                "password":client.password_hash,
+                "email":client.email,                
                 "role":client.role
                 } for client in clients]
     return jsonify(result), 200
