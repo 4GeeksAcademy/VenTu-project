@@ -23,6 +23,29 @@ const getState = ({ getStore, getActions, setStore }) => {
 			exampleFunction: () => {
 				getActions().changeColor(0, "green");
 			},
+
+
+			getClient: async () => {
+
+				const { register } = getActions();
+
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}/api/clients`);
+					console.log(response);
+
+					if (response.status === 404) {
+						register();
+					} else {
+						const data = await response.json();
+						console.log(data);
+						setStore({ user: data.user }); // Actualiza el store con la lista de clientes
+					}
+				} catch (error) {
+					console.error('Error al obtener los clientes:', error);
+				}
+			},
+
+
 			register: async (email, fullName, password) => {
 				const resp = await fetch(process.env.BACKEND_URL + "/api/register/client", {
 					method: "POST",
@@ -43,10 +66,30 @@ const getState = ({ getStore, getActions, setStore }) => {
 				setStore({ token: data.token });
 
 				if (resp.ok) {
+					getClient();
 					toast.success("User registered!");
 				}
 				else {
 					toast.error("Error registering user");
+				}
+			},
+
+			deleteClient: async (clientId) => {
+				const resp = await fetch(`${process.env.BACKEND_URL}/api/clients/${clientId}`, {
+					method: "DELETE",
+					headers: {
+						"Content-Type": "application/json",
+
+					}
+				});
+
+				if (resp.ok) {
+					toast.success("Client deleted successfully!");
+					await getActions().getClient(); // Espera a que se complete la llamada
+					const store = getStore();
+					
+				} else {
+					toast.error("Error deleting client");
 				}
 			},
 
