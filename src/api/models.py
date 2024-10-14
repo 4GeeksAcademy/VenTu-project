@@ -11,6 +11,7 @@ class User(db.Model):
     email = db.Column(db.String(255), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
     role = db.Column(db.String(50), nullable=False)  # "provider" or "client"
+    status = db.Column(db.String(50), default="active", nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     @validates('role')

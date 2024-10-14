@@ -146,9 +146,29 @@ def delete_client(client_id):
     if not client:
         return jsonify({"error": "Client not found"}), 404
     
-    db.session.delete(client)
+    # Verifica si hay un usuario asociado al cliente
+    user = User.query.get(client.user_id)  # Asumiendo que `user_id` está en el modelo Client
+    if user:
+        user.status = "inactive"  # Cambia el estado a inactivo
+        db.session.commit()  # Guarda los cambios en la base de datos
+
+    db.session.delete(client)  # Elimina el cliente
     db.session.commit()
-    return jsonify({"message": "Client deleted"}), 200
+    
+    return jsonify({"message": "Client deleted and user marked as inactive!"}), 200
+
+# @api.route('/clients/<int:client_id>', methods=['DELETE'])
+# def delete_client(client_id):
+#     client = Client.query.get(client_id)
+#     if not client:
+#         return jsonify({"error": "Client not found"}), 404
+    
+#     db.session.delete(client)    
+#     db.session.commit()
+#     return jsonify({"message": "Client deleted"}), 200
+
+
+
 
 # ========================
 # Rutas para Users
@@ -162,11 +182,14 @@ def get_users():
             "id": user.id,
             "username": user.username,
             "email": user.email,
+            "status": user.status,
             "role": user.role,
             "created_at": user.created_at
         } for user in users
     ]
     return jsonify(result), 200
+
+
 
 @api.route('/users/<int:user_id>', methods=['DELETE'])
 def delete_user(user_id):
@@ -174,9 +197,22 @@ def delete_user(user_id):
     if not user:
         return jsonify({"error": "User not found"}), 404
     
-    db.session.delete(user)
+    db.session.delete(user)    
     db.session.commit()
     return jsonify({"message": "User deleted"}), 200
+
+
+
+
+#@api.route('/users/<int:user_id>', methods=['DELETE'])
+# def delete_users(user_id):
+#     user = User.query.get(user_id)
+#     if user:
+#         user.status = "inactive"  # Cambia el estado a inactivo
+#         db.session.commit()  # Guarda los cambios en la base de datos
+#         return jsonify({"message": "Client marked as inactive!"}), 200
+#     else:
+#         return jsonify({"message": "Client not found!"}), 404
 
 # ========================
 # Rutas para Reservations
