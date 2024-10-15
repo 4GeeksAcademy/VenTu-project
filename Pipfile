@@ -21,6 +21,9 @@ typing-extensions = "*"
 flask-login = "*"
 firebase = "*"
 pyrebase4 = "*"
+pirebase = "*"
+flask-jwt-extended = "*"
+firebase-admin = "*"
 
 [requires]
 python_version = "3.10"

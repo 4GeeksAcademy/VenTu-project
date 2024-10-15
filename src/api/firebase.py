@@ -1,15 +1,18 @@
-import pyrebase
+import firebase_admin
+from firebase_admin import credentials, storage
 import os
 
-config = {
-    "apiKey": os.getenv("API_KEY"),
-    "authDomain": os.getenv("AUTH_DOMAIN"),
-    "projectId": os.getenv("PROJECT_ID"),
-    "storageBucket": os.getenv("STORAGE_BUCKET"),
-    "messagingSenderId": os.getenv("MESSAGING_SENDER_ID"),
-    "appId": os.getenv("APP_ID"),
-    "databaseURL": os.getenv("DATABASE_URL")
-}
+# credenciales de Firebase
+cred = credentials.Certificate(os.getenv("GOOGLE_APPLICATION_CREDENTIALS"))  # Ruta JSON de credenciales
+firebase_admin.initialize_app(cred, {
+    'storageBucket': os.getenv("STORAGE_BUCKET")
+})
 
-firebase = pyrebase.initialize_app(config)
-storage = firebase.storage()
+
+bucket = storage.bucket()
+
+def upload_image(file_path, file_name):
+    blob = bucket.blob(file_name)
+    blob.upload_from_filename(file_path)
+    blob.make_public()
+    return blob.public_url
