@@ -1,31 +1,32 @@
 import React from 'react';
 
-const PackageCard = ({  }) => { 
-    return (
+const PackageCard = ({ actividades= [] }) => { 
 
+
+    return (
         // Tarjeta de paquete
-        <div className="card" style={{ width: '24rem', backgroundColor: '#F2F4FF', borderColor: '#F2F4FF' }}>
-           
+        <div className="d-flex flex-wrap gap-4 justify-content-center">
+        {actividades.map((actividad, index) => (  
+        <div key={index} className="card" style={{ width: '24rem', backgroundColor: '#F2F4FF', borderColor: '#F2F4FF' }}>
+
             {/* Imagen de la tarjeta */}
             <img 
-                src="https://media.istockphoto.com/id/1457972072/photo/scenic-view-of-worlds-highest-waterfall-angel-fall-in-venezuela.jpg?s=612x612&w=0&k=20&c=PJsr6zejx-jztAqlXvQ5T_SlgTuvd2tUn7JU7WEIZvk=" 
+                src={actividad.img}
                 className="card-img-top" 
                 alt="..." 
                 style={{ width: '100%', height: '180px', objectFit: 'cover' }}
             />
 
-            
             <div className="card-body">
 
                 {/* Título del paquete */}
                 <div className="row"> 
-                    <h5 className="card-title"> Paseo por el Salto Angel </h5>
-                    <p className="card-title"> 1 dia </p>
+                    <h5 className="card-title"> {actividad.title} </h5>
                 </div>
                 
 
                 {/* Precio del paquete*/}
-                <h6 className="card-text"> Desde $600 </h6>
+                <h6 className="card-text"> Desde {actividad.price} </h6>
 
 
                 {/* Botones de Reserva y Favoritos */}
@@ -42,6 +43,8 @@ const PackageCard = ({  }) => {
                 </div>
                 
             </div>
+        </div>
+        ))}
         </div>
     );
 };
