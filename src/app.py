@@ -15,6 +15,7 @@ from api.admin import setup_admin
 from api.commands import setup_commands
 from dotenv import load_dotenv
 from flask_login import LoginManager
+from flask_cors import CORS
 
 
 # Load environment variables
@@ -40,6 +41,10 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # Initialize the database and migrations
 MIGRATE = Migrate(app, db, compare_type=True)
 db.init_app(app)
+
+
+# Allow CORS requests to this API
+CORS(app)
 
 # Setup admin interface and custom commands
 setup_admin(app)

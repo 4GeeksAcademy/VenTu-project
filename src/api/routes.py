@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify, request
+from flask_cors import CORS
 from api.models import db, TourPlan, Client, Provider, User, Reservation
 from datetime import datetime
 import os
