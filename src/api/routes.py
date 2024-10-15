@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify, request
+from flask_cors import CORS
 from api.models import db, TourPlan, Client, Provider, User, Reservation
 from werkzeug.security import generate_password_hash
 from datetime import datetime
@@ -212,4 +213,3 @@ def delete_reservation(reservation_id):
     db.session.delete(reservation)
     db.session.commit()
     return jsonify({"message": "Reservation deleted"}), 200
-

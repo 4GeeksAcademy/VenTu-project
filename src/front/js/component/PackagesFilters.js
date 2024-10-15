@@ -1,70 +1,34 @@
 import React from 'react';
 import { Form, Button } from "react-bootstrap";
 
-const Filters = ({ filters, setFilters}) => { 
+const PackagesFilters = ({ filters, setFilters}) => { 
 
-    const handleInputChange = (e) => { 
-        const { name, value } = e.target;
-        setFilters({ 
-            ...filters, 
-            [name]: value 
-        });
-    };
 
     return (
-        <Form className="mb-4">
+        
+        <div className="m2" tabindex="-1">
+            
+                            
             <div clasName= "row"> 
+                <p> Elige tu rango de precios</p>
+            <div>
 
-                {/* Filtro por destino */}
-                <div className= "col-4">
-                    <Form.Group className="mb-3">
-                        <Form.Label> Destino </Form.Label>
-                        <Form.Control 
-                            type="text"
-                            name="destination"
-                            value={filters.destination}
-                            onChange={handleInputChange}
-                            placeholder="Enter destination"
-                        />
-                    </Form.Group>
+                <input type="range" id="volume" name="volume" min="0" max="11" />
+                <label for="volume">Minimo</label>
                 </div>
 
-                {/* Filtro por precio minimo */}
-                <div className= "col-3">
-                    <Form.Group className="mb-3">
-                        <Form.Label> Precio minimo </Form.Label>
-                        <Form.Control 
-                            type="number"
-                            name="minPrice"
-                            value={filters.minPrice}
-                            onChange={handleInputChange}
-                        />
-                    </Form.Group>
+                <div>
+                <input type="range" id="cowbell" name="cowbell" min="0" max="100" value="90" step="10" />
+                <label for="cowbell">Maximo </label>
                 </div>
-
-                {/* Filtro por precio maximo */}
-                <div className= "col-3">
-                    <Form.Group className="mb-3">
-                        <Form.Label> Precio maximo </Form.Label>
-                        <Form.Control 
-                            type="number"
-                            name="maxPrice"
-                            value={filters.maxPrice}
-                            onChange={handleInputChange}
-                        />
-                    </Form.Group>
-                </div>
-
-                {/* Boton para aplicar filtros */}
-                <div> 
-                    <Button className= "btn-primary w-100" >
-                        Aplicar Filtros
-                    </Button>
-                </div>
-
+                            
             </div>
-        </Form>
+            
+        </div>
+            
+        
     );
 };
 
-export default Filters;
+
+export default PackagesFilters;
