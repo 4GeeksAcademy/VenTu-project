@@ -1,8 +1,6 @@
 # ignore all files starting with .
 .*
 
-.devcontainer/ventu-2024-firebase-adminsdk-n9t6n-952f7526ea.json
-
 # track this file .gitignore (i.e. do NOT ignore it)
 !.gitignore
 !.github
