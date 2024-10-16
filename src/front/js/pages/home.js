@@ -3,6 +3,7 @@ import styles from '../../styles/home.css';
 import background from '../../static/images/bg-hero-4.webp';
 import MainDestinations from '../component/MainDestinations';
 import FeaturedActivities from '../component/FeaturedActivities';
+import UploadImage from '../component/UploadImage';
 
 export const Home = () => {
     return (
