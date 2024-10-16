@@ -1,9 +1,30 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, Flask, jsonify, url_for
 from api.models import db, TourPlan, Client, Provider, User, Reservation
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
+from flask_jwt_extended import create_access_token
+from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import jwt_required
+
+#from api.utils import generate_sitemap, APIException
+
 
 api = Blueprint('api', __name__)
+
+# Create a route to authenticate your users and return JWTs. The
+# create_access_token() function is used to actually generate the JWT.
+@api.route("/token", methods=["POST"])
+def create_token():
+    email = request.json.get("email", None)
+    password = request.json.get("password", None)
+    if email != "test" or password != "test":
+        return jsonify({"msg": "Bad email or password"}), 401
+
+    access_token = create_access_token(identity=email)
+    return jsonify(access_token=access_token)
+
+
+
 
 @api.route('/register/provider', methods=['POST'])
 def register_provider():
@@ -21,21 +42,7 @@ def register_provider():
     new_user.save()  # Usamos el método save para crear el Provider
     return jsonify({"message": "Provider registered", "id": new_user.id}), 201
 
-@api.route('/register/client', methods=['POST'])
-def register_client():
-    data = request.json
-    if not data.get('username') or not data.get('email') or not data.get('password'):
-        return jsonify({"error": "Missing username, email or password"}), 400
 
-    new_user = User(
-        username=data.get('username'),
-        email=data.get('email'),
-        password_hash=generate_password_hash(data.get('password')),
-        role='client'
-    )
-    
-    new_user.save()  # Usamos el método save para crear el Client
-    return jsonify({"message": "Client registered", "id": new_user.id}), 201
 
 # ========================
 # Rutas para Tour Plans
@@ -124,9 +131,9 @@ def delete_provider(provider_id):
     db.session.commit()
     return jsonify({"message": "Provider deleted"}), 200
 
-# ========================
+# ===============================================================================================================
 # Rutas para Clients
-# ========================
+# ==============================================================================================================
 
 @api.route('/clients', methods=['GET'])
 def get_clients():
@@ -140,6 +147,24 @@ def get_clients():
                 } for client in clients]
     return jsonify(result), 200
 
+# ==============================================================================================================
+@api.route('/register/client', methods=['POST'])
+def register_client():
+    data = request.json
+    if not data.get('username') or not data.get('email') or not data.get('password'):
+        return jsonify({"error": "Missing username, email or password"}), 400
+
+    new_user = User(
+        username=data.get('username'),
+        email=data.get('email'),
+        password_hash=generate_password_hash(data.get('password')),
+        role='client'
+    )
+    
+    new_user.save()  # Usamos el método save para crear el Client
+    return jsonify({"message": "Client registered", "id": new_user.id}), 201
+
+# ==============================================================================================================
 @api.route('/clients/<int:client_id>', methods=['DELETE'])
 def delete_client(client_id):
     client = Client.query.get(client_id)
@@ -156,7 +181,31 @@ def delete_client(client_id):
     db.session.commit()
     
     return jsonify({"message": "Client deleted and user marked as inactive!"}), 200
+# ==============================================================================================================
 
+
+# @api.route("/client", methods=["POST"])
+# def login():
+#     email = request.json.get("email")
+#     #password = request.json.get("password")
+#     if not email :
+#     #if not email or not password:
+#         return jsonify({"msg": "Missing email or password."}), 400
+
+#     user = User.query.filter_by(email=email).first()
+
+#     if user is None:
+#         return jsonify({"msg": "User not found!"}), 404
+
+#     # if check_password_hash(user.password_hash, password):  # Usa check_password_hash aquí
+#     #     access_token = create_access_token(identity=user.id)
+
+#     #     return jsonify({
+#     #         "token": access_token,
+#     #         "user": user.serialize()
+#     #     }), 200
+    
+#     # return jsonify({"msg": "Invalid password"}), 401
 # ========================
 # Rutas para Users
 # ========================

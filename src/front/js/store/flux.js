@@ -31,7 +31,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				try {
 					const response = await fetch(`${process.env.BACKEND_URL}/api/clients`);
-					console.log(response);
+					//console.log(response);
 
 					if (response.status === 404) {
 						register();
@@ -94,32 +94,51 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-			login: async (email, fullName, password) => {
-				const resp = await fetch(process.env.BACKEND_URL + "/api/login", {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json"
-					},
-					body: JSON.stringify({
-						email: email,
-						username: fullName,
-						password: password
-					})
-				});
-				const data = await resp.json();
+			login: async (email, password) => {
+				const { getClient } = getActions();
+				try {
+					const resp = await fetch(process.env.BACKEND_URL + "/api/token", {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json"
+						},
+						body: JSON.stringify({
+							email: email,
+							password: password
+						})
+					});
 
-				localStorage.setItem("token", data.token);
+					const data = await resp.json();
+					console.log(data);
 
-				setStore({ token: data.token });
-				setStore({ user: data.user });
 
-				if (resp.ok) {
-					toast.success("Logged in! 🎉");
-				}
-				else {
-					toast.error("You shall not pass! 🧙‍♂️");
+					if (resp.ok) {
+						getClient();
+						localStorage.setItem("token", data.token);
+						setStore({ token: data.token });
+						setStore({ user: data.user });
+						toast.success("Logged in! 🎉");
+					} else {
+						// Manejo específico de errores
+						if (data.msg) {
+							toast.error(data.msg); // Mensaje específico del servidor
+						} else {
+							toast.error("An error occurred! Please try again."); // Mensaje genérico
+						}
+					}
+				} catch (error) {
+					console.error("Login error:", error);
+					toast.error("An error occurred! Please check your network connection.");
 				}
 			},
+
+			logout: () => {
+				localStorage.removeItem("token");
+				setStore({ token: null });
+				setStore({ user: null });
+				toast.success("Logged out! 🎉");
+			},
+
 
 			getMessage: async () => {
 				try {

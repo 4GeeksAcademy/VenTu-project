@@ -1,10 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Context } from "../store/appContext";
 
 export const Navbar = () => {
     const navigate = useNavigate();
     const [user, setUser] = useState({});
     const [showPassword, setShowPassword] = useState(false);
+    const { store, actions } = useContext(Context);
+    // useEffect para observar cambios en el token
+    useEffect(() => {
+        if (store.token) {
+            // Aquí podrías hacer algo si es necesario cuando el token cambia
+            console.log("Usuario ha iniciado sesión");
+        }
+    }, [store.token]); // Dependencia: ejecuta este efecto cuando store.token cambie
+
+    const handleLogout = () => {
+        actions.logout(); // Asegúrate de tener esta función en tu contexto
+        navigate("/"); // Redirige a la página de inicio
+    };
+    const handleLogin = () => {
+        actions.login(user.email, user.password).then(() => {
+            // Cierra el modal usando jQuery
+            const modalElement = document.getElementById('exampleModal');
+            const modalInstance = bootstrap.Modal.getInstance(modalElement);
+            if (modalInstance) {
+                modalInstance.hide(); // Cierra el modal
+            }
+            navigate("/"); // Redirige a la página de inicio
+        });
+    };
+
+
     return (
         <nav className="navbar navbar-light" style={{ backgroundColor: '#00B4E7' }}>
             <div className="container">
@@ -22,45 +49,41 @@ export const Navbar = () => {
                     <button className="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Iniciar / Registrarse
                     </button>
-                    <ul className="dropdown-menu">
-                        <li>
-                            <button className="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                Iniciar sesión
-                            </button>
-                        </li>
-                        <li>
-                            <Link to="/register" className="btn btn-outline-light dropdown-item">
-                                Registre
-                            </Link>
-                        </li>
-                        <li>
-                            <Link to="/" className="btn btn-outline-light dropdown-item">Log in</Link>
-                        </li>
-                    </ul>
+                    {!store.token ? (
+                        <ul className="dropdown-menu">
+                            <li>
+                                <button className="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                    Iniciar sesión
+                                </button>
+                            </li>
+                            <li>
+                                <Link to="/register" className="btn btn-outline-light dropdown-item">Registre</Link>
+                            </li>
+                        </ul>
+                    ) : (
+                        <ul className="dropdown-menu">
+                            <li>
+                                <button className="dropdown-item" onClick={handleLogout}>
+                                    Cerrar sesión
+                                </button>
+                            </li>
+                            <li>
+                                <Link to="/favorites" className="btn btn-outline-light dropdown-item">Favoritos</Link>
+                            </li>
+                        </ul>
+                    )}
 
                     <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div className="modal-dialog">
                             <div className="modal-content">
+
                                 <div className="modal-header">
                                     <h1 className="modal-title fs-5" id="exampleModalLabel">Iniciar Sesión</h1>
                                     <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
+
                                 <div className="modal-body">
                                     <div className='mx-auto my-auto'>
-
-                                        <div className="mb-3">
-                                            <label className="form-label">Nombre de usuario</label>
-
-                                            <input
-                                                type="text"
-                                                className="form-control"
-                                                onChange={(event) => setUser({
-                                                    ...user,
-                                                    username: event.target.value // Actualiza el estado con el nombre de usuario
-                                                })}
-                                                required
-                                            />
-                                        </div>
                                         <div className="mb-3">
                                             <label className="form-label">Email</label>
                                             <input type="email" className="form-control" onChange={(event) => setUser({
@@ -92,9 +115,12 @@ export const Navbar = () => {
                                 <div className="d-flex">
                                     <div className='d-flex flex-column w-100 mx-3 py-2'>
 
-                                        <button onClick={() => console.log(user)
-                                        }
-                                            className="btn btn-success mt-2">Iniciar Sesión</button>
+                                        <button onClick={handleLogin} className="btn btn-success mt-2">
+
+                                            Iniciar Sesión
+                                        </button>
+
+
                                         <button className="btn btn-primary  text-center mt-2" data-bs-dismiss="modal" onClick={() => {
                                             navigate("/register")
                                         }}>
@@ -108,6 +134,7 @@ export const Navbar = () => {
 
                         </div>
                     </div>
+
                 </div>
             </div>
         </nav>
