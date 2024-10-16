@@ -90,7 +90,7 @@ const Register = () => {
             </div>
 
             {/* Cambiar Link a un botón normal que llama a handleSubmit */}
-            <button type="submit" className="btn btn-primary w-100">
+            <button type="submit" className="btn btn-primary w-100" >
               Register
             </button>
           </form>

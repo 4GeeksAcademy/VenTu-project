@@ -146,29 +146,16 @@ def delete_client(client_id):
     if not client:
         return jsonify({"error": "Client not found"}), 404
     
-    # Verifica si hay un usuario asociado al cliente
-    user = User.query.get(client.user_id)  # Asumiendo que `user_id` está en el modelo Client
+    
+    user = User.query.get(client.user_id)  
     if user:
-        user.status = "inactive"  # Cambia el estado a inactivo
-        db.session.commit()  # Guarda los cambios en la base de datos
+        user.status = "inactive"  
+        db.session.commit()  
 
-    db.session.delete(client)  # Elimina el cliente
+    db.session.delete(client)  
     db.session.commit()
     
     return jsonify({"message": "Client deleted and user marked as inactive!"}), 200
-
-# @api.route('/clients/<int:client_id>', methods=['DELETE'])
-# def delete_client(client_id):
-#     client = Client.query.get(client_id)
-#     if not client:
-#         return jsonify({"error": "Client not found"}), 404
-    
-#     db.session.delete(client)    
-#     db.session.commit()
-#     return jsonify({"message": "Client deleted"}), 200
-
-
-
 
 # ========================
 # Rutas para Users
@@ -201,18 +188,6 @@ def delete_user(user_id):
     db.session.commit()
     return jsonify({"message": "User deleted"}), 200
 
-
-
-
-#@api.route('/users/<int:user_id>', methods=['DELETE'])
-# def delete_users(user_id):
-#     user = User.query.get(user_id)
-#     if user:
-#         user.status = "inactive"  # Cambia el estado a inactivo
-#         db.session.commit()  # Guarda los cambios en la base de datos
-#         return jsonify({"message": "Client marked as inactive!"}), 200
-#     else:
-#         return jsonify({"message": "Client not found!"}), 404
 
 # ========================
 # Rutas para Reservations

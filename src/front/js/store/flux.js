@@ -1,4 +1,4 @@
-
+import toast from "react-hot-toast";
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
@@ -47,6 +47,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 
 			register: async (email, fullName, password) => {
+				const { getClient } = getActions();
 				const resp = await fetch(process.env.BACKEND_URL + "/api/register/client", {
 					method: "POST",
 					headers: {
@@ -87,7 +88,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					toast.success("Client deleted successfully!");
 					await getActions().getClient(); // Espera a que se complete la llamada
 					const store = getStore();
-					
+
 				} else {
 					toast.error("Error deleting client");
 				}
