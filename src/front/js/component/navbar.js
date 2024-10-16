@@ -47,12 +47,27 @@ export const Navbar = () => {
                                 </div>
                                 <div className="modal-body">
                                     <div className='mx-auto my-auto'>
+
+                                        <div className="mb-3">
+                                            <label className="form-label">Nombre de usuario</label>
+
+                                            <input
+                                                type="text"
+                                                className="form-control"
+                                                onChange={(event) => setUser({
+                                                    ...user,
+                                                    username: event.target.value // Actualiza el estado con el nombre de usuario
+                                                })}
+                                                required
+                                            />
+                                        </div>
                                         <div className="mb-3">
                                             <label className="form-label">Email</label>
                                             <input type="email" className="form-control" onChange={(event) => setUser({
                                                 ...user,
                                                 email: event.target.value
-                                            })} />
+                                            })}
+                                                required />
                                         </div>
                                         <div className="mb-3">
                                             <label className="form-label">Contraseña</label>
@@ -61,7 +76,8 @@ export const Navbar = () => {
                                                 <input type={showPassword ? "text" : "password"} className="form-control" onChange={(event) => setUser({
                                                     ...user,
                                                     password: event.target.value
-                                                })} />
+                                                })}
+                                                    required />
 
                                                 <div className='btn'
                                                     onClick={() => setShowPassword(!showPassword)}
