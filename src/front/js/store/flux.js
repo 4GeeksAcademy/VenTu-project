@@ -24,7 +24,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				getActions().changeColor(0, "green");
 			},
 
-
 			getClient: async () => {
 
 				const { register } = getActions();
