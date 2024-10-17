@@ -21,6 +21,7 @@ typing-extensions = "*"
 flask-login = "*"
 firebase = "*"
 pyrebase4 = "*"
+pyrebase = "*"
 
 [requires]
 python_version = "3.10"
