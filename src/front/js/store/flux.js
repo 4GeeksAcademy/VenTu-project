@@ -19,7 +19,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			]
 		},
 		actions: {
-			// Use getActions to call a function within a fuction
+			
 			exampleFunction: () => {
 				getActions().changeColor(0, "green");
 			},
@@ -31,14 +31,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				try {
 					const response = await fetch(`${process.env.BACKEND_URL}/api/clients`);
-					//console.log(response);
+					
 
 					if (response.status === 404) {
 						register();
 					} else {
 						const data = await response.json();
 						console.log(data);
-						setStore({ user: data.user }); // Actualiza el store con la lista de clientes
+						setStore({ user: data.user }); 
 					}
 				} catch (error) {
 					console.error('Error al obtener los clientes:', error);
@@ -86,7 +86,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				if (resp.ok) {
 					toast.success("Client deleted successfully!");
-					await getActions().getClient(); // Espera a que se complete la llamada
+					await getActions().getClient(); 
 					const store = getStore();
 
 				} else {
@@ -97,7 +97,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 			login: async (email, password) => {
 				const { getClient } = getActions();
 				try {
+
 					const resp = await fetch(process.env.BACKEND_URL + "/api/token", {
+
 						method: "POST",
 						headers: {
 							"Content-Type": "application/json"
@@ -111,19 +113,19 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const data = await resp.json();
 					console.log(data);
 
-
 					if (resp.ok) {
-						getClient();
 						localStorage.setItem("token", data.token);
-						setStore({ token: data.token });
-						setStore({ user: data.user });
+						setStore({
+							token: data.token,
+							user: data.user
+						});
+						getClient();
 						toast.success("Logged in! 🎉");
 					} else {
-						// Manejo específico de errores
 						if (data.msg) {
-							toast.error(data.msg); // Mensaje específico del servidor
+							toast.error(data.msg);
 						} else {
-							toast.error("An error occurred! Please try again."); // Mensaje genérico
+							toast.error("An error occurred! Please try again.");
 						}
 					}
 				} catch (error) {
@@ -142,7 +144,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			getMessage: async () => {
 				try {
-					// fetching data from the backend
+					
 					const resp = await fetch(process.env.BACKEND_URL + "/api/hello")
 					const data = await resp.json()
 					setStore({ message: data.message })

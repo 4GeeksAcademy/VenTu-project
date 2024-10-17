@@ -21,7 +21,7 @@ def create_token():
         return jsonify({"msg": "Bad email or password"}), 401
 
     access_token = create_access_token(identity=email)
-    return jsonify(access_token=access_token)
+    return jsonify(token=access_token)
 
 
 
@@ -182,30 +182,6 @@ def delete_client(client_id):
     
     return jsonify({"message": "Client deleted and user marked as inactive!"}), 200
 # ==============================================================================================================
-
-
-# @api.route("/client", methods=["POST"])
-# def login():
-#     email = request.json.get("email")
-#     #password = request.json.get("password")
-#     if not email :
-#     #if not email or not password:
-#         return jsonify({"msg": "Missing email or password."}), 400
-
-#     user = User.query.filter_by(email=email).first()
-
-#     if user is None:
-#         return jsonify({"msg": "User not found!"}), 404
-
-#     # if check_password_hash(user.password_hash, password):  # Usa check_password_hash aquí
-#     #     access_token = create_access_token(identity=user.id)
-
-#     #     return jsonify({
-#     #         "token": access_token,
-#     #         "user": user.serialize()
-#     #     }), 200
-    
-#     # return jsonify({"msg": "Invalid password"}), 401
 # ========================
 # Rutas para Users
 # ========================
