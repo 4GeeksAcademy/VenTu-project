@@ -130,25 +130,25 @@ def create_tour_plan():
 # Rutas para subir imágenes a Firebase
 # ========================
 
-@api.route('/upload_image', methods=['POST'])
-def upload_image():
-    if 'image' not in request.files:
-        return jsonify({"error": "No file part"}), 400
+# @api.route('/upload_image', methods=['POST'])
+# def upload_image():
+#     if 'image' not in request.files:
+#         return jsonify({"error": "No file part"}), 400
     
-    file = request.files['image']
+#     file = request.files['image']
     
-    if file.filename == '':
-        return jsonify({"error": "No selected file"}), 400
+#     if file.filename == '':
+#         return jsonify({"error": "No selected file"}), 400
     
-    if file:
-        filename = secure_filename(file.filename)
-        filepath = f"images/{filename}"
-        storage.child(filepath).put(file)  # Subir imagen a Firebase Storage
+#     if file:
+#         filename = secure_filename(file.filename)
+#         filepath = f"images/{filename}"
+#         storage.child(filepath).put(file)  # Subir imagen a Firebase Storage
         
-        # Obtener URL de la imagen
-        image_url = storage.child(filepath).get_url(None)
+#         # Obtener URL de la imagen
+#         image_url = storage.child(filepath).get_url(None)
         
-        return jsonify({"message": "Image uploaded", "url": image_url}), 201
+#         return jsonify({"message": "Image uploaded", "url": image_url}), 201
 
 # ========================
 # Rutas para Proveedores
