@@ -73,6 +73,7 @@ class TourPlan(db.Model):
     start_date = db.Column(db.DateTime, nullable=False)
     end_date = db.Column(db.DateTime, nullable=False)
     provider_id = db.Column(db.Integer, db.ForeignKey('provider.id'), nullable=False)
+    image_url = db.Column(db.String(255), nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     provider = db.relationship('Provider', backref='tour_plan')
 
