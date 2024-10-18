@@ -27,10 +27,10 @@ export const Navbar = () => {
                 if (modalInstance) {
                     modalInstance.hide();
                 }
-                //toast.success("Inicio de sesión exitoso! 🎉");
+                
                 navigate("/");
             } else {
-                //toast.error("Email o contraseña incorrectos");
+                
             }
         } catch (error) {
             toast.error("Error en la solicitud. Por favor, inténtalo de nuevo.");

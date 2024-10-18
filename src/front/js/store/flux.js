@@ -109,6 +109,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 					if (resp.ok) {
 						localStorage.setItem("token", data.token);
+						//localStorage.setItem("user", JSON.stringify(data.user));
 						setStore({
 							token: data.token,
 							user: data.user
@@ -153,7 +154,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 
-			
+
 			changeColor: (index, color) => {
 				//get the store
 				const store = getStore();
