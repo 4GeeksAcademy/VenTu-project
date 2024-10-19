@@ -23,6 +23,8 @@ flask-login = "*"
 firebase = "*"
 pyrebase4 = "*"
 pyrebase = "*"
+firebase-admin = "*"
+pycryptodome = "*"
 
 [requires]
 python_version = "3.10"

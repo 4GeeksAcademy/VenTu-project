@@ -7,7 +7,9 @@ from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
 from flask_cors import CORS
 import os
-from api.firebase import storage
+import cloudinary
+import cloudinary.uploader
+# from api.firebase import storage
 
 
 
@@ -16,6 +18,21 @@ api = Blueprint('api', __name__)
 
 # Create a route to authenticate your users and return JWTs. The
 # create_access_token() function is used to actually generate the JWT.
+
+cloudinary.config(
+    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
+    api_key=os.getenv("CLOUDINARY_API_KEY"),
+    api_secret=os.getenv("CLOUDINARY_API_SECRET")
+)
+
+@api.route('/upload', methods=['POST'])
+def upload_file():
+    file = request.files['image']
+    result = cloudinary.uploader.upload(file)
+    print (result["secure_url"])
+    return jsonify({"url": result["secure_url"]})
+
+
 @api.route("/token", methods=["POST"])
 def create_token():
     email = request.json.get("email", None)

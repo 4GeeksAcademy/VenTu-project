@@ -1,39 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { Context } from '../store/appContext';
 
 export const B2BPage = () => {
-    const [formData, setFormData] = useState({
-        companyName: '',
-        email: '',
-        planDescription: '',
-        packageImage: null, // Nuevo estado para la imagen
-    });
+    const { store, actions } = useContext(Context);
+    const [formData, setFormData] = useState();
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
-    };
+    // const handleInputChange = (e) => {
+    //     const { name, value } = e.target;
+    //     setFormData({
+    //         ...formData,
+    //         [name]: value,
+    //     });
+    // };
 
     const handleFileChange = (e) => {
-        setFormData({
-            ...formData,
-            packageImage: e.target.files[0],
-        });
+        setFormData(
+           e.target.files[0]
+        );
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        const formDataToSend = new FormData();
-        formDataToSend.append('companyName', formData.companyName);
-        formDataToSend.append('email', formData.email);
-        formDataToSend.append('planDescription', formData.planDescription);
-        formDataToSend.append('packageImage', formData.packageImage);
+        // const formDataToSend = new FormData();
+        // formDataToSend.append('companyName', formData.companyName);
+        // formDataToSend.append('email', formData.email);
+        // formDataToSend.append('planDescription', formData.planDescription);
+        // formDataToSend.append('packageImage', formData.packageImage);
 
-        console.log([...formDataToSend]);
-
+        // console.log([...formDataToSend]);
+        actions.uploadImage(formData);
         alert('Formulario enviado');
     };
 
@@ -74,8 +70,8 @@ export const B2BPage = () => {
                                 className="form-control"
                                 id="companyName"
                                 name="companyName"
-                                value={formData.companyName}
-                                onChange={handleInputChange}
+                                // value={formData.companyName}
+                                // onChange={handleInputChange}
                                 required
                             />
                             <div className="invalid-feedback">Por favor ingresa el nombre de tu empresa.</div>
@@ -88,8 +84,8 @@ export const B2BPage = () => {
                                 className="form-control"
                                 id="email"
                                 name="email"
-                                value={formData.email}
-                                onChange={handleInputChange}
+                                // value={formData.email}
+                                // onChange={handleInputChange}
                                 required
                             />
                             <div className="invalid-feedback">Por favor ingresa un correo válido.</div>
@@ -102,8 +98,8 @@ export const B2BPage = () => {
                                 id="planDescription"
                                 name="planDescription"
                                 rows="3"
-                                value={formData.planDescription}
-                                onChange={handleInputChange}
+                                // value={formData.planDescription}
+                                // onChange={handleInputChange}
                                 required
                             ></textarea>
                             <div className="invalid-feedback">Por favor describe el plan turístico.</div>

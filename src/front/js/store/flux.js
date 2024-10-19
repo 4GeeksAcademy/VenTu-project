@@ -24,6 +24,16 @@ const getState = ({ getStore, getActions, setStore }) => {
 				getActions().changeColor(0, "green");
 			},
 
+			uploadImage: async (image) => {
+				const formData = new FormData();
+				formData.append("image", image);
+				const resp = await fetch(`${process.env.BACKEND_URL}/api/upload`, {
+					method: "POST",
+					body: formData
+				});
+				const data = await resp.json();
+				console.log(data);
+			},
 
 			getClient: async () => {
 
