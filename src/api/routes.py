@@ -1,21 +1,18 @@
-from flask import Blueprint, jsonify, request, Flask, jsonify, url_for
+from flask import Blueprint, jsonify, request
 from api.models import db, TourPlan, Client, Provider, User, Reservation
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import generate_password_hash
 from datetime import datetime
-from flask_jwt_extended import create_access_token
-from flask_jwt_extended import get_jwt_identity
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import create_access_token, jwt_required
 from flask_cors import CORS
-import os
-from api.firebase import storage
-
-
-
+from datetime import datetime, timezone
+from api.models import ReservationStatus 
 
 api = Blueprint('api', __name__)
 
-# Create a route to authenticate your users and return JWTs. The
-# create_access_token() function is used to actually generate the JWT.
+# =====================================
+# Rutas de autenticación con JWT
+# =====================================
+
 @api.route("/token", methods=["POST"])
 def create_token():
     email = request.json.get("email", None)
@@ -25,6 +22,7 @@ def create_token():
         return jsonify({"msg": "Correo electrónico o contraseña incorrectos"}), 401
     if not check_password_hash(user.password_hash, password):
         return jsonify({"msg": "Correo electrónico o contraseña incorrectos"}), 401
+
 
     access_token = create_access_token(identity=email)
     return jsonify(token=access_token, user=user.serialize()), 200
@@ -41,12 +39,9 @@ def get_me():
 
 
 
-
-
-
-# ========================
-# Rutas de Registro de Usuarios
-# ========================
+# =====================================
+# Rutas para Providers
+# =====================================
 
 @api.route('/register/provider', methods=['POST'])
 def register_provider():
@@ -54,7 +49,6 @@ def register_provider():
     if not data.get('username') or not data.get('email') or not data.get('password'):
         return jsonify({"error": "Missing username, email or password"}), 400
 
-    # Crear el usuario con rol provider
     new_user = User(
         username=data.get('username'),
         email=data.get('email'),
@@ -65,35 +59,104 @@ def register_provider():
     db.session.add(new_user)
     db.session.commit()
     
-    # Crear un proveedor asociado al nuevo usuario
     new_provider = Provider(user_id=new_user.id)
     db.session.add(new_provider)
     db.session.commit()
     
     return jsonify({"message": "Provider registered", "id": new_user.id}), 201
 
+@api.route('/providers', methods=['GET'])
+def get_providers():
+    providers = Provider.query.all()
+    result = [{"id": provider.id, "user_id": provider.user_id} for provider in providers]
+    return jsonify(result), 200
 
-    # # Crear el usuario con rol client
-    # new_user = User(
-    #     username=data.get('username'),
-    #     email=data.get('email'),
-    #     password_hash=generate_password_hash(data.get('password')),
-    #     role='client'
-    # )
+@api.route('/providers/<int:provider_id>', methods=['DELETE'])
+def delete_provider(provider_id):
+    provider = Provider.query.get(provider_id)
+    if not provider:
+        return jsonify({"error": "Provider not found"}), 404
     
-    # db.session.add(new_user)
-    # db.session.commit()
+    db.session.delete(provider)
+    db.session.commit()
+    return jsonify({"message": "Provider deleted"}), 200
+
+
+# =====================================
+# Rutas para Clients
+# =====================================
+
+@api.route('/register/client', methods=['POST'])
+def register_client():
+    data = request.json
+    if not data.get('username') or not data.get('email') or not data.get('password'):
+        return jsonify({"error": "Missing username, email or password"}), 400
+
+    new_user = User(
+        username=data.get('username'),
+        email=data.get('email'),
+        password_hash=generate_password_hash(data.get('password')),
+        role='client'
+    )
     
-    # # Crear un cliente asociado al nuevo usuario
-    # new_client = Client(user_id=new_user.id, status='active')
-    # db.session.add(new_client)
-    # db.session.commit()
+    new_user.save()  # Se utiliza el método save para manejar la creación
+    return jsonify({"message": "Client registered", "id": new_user.id}), 201
 
-    # return jsonify({"message": "Client registered", "id": new_user.id}), 201
+@api.route('/clients', methods=['GET'])
+def get_clients():
+    clients = Client.query.all()
+    result = [{"id": client.id, "user_id": client.user_id, "status": client.status} for client in clients]
+    return jsonify(result), 200
 
-# ========================
+@api.route('/clients/<int:client_id>', methods=['DELETE'])
+def delete_client(client_id):
+    client = Client.query.get(client_id)
+    if not client:
+        return jsonify({"error": "Client not found"}), 404
+    
+    user = User.query.get(client.user_id)
+    if user:
+        user.status = "inactive"
+        db.session.commit()
+
+    db.session.delete(client)
+    db.session.commit()
+    return jsonify({"message": "Client deleted and user marked as inactive"}), 200
+
+
+# =====================================
+# Rutas para Users
+# =====================================
+
+@api.route('/users', methods=['GET'])
+def get_users():
+    users = User.query.all()
+    result = [
+        {
+            "id": user.id,
+            "username": user.username,
+            "email": user.email,
+            "status": user.status,
+            "role": user.role,
+            "created_at": user.created_at
+        } for user in users
+    ]
+    return jsonify(result), 200
+
+@api.route('/users/<int:user_id>', methods=['DELETE'])
+def delete_user(user_id):
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+    
+    db.session.delete(user)
+    db.session.commit()
+    return jsonify({"message": "User deleted"}), 200
+
+
+# =====================================
 # Rutas para Tour Plans
-# ========================
+# =====================================
 
 @api.route('/tourplans', methods=['GET'])
 def get_tour_plans():
@@ -116,17 +179,14 @@ def get_tour_plans():
 @api.route('/tourplans', methods=['POST'])
 def create_tour_plan():
     data = request.json
-    
-    # Validar que el usuario sea un proveedor
+
     provider = Provider.query.filter_by(user_id=data.get('user_id')).first()
     if not provider:
         return jsonify({"error": "El usuario no es un proveedor válido"}), 403
 
-    # Validar campos requeridos
     if not data.get('title') or not data.get('price'):
         return jsonify({"error": "Faltan campos obligatorios"}), 400
     
-    # Crear el nuevo TourPlan
     new_plan = TourPlan(
         title=data.get('title'),
         description=data.get('description'),
@@ -140,136 +200,10 @@ def create_tour_plan():
     db.session.commit()
     return jsonify({"message": "Tour plan created", "id": new_plan.id}), 201
 
-# ========================
-# Rutas para subir imágenes a Firebase
-# ========================
 
-# @api.route('/upload_image', methods=['POST'])
-# def upload_image():
-#     if 'image' not in request.files:
-#         return jsonify({"error": "No file part"}), 400
-    
-#     file = request.files['image']
-    
-#     if file.filename == '':
-#         return jsonify({"error": "No selected file"}), 400
-    
-#     if file:
-#         filename = secure_filename(file.filename)
-#         filepath = f"images/{filename}"
-#         storage.child(filepath).put(file)  # Subir imagen a Firebase Storage
-        
-#         # Obtener URL de la imagen
-#         image_url = storage.child(filepath).get_url(None)
-        
-#         return jsonify({"message": "Image uploaded", "url": image_url}), 201
-
-# ========================
-# Rutas para Proveedores
-# ========================
-
-@api.route('/providers', methods=['GET'])
-def get_providers():
-    providers = Provider.query.all()
-    result = [{"id": provider.id, "user_id": provider.user_id} for provider in providers]
-    return jsonify(result), 200
-
-@api.route('/providers/<int:provider_id>', methods=['DELETE'])
-def delete_provider(provider_id):
-    provider = Provider.query.get(provider_id)
-    if not provider:
-        return jsonify({"error": "Provider not found"}), 404
-    
-    db.session.delete(provider)
-    db.session.commit()
-    return jsonify({"message": "Provider deleted"}), 200
-
-# ===============================================================================================================
-# Rutas para Clients
-# ==============================================================================================================
-
-@api.route('/clients', methods=['GET'])
-def get_clients():
-    clients = Client.query.all()
-    result = [{"id": client.id,
-                "user_id": client.user_id,
-                "status": client.status,
-                "username": client.username,
-                "email":client.email,                
-                "role":client.role
-                } for client in clients]
-    return jsonify(result), 200
-
-# ==============================================================================================================
-@api.route('/register/client', methods=['POST'])
-def register_client():
-    data = request.json
-    if not data.get('username') or not data.get('email') or not data.get('password'):
-        return jsonify({"error": "Missing username, email or password"}), 400
-
-    new_user = User(
-        username=data.get('username'),
-        email=data.get('email'),
-        password_hash=generate_password_hash(data.get('password')),
-        role='client'
-    )
-    
-    new_user.save()  # Usamos el método save para crear el Client
-    return jsonify({"message": "Client registered", "id": new_user.id}), 201
-
-# ==============================================================================================================
-@api.route('/clients/<int:client_id>', methods=['DELETE'])
-def delete_client(client_id):
-    client = Client.query.get(client_id)
-    if not client:
-        return jsonify({"error": "Client not found"}), 404
-    
-    
-    user = User.query.get(client.user_id)  
-    if user:
-        user.status = "inactive"  
-        db.session.commit()  
-
-    db.session.delete(client)  
-    db.session.commit()
-    
-    return jsonify({"message": "Client deleted and user marked as inactive!"}), 200
-# ==============================================================================================================
-# ========================
-# Rutas para Users
-# ========================
-
-@api.route('/users', methods=['GET'])
-def get_users():
-    users = User.query.all()
-    result = [
-        {
-            "id": user.id,
-            "username": user.username,
-            "email": user.email,
-            "status": user.status,
-            "role": user.role,
-            "created_at": user.created_at
-        } for user in users
-    ]
-    return jsonify(result), 200
-
-
-
-@api.route('/users/<int:user_id>', methods=['DELETE'])
-def delete_user(user_id):
-    user = User.query.get(user_id)
-    if not user:
-        return jsonify({"error": "User not found"}), 404
-    
-    db.session.delete(user)    
-    db.session.commit()
-    return jsonify({"message": "User deleted"}), 200
-
-
-# ========================
+# =====================================
 # Rutas para Reservaciones
-# ========================
+# =====================================
 
 @api.route('/reservations', methods=['GET'])
 def get_reservations():
@@ -294,25 +228,43 @@ def create_reservation():
     if not client:
         return jsonify({"error": "El cliente no es válido"}), 403
 
-    # Validar que hay cupos disponibles en el TourPlan
+    # Validar que el TourPlan existe y que hay cupos disponibles
     tour_plan = TourPlan.query.get(data.get('tour_plan_id'))
+    if not tour_plan:
+        return jsonify({"error": "El TourPlan no existe"}), 404
+
     if tour_plan.available_spots <= 0:
         return jsonify({"error": "No hay cupos disponibles"}), 400
 
-    # Crear la reservación
+    # Obtener el estado de la reserva, usar 'active' si no se proporciona o si es inválido
+    status_str = data.get('status', 'active').lower()
+    if status_str not in ReservationStatus._value2member_map_:
+        status = ReservationStatus.ACTIVE
+    else:
+        status = ReservationStatus(status_str)
+
+    # Crear la reservación con fecha y hora en UTC
     new_reservation = Reservation(
-        reservation_date=datetime.utcnow(),
-        status=data.get('status'),
+        reservation_date=datetime.now(timezone.utc),
+        status=status,
         client_id=client.id,
         tour_plan_id=tour_plan.id
     )
     
     # Reducir los cupos disponibles del tour
     tour_plan.available_spots -= 1
+
+    # Guardar la reservación y el nuevo valor de available_spots en la base de datos
     db.session.add(new_reservation)
     db.session.commit()
 
-    return jsonify({"message": "Reservación creada exitosamente", "id": new_reservation.id}), 201
+    # Devolver la información de la reservación y los cupos disponibles restantes
+    return jsonify({
+        "message": "Reservación creada exitosamente",
+        "reservation_id": new_reservation.id,
+        "available_spots_remaining": tour_plan.available_spots
+    }), 201
+
 
 @api.route('/reservations/<int:reservation_id>', methods=['DELETE'])
 def delete_reservation(reservation_id):
