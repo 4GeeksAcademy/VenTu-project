@@ -25,6 +25,7 @@ pyrebase4 = "*"
 pyrebase = "*"
 firebase-admin = "*"
 pycryptodome = "*"
+werkzeug = "*"
 
 [requires]
 python_version = "3.10"

@@ -4,7 +4,7 @@ from sqlalchemy.orm import validates
 from enum import Enum
 from sqlalchemy import Enum as SQLAlchemyEnum
 from datetime import datetime, timezone
-# from models import db
+
 db = SQLAlchemy()
 class User(db.Model):
     __tablename__ = 'user'
@@ -32,15 +32,17 @@ class User(db.Model):
             client = Client(user_id=self.id, username=self.username, email=self.email, role=self.role, status="active")
             db.session.add(client)
         db.session.commit()
-    # def serialize(self):
-    #     return {
-    #         "id": self.id,
-    #         "username": self.username,
-    #         "email": self.email,
-    #         "role": self.role,
-    #         "status": self.status,
-    #         "created_at": self.created_at.isoformat()  # Convierte a formato ISO para JSON
-    #     }
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "username": self.username,
+            "email": self.email,
+            "role": self.role,
+            "status": self.status,
+            "created_at": self.created_at.isoformat()  # Convierte a formato ISO para JSON
+        }   
+
 class Client(db.Model):
     __tablename__ = 'client'
     id = db.Column(db.Integer, primary_key=True)
@@ -76,14 +78,17 @@ class ReservationStatus(Enum):
     COMPLETED = 'completed'
 class Reservation(db.Model):
     __tablename__ = 'reservation'
+    
     id = db.Column(db.Integer, primary_key=True)
     reservation_date = db.Column(db.DateTime(timezone=True), nullable=False, default=datetime.now(timezone.utc))
     status = db.Column(SQLAlchemyEnum(ReservationStatus), nullable=False, default=ReservationStatus.ACTIVE)
     client_id = db.Column(db.Integer, db.ForeignKey('client.id'), nullable=False)
     tour_plan_id = db.Column(db.Integer, db.ForeignKey('tour_plan.id'), nullable=False)
+    
     # Relaciones
     client = db.relationship('Client', backref='reservations')
     tour_plan = db.relationship('TourPlan', backref='reservations')
+    
     def serialize(self):
         return {
             'id': self.id,
