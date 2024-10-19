@@ -1,6 +1,9 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from sqlalchemy.orm import validates
+from enum import Enum
+from sqlalchemy import Enum as SQLAlchemyEnum
+from datetime import datetime, timezone
 
 db = SQLAlchemy()
 
@@ -77,12 +80,29 @@ class TourPlan(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     provider = db.relationship('Provider', backref='tour_plan')
 
+class ReservationStatus(Enum):
+    ACTIVE = 'active'
+    CANCELLED = 'cancelled'
+    COMPLETED = 'completed'
+
 class Reservation(db.Model):
     __tablename__ = 'reservation'
+    
     id = db.Column(db.Integer, primary_key=True)
-    reservation_date = db.Column(db.DateTime, default=datetime.utcnow)
-    status = db.Column(db.String(50), nullable=False)
+    reservation_date = db.Column(db.DateTime(timezone=True), nullable=False, default=datetime.now(timezone.utc))
+    status = db.Column(SQLAlchemyEnum(ReservationStatus), nullable=False, default=ReservationStatus.ACTIVE)
     client_id = db.Column(db.Integer, db.ForeignKey('client.id'), nullable=False)
     tour_plan_id = db.Column(db.Integer, db.ForeignKey('tour_plan.id'), nullable=False)
-    client = db.relationship('Client', backref='reservation')
-    tour_plan = db.relationship('TourPlan', backref='reservation')
+    
+    # Relaciones
+    client = db.relationship('Client', backref='reservations')
+    tour_plan = db.relationship('TourPlan', backref='reservations')
+    
+    def serialize(self):
+        return {
+            'id': self.id,
+            'reservation_date': self.reservation_date.isoformat(),
+            'status': self.status.value,
+            'client_id': self.client_id,
+            'tour_plan_id': self.tour_plan_id
+        }
