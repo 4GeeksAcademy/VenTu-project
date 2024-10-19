@@ -1,4 +1,4 @@
-
+import toast from "react-hot-toast";
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
@@ -19,7 +19,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			]
 		},
 		actions: {
-			// Use getActions to call a function within a fuction
+			
 			exampleFunction: () => {
 				getActions().changeColor(0, "green");
 			},
@@ -31,14 +31,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				try {
 					const response = await fetch(`${process.env.BACKEND_URL}/api/clients`);
-					console.log(response);
+					
 
 					if (response.status === 404) {
 						register();
 					} else {
 						const data = await response.json();
 						console.log(data);
-						setStore({ user: data.user }); // Actualiza el store con la lista de clientes
+						setStore({ user: data.user }); 
 					}
 				} catch (error) {
 					console.error('Error al obtener los clientes:', error);
@@ -47,6 +47,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 
 			register: async (email, fullName, password) => {
+				const { getClient } = getActions();
 				const resp = await fetch(process.env.BACKEND_URL + "/api/register/client", {
 					method: "POST",
 					headers: {
@@ -85,17 +86,65 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				if (resp.ok) {
 					toast.success("Client deleted successfully!");
-					await getActions().getClient(); // Espera a que se complete la llamada
+					await getActions().getClient(); 
 					const store = getStore();
-					
+
 				} else {
 					toast.error("Error deleting client");
 				}
 			},
 
+			login: async (email, password) => {
+				const { getClient } = getActions();
+				try {
+
+					const resp = await fetch(process.env.BACKEND_URL + "/api/token", {
+
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json"
+						},
+						body: JSON.stringify({
+							email: email,
+							password: password
+						})
+					});
+
+					const data = await resp.json();
+					console.log(data);
+
+					if (resp.ok) {
+						localStorage.setItem("token", data.token);
+						setStore({
+							token: data.token,
+							user: data.user
+						});
+						getClient();
+						toast.success("Logged in! 🎉");
+					} else {
+						if (data.msg) {
+							toast.error(data.msg);
+						} else {
+							toast.error("An error occurred! Please try again.");
+						}
+					}
+				} catch (error) {
+					console.error("Login error:", error);
+					toast.error("An error occurred! Please check your network connection.");
+				}
+			},
+
+			logout: () => {
+				localStorage.removeItem("token");
+				setStore({ token: null });
+				setStore({ user: null });
+				toast.success("Logged out! 🎉");
+			},
+
+
 			getMessage: async () => {
 				try {
-					// fetching data from the backend
+					
 					const resp = await fetch(process.env.BACKEND_URL + "/api/hello")
 					const data = await resp.json()
 					setStore({ message: data.message })

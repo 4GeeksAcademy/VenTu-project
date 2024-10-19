@@ -11,6 +11,7 @@ class User(db.Model):
     email = db.Column(db.String(255), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
     role = db.Column(db.String(50), nullable=False)  # "provider" or "client"
+    status = db.Column(db.String(50), default="active", nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     @validates('role')
@@ -29,10 +30,20 @@ class User(db.Model):
             provider = Provider(user_id=self.id)
             db.session.add(provider)
         elif self.role == 'client':
-            client = Client(user_id=self.id, username=self.username, email=self.email, role=self.role, password_hash =self.password_hash, status="active")                                          
+            client = Client(user_id=self.id, username=self.username, email=self.email, role=self.role, status="active")                                          
                             
             db.session.add(client)
         db.session.commit()
+
+    # def serialize(self):
+    #     return {
+    #         "id": self.id,
+    #         "username": self.username,
+    #         "email": self.email,
+    #         "role": self.role,
+    #         "status": self.status,
+    #         "created_at": self.created_at.isoformat()  # Convierte a formato ISO para JSON
+    #     }   
 
 class Client(db.Model):
     __tablename__ = 'client'
@@ -40,8 +51,7 @@ class Client(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     status = db.Column(db.String(50), nullable=False)
     username = db.Column(db.String(255), nullable=False)
-    email = db.Column(db.String(255), unique=True, nullable=False)
-    password_hash = db.Column(db.String(255), nullable=False)
+    email = db.Column(db.String(255), unique=True, nullable=False)    
     role = db.Column(db.String(50), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     user = db.relationship('User', backref='client')
@@ -63,6 +73,7 @@ class TourPlan(db.Model):
     start_date = db.Column(db.DateTime, nullable=False)
     end_date = db.Column(db.DateTime, nullable=False)
     provider_id = db.Column(db.Integer, db.ForeignKey('provider.id'), nullable=False)
+    image_url = db.Column(db.String(255), nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     provider = db.relationship('Provider', backref='tour_plan')
 
