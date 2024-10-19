@@ -33,7 +33,7 @@ const Layout = () => {
                         <Route element={<Single />} path="/single/:theid" />
                         <Route path="/register" element={<Register />} />
                         <Route element={<h1>Not found!</h1>} />
-                        <Route element= {<PackagesList/>} path= "/Paquetes"/>
+                        <Route element= {<PackagesList/>} path= "/tourplans"/>
                     </Routes>
                     <Footer />
                 </ScrollToTop>
