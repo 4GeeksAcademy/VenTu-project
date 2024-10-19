@@ -4,10 +4,31 @@ from werkzeug.security import generate_password_hash
 from datetime import datetime
 from flask_jwt_extended import create_access_token, jwt_required
 from flask_cors import CORS
+import os
+import cloudinary
+import cloudinary.uploader
 from datetime import datetime, timezone
 from api.models import ReservationStatus 
 
+
 api = Blueprint('api', __name__)
+
+
+
+cloudinary.config(
+    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
+    api_key=os.getenv("CLOUDINARY_API_KEY"),
+    api_secret=os.getenv("CLOUDINARY_API_SECRET")
+)
+
+@api.route('/upload', methods=['POST'])
+def upload_file():
+    file = request.files['image']
+    result = cloudinary.uploader.upload(file)
+    print (result["secure_url"])
+    return jsonify({"url": result["secure_url"]})
+
+
 
 # =====================================
 # Rutas de autenticación con JWT
@@ -17,12 +38,26 @@ api = Blueprint('api', __name__)
 def create_token():
     email = request.json.get("email", None)
     password = request.json.get("password", None)
-    
-    if email != "test" or password != "test":
-        return jsonify({"msg": "Bad email or password"}), 401
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        return jsonify({"msg": "Correo electrónico o contraseña incorrectos"}), 401
+    if not check_password_hash(user.password_hash, password):
+        return jsonify({"msg": "Correo electrónico o contraseña incorrectos"}), 401
+
 
     access_token = create_access_token(identity=email)
-    return jsonify(token=access_token)
+    return jsonify(token=access_token, user=user.serialize()), 200
+
+
+@api.route('/me', methods=['GET'])
+@jwt_required()
+def get_me():
+    email = get_jwt_identity()
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+    return jsonify(user.serialize()), 200
+
 
 
 # =====================================
