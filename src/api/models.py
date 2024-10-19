@@ -38,15 +38,15 @@ class User(db.Model):
             db.session.add(client)
         db.session.commit()
 
-    # def serialize(self):
-    #     return {
-    #         "id": self.id,
-    #         "username": self.username,
-    #         "email": self.email,
-    #         "role": self.role,
-    #         "status": self.status,
-    #         "created_at": self.created_at.isoformat()  # Convierte a formato ISO para JSON
-    #     }   
+    def serialize(self):
+        return {
+            "id": self.id,
+            "username": self.username,
+            "email": self.email,
+            "role": self.role,
+            "status": self.status,
+            "created_at": self.created_at.isoformat()  # Convierte a formato ISO para JSON
+        }   
 
 class Client(db.Model):
     __tablename__ = 'client'

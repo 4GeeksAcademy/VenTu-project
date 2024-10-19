@@ -17,12 +17,26 @@ api = Blueprint('api', __name__)
 def create_token():
     email = request.json.get("email", None)
     password = request.json.get("password", None)
-    
-    if email != "test" or password != "test":
-        return jsonify({"msg": "Bad email or password"}), 401
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        return jsonify({"msg": "Correo electrónico o contraseña incorrectos"}), 401
+    if not check_password_hash(user.password_hash, password):
+        return jsonify({"msg": "Correo electrónico o contraseña incorrectos"}), 401
+
 
     access_token = create_access_token(identity=email)
-    return jsonify(token=access_token)
+    return jsonify(token=access_token, user=user.serialize()), 200
+
+
+@api.route('/me', methods=['GET'])
+@jwt_required()
+def get_me():
+    email = get_jwt_identity()
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+    return jsonify(user.serialize()), 200
+
 
 
 # =====================================
