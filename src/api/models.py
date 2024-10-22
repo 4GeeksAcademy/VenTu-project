@@ -63,7 +63,7 @@ class TourPlan(db.Model):
     __tablename__ = 'tour_plan'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=False)
-    description = db.Column(db.Text, nullable=False)
+    description = db.Column(db.Text, nullable=False)       
     price = db.Column(db.Float, nullable=False)
     available_spots = db.Column(db.Integer, nullable=False)
     start_date = db.Column(db.DateTime, nullable=False)
