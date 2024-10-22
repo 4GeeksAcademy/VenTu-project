@@ -27,10 +27,10 @@ export const Navbar = () => {
                 if (modalInstance) {
                     modalInstance.hide();
                 }
-                
+
                 navigate("/");
             } else {
-                
+
             }
         } catch (error) {
             toast.error("Error en la solicitud. Por favor, inténtalo de nuevo.");
