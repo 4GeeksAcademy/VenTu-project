@@ -8,7 +8,7 @@ import os
 import cloudinary
 import cloudinary.uploader
 from datetime import datetime, timezone
-from api.models import ReservationStatus 
+from api.models import ReservationStatus
 
 
 api = Blueprint('api', __name__)
