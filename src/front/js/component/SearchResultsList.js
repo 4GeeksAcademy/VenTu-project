@@ -7,14 +7,14 @@ export const SearchResultsList = ({ results }) => {
          {
             results.map((result, id) => {
                 return (
-                    <div key= {id}> 
-                        {result.title}
-                    </div> 
+                    // <div key= {id}> 
+                    //     {result.title}
+                    // </div> 
 
-                    // <PackageCard 
-                    //         key={id} 
-                    //         actividades={[result]}
-                    //     />
+                    <PackageCard 
+                            key={id} 
+                            actividades={[result]}
+                        />
                 );
             })
          }

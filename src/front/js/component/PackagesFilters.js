@@ -1,5 +1,4 @@
-import React from 'react';
-import { Form, Button } from "react-bootstrap";
+import React, {useState} from 'react';
 
 const PackagesFilters = ({ filters, setFilters}) => { 
 
