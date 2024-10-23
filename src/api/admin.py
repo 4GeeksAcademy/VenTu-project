@@ -1,7 +1,7 @@
 import os
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
-from .models import db, User, TourPlan, Reservation
+from .models import db, User, TourPlan, Provider, Client, Reservation
 
 # Modelo personalizado para manejar campos y permisos de usuarios
 class CustomModelView(ModelView):
@@ -51,4 +51,6 @@ def setup_admin(app):
     # Añadir vistas de los modelos al panel de administración
     admin.add_view(CustomModelView(User, db.session))
     admin.add_view(TourPlanAdmin(TourPlan, db.session))
+    admin.add_view(ModelView(Provider, db.session))
+    admin.add_view(ModelView(Client, db.session))
     admin.add_view(ReservationAdmin(Reservation, db.session))

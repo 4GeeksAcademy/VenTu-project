@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
-from api.models import db, TourPlan,  User, Reservation
-from werkzeug.security import generate_password_hash
+from api.models import db, TourPlan, Client, Provider, User, Reservation
+from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 from flask_jwt_extended import create_access_token, jwt_required
 from flask_cors import CORS
@@ -81,32 +81,26 @@ def register_provider():
     db.session.add(new_user)
     db.session.commit()
     
-    # new_provider = Provider(user_id=new_user.id)
-    # db.session.add(new_provider)
-    # db.session.commit()
+    new_provider = Provider(user_id=new_user.id)
+    db.session.add(new_provider)
+    db.session.commit()
     
     return jsonify({"message": "Provider registered", "id": new_user.id}), 201
 
 @api.route('/providers', methods=['GET'])
 def get_providers():
-    providers = User.query.filter_by(role='provider').all()
-    result = [ provider.serialize() for provider in providers]
+    providers = Provider.query.all()
+    result = [{"id": provider.id, "user_id": provider.user_id} for provider in providers]
     return jsonify(result), 200
-
 
 @api.route('/providers/<int:provider_id>', methods=['DELETE'])
 def delete_provider(provider_id):
-    provider = User.query.get(provider_id)
-
+    provider = Provider.query.get(provider_id)
     if not provider:
         return jsonify({"error": "Provider not found"}), 404
     
-    if provider:
-        provider.status = "inactive"
-        db.session.commit()
-    
-    # db.session.delete(provider)
-    # db.session.commit()
+    db.session.delete(provider)
+    db.session.commit()
     return jsonify({"message": "Provider deleted"}), 200
 
 
@@ -127,28 +121,28 @@ def register_client():
         role='client'
     )
     
-    db.session.add(new_user)
-    db.session.commit()
+    new_user.save()  # Se utiliza el método save para manejar la creación
     return jsonify({"message": "Client registered", "id": new_user.id}), 201
 
 @api.route('/clients', methods=['GET'])
 def get_clients():
-    clients = User.query.filter_by(role='client').all()
-    result = [client.serialize() for client in clients]
+    clients = Client.query.all()
+    result = [{"id": client.id, "user_id": client.user_id, "status": client.status} for client in clients]
     return jsonify(result), 200
 
 @api.route('/clients/<int:client_id>', methods=['DELETE'])
 def delete_client(client_id):
-    client = User.query.get(client_id)
+    client = Client.query.get(client_id)
     if not client:
         return jsonify({"error": "Client not found"}), 404
     
-    if client:
-        client.status = "inactive"
+    user = User.query.get(client.user_id)
+    if user:
+        user.status = "inactive"
         db.session.commit()
 
-    # db.session.delete(client)
-    # db.session.commit()
+    db.session.delete(client)
+    db.session.commit()
     return jsonify({"message": "Client deleted and user marked as inactive"}), 200
 
 
@@ -252,7 +246,7 @@ def create_reservation():
     data = request.json
 
     # Validar que el cliente existe
-    client = User.query.get(data.get('client_id'))
+    client = Client.query.filter_by(user_id=data.get('client_id')).first()
     if not client:
         return jsonify({"error": "El cliente no es válido"}), 403
 
