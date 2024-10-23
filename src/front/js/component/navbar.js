@@ -28,8 +28,13 @@ export const Navbar = () => {
                 if (modalInstance) {
                     modalInstance.hide();
                 }
+                if (store.user.role === 'provider') {
+                    navigate("/b2b");
+                } else {
+                
+                    navigate("/");
 
-                navigate("/");
+                }
             } else {
 
             }

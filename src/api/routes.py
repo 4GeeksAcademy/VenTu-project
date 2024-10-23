@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from api.models import db, TourPlan, Client, Provider, User, Reservation
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 from flask_jwt_extended import create_access_token, jwt_required
 from flask_cors import CORS
@@ -9,6 +9,7 @@ import cloudinary
 import cloudinary.uploader
 from datetime import datetime, timezone
 from api.models import ReservationStatus
+
 
 
 api = Blueprint('api', __name__)
@@ -296,3 +297,23 @@ def delete_reservation(reservation_id):
     db.session.delete(reservation)
     db.session.commit()
     return jsonify({"message": "Reservation deleted"}), 200
+
+
+@api.route('/api/upload', methods=['POST'])
+def upload_image():
+    if 'image' not in request.files:
+        return jsonify({"msg": "No file part"}), 400
+    file = request.files['image']
+    if file.filename == '':
+        return jsonify({"msg": "No selected file"}), 400
+    
+    if file:
+        filename = secure_filename(file.filename)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(filepath)
+        
+        # Guardar información de la imagen en un nuevo TourPlan o actualizar uno existente
+        image_url = f'/uploads/{filename}'
+        # Aquí puedes relacionar el tour con la imagen cargada (ej. buscando el tour por ID)
+        
+        return jsonify({"msg": "File uploaded", "filename": filename, "url": image_url}), 201

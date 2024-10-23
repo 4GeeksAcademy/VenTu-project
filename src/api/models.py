@@ -59,19 +59,38 @@ class Provider(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     user = db.relationship('User', backref='provider')
+
+
 class TourPlan(db.Model):
     __tablename__ = 'tour_plan'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=False)
-    description = db.Column(db.Text, nullable=False)       
+    description = db.Column(db.Text, nullable=False)
     price = db.Column(db.Float, nullable=False)
     available_spots = db.Column(db.Integer, nullable=False)
     start_date = db.Column(db.DateTime, nullable=False)
     end_date = db.Column(db.DateTime, nullable=False)
     provider_id = db.Column(db.Integer, db.ForeignKey('provider.id'), nullable=False)
-    image_url = db.Column(db.String(255), nullable=True)
+    image_url = db.Column(db.String(255), nullable=True)  # Almacena la URL de la imagen
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     provider = db.relationship('Provider', backref='tour_plan')
+
+    def __repr__(self):
+        return f'<TourPlan {self.title}>'
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "title": self.title,
+            "description": self.description,
+            "price": self.price,
+            "available_spots": self.available_spots,
+            "start_date": self.start_date,
+            "end_date": self.end_date,
+            "provider_id": self.provider_id,
+            "image_url": self.image_url,
+            "created_at": self.created_at
+        }
 class ReservationStatus(Enum):
     ACTIVE = 'active'
     CANCELLED = 'cancelled'
