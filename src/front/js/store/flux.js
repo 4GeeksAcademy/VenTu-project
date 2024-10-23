@@ -19,11 +19,21 @@ const getState = ({ getStore, getActions, setStore }) => {
 			]
 		},
 		actions: {
-			
+
 			exampleFunction: () => {
 				getActions().changeColor(0, "green");
 			},
 
+			uploadImage: async (image) => {
+				const formData = new FormData();
+				formData.append("image", image);
+				const resp = await fetch(`${process.env.BACKEND_URL}/api/upload`, {
+					method: "POST",
+					body: formData
+				});
+				const data = await resp.json();
+				console.log(data);
+			},
 
 			getClient: async () => {
 
@@ -31,14 +41,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				try {
 					const response = await fetch(`${process.env.BACKEND_URL}/api/clients`);
-					
+
 
 					if (response.status === 404) {
 						register();
 					} else {
 						const data = await response.json();
 						console.log(data);
-						setStore({ user: data.user }); 
+						setStore({ user: data.user });
 					}
 				} catch (error) {
 					console.error('Error al obtener los clientes:', error);
@@ -47,7 +57,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 
 			register: async (email, fullName, password) => {
-				const { getClient } = getActions();
+
 				const resp = await fetch(process.env.BACKEND_URL + "/api/register/client", {
 					method: "POST",
 					headers: {
@@ -59,19 +69,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 						password: password
 					})
 				});
-				const data = await resp.json();
-
-				localStorage.setItem("token", data.token);
-
-				setStore({ user: data.user });
-				setStore({ token: data.token });
 
 				if (resp.ok) {
-					getClient();
-					toast.success("User registered!");
+
+					toast.success("Usuario registrado! Bienvenido!");
 				}
 				else {
-					toast.error("Error registering user");
+					toast.error("Error registrando al usuario!");
 				}
 			},
 
@@ -86,7 +90,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				if (resp.ok) {
 					toast.success("Client deleted successfully!");
-					await getActions().getClient(); 
+					await getActions().getClient();
 					const store = getStore();
 
 				} else {
@@ -95,7 +99,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			login: async (email, password) => {
-				const { getClient } = getActions();
+
 				try {
 
 					const resp = await fetch(process.env.BACKEND_URL + "/api/token", {
@@ -115,11 +119,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 					if (resp.ok) {
 						localStorage.setItem("token", data.token);
+						//localStorage.setItem("user", JSON.stringify(data.user));
 						setStore({
 							token: data.token,
 							user: data.user
 						});
-						getClient();
+
 						toast.success("Logged in! 🎉");
 					} else {
 						if (data.msg) {
@@ -138,22 +143,28 @@ const getState = ({ getStore, getActions, setStore }) => {
 				localStorage.removeItem("token");
 				setStore({ token: null });
 				setStore({ user: null });
-				toast.success("Logged out! 🎉");
+				toast.success("Desconectado! 🎉");
 			},
 
+			me: async () => {
+				const resp = await fetch(process.env.BACKEND_URL + "/api/me", {
+					headers: {
+						Authorization: "Bearer " + localStorage.getItem("token")
+					}
+				});
 
-			getMessage: async () => {
-				try {
-					
-					const resp = await fetch(process.env.BACKEND_URL + "/api/hello")
-					const data = await resp.json()
-					setStore({ message: data.message })
-					// don't forget to return something, that is how the async resolves
-					return data;
-				} catch (error) {
-					console.log("Error loading message from backend", error)
+				const data = await resp.json();
+				console.log(data);
+
+				if (resp.ok) {
+					setStore({ user: data });
+				} else {
+					console.log("Error getting user data");
 				}
 			},
+
+
+
 			changeColor: (index, color) => {
 				//get the store
 				const store = getStore();
