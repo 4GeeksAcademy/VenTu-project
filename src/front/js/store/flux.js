@@ -2,6 +2,7 @@ import toast from "react-hot-toast";
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
+			
 			message: null,
 			user: null,
 			token: localStorage.getItem("token") || null,

@@ -1,6 +1,6 @@
 from flask import Flask
 from flask.cli import AppGroup
-from api.models import db, User, Client, Provider, TourPlan, Reservation
+from api.models import db, User, TourPlan, Reservation
 from werkzeug.security import generate_password_hash
 
 def setup_commands(app):
@@ -17,12 +17,10 @@ def setup_commands(app):
         user1 = User(username="client1", email="client1@example.com", password_hash=generate_password_hash("password123"), role="client")
         user2 = User(username="provider1", email="provider1@example.com", password_hash=generate_password_hash("password123"), role="provider")
         
-        # Crear clientes y proveedores asociados a los usuarios
-        client1 = Client(user=user1, status="active")
-        provider1 = Provider(user=user2)
+
         
         # Insertar en la base de datos
-        db.session.add_all([user1, user2, client1, provider1])
+        db.session.add_all([user1, user2])
         db.session.commit()
 
         print("Datos de prueba insertados con éxito")
@@ -49,8 +47,6 @@ def setup_commands(app):
         """
         db.session.query(Reservation).delete()
         db.session.query(TourPlan).delete()
-        db.session.query(Client).delete()
-        db.session.query(Provider).delete()
         db.session.query(User).delete()
         db.session.commit()
 

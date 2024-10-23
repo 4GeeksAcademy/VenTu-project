@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from api.models import db, TourPlan, Client, Provider, User, Reservation
+from api.models import db, TourPlan,  User, Reservation
 from werkzeug.security import generate_password_hash
 from datetime import datetime
 from flask_jwt_extended import create_access_token, jwt_required
@@ -9,6 +9,7 @@ import cloudinary
 import cloudinary.uploader
 from datetime import datetime, timezone
 from api.models import ReservationStatus
+
 
 
 api = Blueprint('api', __name__)
@@ -80,26 +81,32 @@ def register_provider():
     db.session.add(new_user)
     db.session.commit()
     
-    new_provider = Provider(user_id=new_user.id)
-    db.session.add(new_provider)
-    db.session.commit()
+    # new_provider = Provider(user_id=new_user.id)
+    # db.session.add(new_provider)
+    # db.session.commit()
     
     return jsonify({"message": "Provider registered", "id": new_user.id}), 201
 
 @api.route('/providers', methods=['GET'])
 def get_providers():
-    providers = Provider.query.all()
-    result = [{"id": provider.id, "user_id": provider.user_id} for provider in providers]
+    providers = User.query.filter_by(role='provider').all()
+    result = [ provider.serialize() for provider in providers]
     return jsonify(result), 200
+
 
 @api.route('/providers/<int:provider_id>', methods=['DELETE'])
 def delete_provider(provider_id):
-    provider = Provider.query.get(provider_id)
+    provider = User.query.get(provider_id)
+
     if not provider:
         return jsonify({"error": "Provider not found"}), 404
     
-    db.session.delete(provider)
-    db.session.commit()
+    if provider:
+        provider.status = "inactive"
+        db.session.commit()
+    
+    # db.session.delete(provider)
+    # db.session.commit()
     return jsonify({"message": "Provider deleted"}), 200
 
 
@@ -120,28 +127,28 @@ def register_client():
         role='client'
     )
     
-    new_user.save()  # Se utiliza el método save para manejar la creación
+    db.session.add(new_user)
+    db.session.commit()
     return jsonify({"message": "Client registered", "id": new_user.id}), 201
 
 @api.route('/clients', methods=['GET'])
 def get_clients():
-    clients = Client.query.all()
-    result = [{"id": client.id, "user_id": client.user_id, "status": client.status} for client in clients]
+    clients = User.query.filter_by(role='client').all()
+    result = [client.serialize() for client in clients]
     return jsonify(result), 200
 
 @api.route('/clients/<int:client_id>', methods=['DELETE'])
 def delete_client(client_id):
-    client = Client.query.get(client_id)
+    client = User.query.get(client_id)
     if not client:
         return jsonify({"error": "Client not found"}), 404
     
-    user = User.query.get(client.user_id)
-    if user:
-        user.status = "inactive"
+    if client:
+        client.status = "inactive"
         db.session.commit()
 
-    db.session.delete(client)
-    db.session.commit()
+    # db.session.delete(client)
+    # db.session.commit()
     return jsonify({"message": "Client deleted and user marked as inactive"}), 200
 
 
@@ -245,7 +252,7 @@ def create_reservation():
     data = request.json
 
     # Validar que el cliente existe
-    client = Client.query.filter_by(user_id=data.get('client_id')).first()
+    client = User.query.get(data.get('client_id'))
     if not client:
         return jsonify({"error": "El cliente no es válido"}), 403
 
@@ -296,3 +303,23 @@ def delete_reservation(reservation_id):
     db.session.delete(reservation)
     db.session.commit()
     return jsonify({"message": "Reservation deleted"}), 200
+
+
+@api.route('/api/upload', methods=['POST'])
+def upload_image():
+    if 'image' not in request.files:
+        return jsonify({"msg": "No file part"}), 400
+    file = request.files['image']
+    if file.filename == '':
+        return jsonify({"msg": "No selected file"}), 400
+    
+    if file:
+        filename = secure_filename(file.filename)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(filepath)
+        
+        # Guardar información de la imagen en un nuevo TourPlan o actualizar uno existente
+        image_url = f'/uploads/{filename}'
+        # Aquí puedes relacionar el tour con la imagen cargada (ej. buscando el tour por ID)
+        
+        return jsonify({"msg": "File uploaded", "filename": filename, "url": image_url}), 201
