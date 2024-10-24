@@ -7,7 +7,6 @@ import SearchBarPrueba from "../component/SearchFormPackage";
 
 
 export const PackagesList = () => {
-    const [destino, setDestination] = useState('');
     const [actividades, setActividades] = useState([]);
     const [results, setResults] = useState([]);
     const [people, setPeople] = useState('');
