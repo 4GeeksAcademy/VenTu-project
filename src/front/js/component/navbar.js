@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Context } from "../store/appContext";
 import toast, { Toaster } from 'react-hot-toast';
+import logo from '../../static/images/ventu-logo.png';
 
 export const Navbar = () => {
     const navigate = useNavigate();
@@ -48,11 +49,12 @@ export const Navbar = () => {
             <Toaster /> {/* Renderiza los mensajes toast */}
             <div className="container">
                 <Link to="/" className="navbar-brand text-white">
-                    Mi Marca
+                    <img src={logo} alt="Ventu Logo" style={{ width: '120px', height: 'auto' }} />
                 </Link>
                 <div>
-                    <Link to="/" className="btn btn-outline-light">Inicio</Link>
-                    <Link to="/about" className="btn btn-outline-light">Sobre Nosotros</Link>
+                    <Link to="/" className="btn">Inicio</Link>
+                    <Link to="/tourplans" className="btn">Planes turisticos</Link>
+                    <Link to="/about" className="btn">Sobre Nosotros</Link>
                 </div>
                 <div className="dropdown">
                     <button

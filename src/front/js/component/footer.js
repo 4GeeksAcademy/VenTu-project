@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import logo from '../../static/images/ventu-logo.png'; // Asegúrate de que la ruta sea correcta
+import logo from '../../static/images/ventu-logo.png';
 
 export const Footer = () => (
     <footer className="footer mt-auto py-3 text-center" style={{ backgroundColor: '#00B4E7', color: '#FFF' }}>
