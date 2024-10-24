@@ -1,7 +1,13 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const PackageCard = ({ actividades= [] }) => { 
+    
+    const navigate = useNavigate();
 
+    const handleReserveClick = (title) => {
+        navigate(`/tourplans/${title}`);
+    };
 
     return (
         // Tarjeta de paquete
@@ -32,14 +38,15 @@ const PackageCard = ({ actividades= [] }) => {
                 {/* Botones de Reserva y Favoritos */}
                 <div className="row d-flex justify-content-center"> 
                     <a href="#" className="btn btn-primary rounded-pill" 
-                    style={{ width: '18rem', backgroundColor: '#35DBD9', borderColor: '#35DBD9'}}> 
+                    style={{ width: '18rem', backgroundColor: '#35DBD9', borderColor: '#35DBD9'}} 
+                    onClick={() => handleReserveClick(actividad.title)}> 
                         Reserva Ya! 
                     </a>
 
-                    <a href="#" className="btn btn-primary ms-2 rounded-pill" 
+                    <button href="#" className="btn btn-primary ms-2 rounded-pill" 
                     style={{ width: '3rem',  backgroundColor: '#35DBD9', borderColor: '#35DBD9' }}> 
                     <i class="fa-solid fa-heart"></i>
-                    </a>
+                    </button>
                 </div>
                 
             </div>

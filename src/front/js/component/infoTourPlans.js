@@ -16,15 +16,20 @@ const InfoTourPlans = () => {
     }, [title])
 
     return (
-        <div claasName="container col-10 mt-5 pt-5 "> 
+        <div className="container col-10 mt-5 pt-5"> 
             <div> 
                 <h1> 
-                    {/* <h2> {actividades.title} </h2> */}
-                    Viaje a Canaima
+                     {title}
                 </h1>
+                {/* Renderiza la información de las actividades */}
+                {actividades.map((actividad, index) => (
+                    <div key={index}>
+                        <h2>{actividad.title}</h2>
+                        <p>{actividad.descripcion}</p>
+                        {/* Otros detalles de la actividad */}
+                    </div>
+                ))}
             </div>
-        
-        
         </div>
 
 
