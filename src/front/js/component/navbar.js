@@ -29,7 +29,7 @@ export const Navbar = () => {
                     modalInstance.hide();
                 }
                 if (store.user.role === 'provider') {
-                    navigate("/b2b");
+                    navigate("/");
                 } else {
                 
                     navigate("/");

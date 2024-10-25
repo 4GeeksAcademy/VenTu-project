@@ -30,7 +30,7 @@ export const Footer = () => (
                         <Link to="/" className="btn btn-link text-white">Inicio</Link>
                         <Link to="/paquetes" className="btn btn-link text-white">Planes Turísticos</Link>
                         <Link to="/about" className="btn btn-link text-white">Sobre Nosotros</Link>
-                        <Link to="/b2b" className="btn btn-link text-white">Regístrate como Empresa</Link>
+                        <Link to="/creartourplan" className="btn btn-link text-white">Crear Plan Turístico</Link>
                     </nav>
                 </div>
             </div>

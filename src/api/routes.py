@@ -1,15 +1,15 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, Blueprint, jsonify, request, app
 from api.models import db, TourPlan, Client, Provider, User, Reservation
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 from datetime import datetime
-from flask_jwt_extended import create_access_token, jwt_required
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from flask_cors import CORS
 import os
 import cloudinary
 import cloudinary.uploader
 from datetime import datetime, timezone
 from api.models import ReservationStatus
-
 
 
 api = Blueprint('api', __name__)
@@ -26,7 +26,7 @@ cloudinary.config(
 def upload_file():
     file = request.files['image']
     result = cloudinary.uploader.upload(file)
-    print (result["secure_url"])
+    print(result["secure_url"])
     return jsonify({"url": result["secure_url"]})
 
 
@@ -199,28 +199,28 @@ def get_tour_plans():
     return jsonify(result), 200
 
 @api.route('/tourplans', methods=['POST'])
+@jwt_required()
 def create_tour_plan():
-    data = request.json
-
-    provider = Provider.query.filter_by(user_id=data.get('user_id')).first()
-    if not provider:
-        return jsonify({"error": "El usuario no es un proveedor válido"}), 403
-
-    if not data.get('title') or not data.get('price'):
-        return jsonify({"error": "Faltan campos obligatorios"}), 400
+    user_email = get_jwt_identity()
+    user = User.query.filter_by(email=user_email).first()
     
+    if not user or user.role != 'provider':
+        return jsonify({"msg": "El usuario no es un proveedor válido"}), 403
+    
+    if not user.provider:
+        return jsonify({"msg": "No se encontró un proveedor asociado a este usuario"}), 404
+
+    data = request.form
     new_plan = TourPlan(
         title=data.get('title'),
         description=data.get('description'),
         price=data.get('price'),
-        available_spots=data.get('available_spots'),
-        start_date=data.get('start_date'),
-        end_date=data.get('end_date'),
-        provider_id=provider.id
+        provider_id=user.provider.id
     )
+
     db.session.add(new_plan)
     db.session.commit()
-    return jsonify({"message": "Tour plan created", "id": new_plan.id}), 201
+    return jsonify({"message": "Tour plan created"}), 201
 
 
 # =====================================
@@ -309,7 +309,7 @@ def upload_image():
     
     if file:
         filename = secure_filename(file.filename)
-        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)  # Use app
         file.save(filepath)
         
         # Guardar información de la imagen en un nuevo TourPlan o actualizar uno existente

@@ -19,7 +19,7 @@ export const B2BPage = () => {
         );
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async(e) => {
         e.preventDefault();
 
         // const formDataToSend = new FormData();
@@ -29,8 +29,13 @@ export const B2BPage = () => {
         // formDataToSend.append('packageImage', formData.packageImage);
 
         // console.log([...formDataToSend]);
-        actions.uploadImage(formData);
-        alert('Formulario enviado');
+        // actions.uploadImage(formData);
+        // alert('Formulario enviado');
+        const imageUpload = await actions.uploadImage(formData);
+        if (imageUpload) {
+            console.log("imagen subida",  imageUpload);
+            
+        } 
     };
 
     return (
