@@ -15,11 +15,11 @@ export const B2BPage = () => {
 
     const handleFileChange = (e) => {
         setFormData(
-           e.target.files[0]
+            e.target.files[0]
         );
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         // const formDataToSend = new FormData();
@@ -29,7 +29,11 @@ export const B2BPage = () => {
         // formDataToSend.append('packageImage', formData.packageImage);
 
         // console.log([...formDataToSend]);
-        actions.uploadImage(formData);
+        const imageUploaded = await actions.uploadImage(formData);
+
+        if (imageUploaded) {
+            console.log('Imagen subida:', imageUploaded);
+        }
         alert('Formulario enviado');
     };
 

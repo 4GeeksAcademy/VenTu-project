@@ -48,6 +48,7 @@ export const Navbar = () => {
                 <div>
                     <Link to="/" className="btn btn-outline-light">Inicio</Link>
                     <Link to="/about" className="btn btn-outline-light">Sobre Nosotros</Link>
+                    <Link to="/tourplans" className="btn btn-warning mx-2">Planes turísticos</Link>
                 </div>
                 <div className="dropdown">
                     <button

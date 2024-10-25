@@ -11,6 +11,12 @@ from datetime import datetime, timezone
 from api.models import ReservationStatus 
 
 
+from flask_jwt_extended import get_jwt_identity
+from werkzeug.security import check_password_hash
+
+from flask_jwt_extended import JWTManager
+
+
 api = Blueprint('api', __name__)
 
 
@@ -215,7 +221,8 @@ def create_tour_plan():
         available_spots=data.get('available_spots'),
         start_date=data.get('start_date'),
         end_date=data.get('end_date'),
-        provider_id=provider.id
+        provider_id=provider.id,
+        image_url=data.get('image_url')
     )
     db.session.add(new_plan)
     db.session.commit()
