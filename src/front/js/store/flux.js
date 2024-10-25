@@ -2,6 +2,7 @@ import toast from "react-hot-toast";
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
+			
 			message: null,
 			user: null,
 			token: localStorage.getItem("token") || null,
@@ -59,9 +60,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 
-			register: async (email, fullName, password) => {
+			register: async (email, fullName, password, role) => {
 
-				const resp = await fetch(process.env.BACKEND_URL + "/api/register/client", {
+				const resp = await fetch(process.env.BACKEND_URL + "/api/register/"+role, {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json"
@@ -69,7 +70,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					body: JSON.stringify({
 						email: email,
 						username: fullName,
-						password: password
+						password: password,
 					})
 				});
 

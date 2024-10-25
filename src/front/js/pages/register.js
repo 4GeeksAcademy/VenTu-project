@@ -8,6 +8,8 @@ const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState("");
+
   const { contact_id } = useParams();
   const navigate = useNavigate();
 
@@ -18,6 +20,7 @@ const Register = () => {
       username: name,
       email: email,
       password_hash: password,
+      role: role
     };
 
     // Cambia esto para usar la acción de registro
@@ -26,12 +29,13 @@ const Register = () => {
       actions.updateContact(contact, contact_id);
     } else {
       // Aquí llamamos a la acción de registro
-      await actions.register(contact.email, contact.username, contact.password_hash);
+      await actions.register(contact.email, contact.username, contact.password_hash, contact.role);
     }
 
     setName("");
     setEmail("");
     setPassword("");
+    setRole("");
     navigate("/"); // Redirigir después del registro
   };
 
@@ -87,6 +91,13 @@ const Register = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
+            </div>
+
+            <div className="mb-3">
+              <select value={role} defaultValue={"client"} onChange={(e) => setRole(e.target.value)} className="form-select" aria-label="Default select example">
+                <option value="client">Client</option>
+                <option value="provider">Provider</option>
+              </select>
             </div>
 
             {/* Cambiar Link a un botón normal que llama a handleSubmit */}

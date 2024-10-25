@@ -2,6 +2,7 @@ import React from 'react';
 import MainDestinations from '../component/MainDestinations';
 import FeaturedActivities from '../component/FeaturedActivities';
 import background from '../../static/images/bg-hero-4.webp';
+import '../../styles/home.css'
 
 export const Home = () => {
     return (
@@ -31,16 +32,7 @@ export const Home = () => {
             />
 
             {/* Featured Activities */}
-            <FeaturedActivities
-                actividades={[
-                    { titulo: 'Excursión a Los Roques', precio: '250,00 US$', img: 'https://images.unsplash.com/photo-1721846527498-8b6d5e6e573f?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
-                    { titulo: 'Tour por Canaima y Salto Ángel', precio: '320,00 US$', img: 'https://images.unsplash.com/photo-1721846527498-8b6d5e6e573f?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
-                    { titulo: 'Excursión al Teleférico de Mérida', precio: '45,00 US$', img: 'https://images.unsplash.com/photo-1721846527498-8b6d5e6e573f?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
-                    { titulo: 'Tour por las playas de Margarita', precio: '150,00 US$', img: 'https://images.unsplash.com/photo-1721846527498-8b6d5e6e573f?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
-                    { titulo: 'Excursión al Teleférico de Mérida', precio: '45,00 US$', img: 'https://images.unsplash.com/photo-1721846527498-8b6d5e6e573f?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
-                    { titulo: 'Tour por las playas de Margarita', precio: '150,00 US$', img: 'https://images.unsplash.com/photo-1721846527498-8b6d5e6e573f?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
-                ]}
-            />
+            <FeaturedActivities/>
         </div>
     );
 };
