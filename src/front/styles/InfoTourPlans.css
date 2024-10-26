@@ -1,0 +1,26 @@
+
+.main-image {
+    width:100%;
+    height: auto;
+    max-width: 600px; 
+    max-height: 400px;
+    object-fit: cover;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.litle-image {
+    width: 170px;
+    height: 115px;
+    object-fit:cover;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.main-image:hover, .litle-image:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+}
+
+.card-tour:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
