@@ -13,7 +13,8 @@ const PackageCard = ({ actividades= [] }) => {
         // Tarjeta de paquete
         <div className="d-flex flex-wrap gap-4 justify-content-center">
         {actividades.map((actividad, index) => (  
-        <div key={index} className="card" style={{ width: '24rem', backgroundColor: '#F2F4FF', borderColor: '#F2F4FF' }}>
+        <div key={index} className="card-tour card shadow" style={{ width: '24rem', backgroundColor: '#F2F4FF', borderColor: '#F2F4FF',transition: 'transform 0.2s' }}>
+        
 
             {/* Imagen de la tarjeta */}
             <img 
@@ -26,14 +27,14 @@ const PackageCard = ({ actividades= [] }) => {
             <div className="card-body">
 
                 {/* Título del paquete */}
-                <div className="row"> 
-                    <h5 className="card-title"> {actividad.title} </h5>
+                <h5 className="card-title">{actividad.title}</h5>
+                <p className="card-text">{actividad.description || 'Sin descripción disponible'}</p>
+                                    
+                <div className="info-extra mb-3">
+                    <p><strong>Precio:</strong> {actividad.price} US$</p>
+                    <p><strong>Disponibles:</strong> {actividad.available_spots} asientos</p>
+                    <p><strong>Fechas:</strong> {new Date(actividad.start_date).toLocaleDateString()} - {new Date(actividad.end_date).toLocaleDateString()}</p>
                 </div>
-                
-
-                {/* Precio del paquete*/}
-                <h6 className="card-text"> Desde {actividad.price} </h6>
-
 
                 {/* Botones de Reserva y Favoritos */}
                 <div className="row d-flex justify-content-center"> 

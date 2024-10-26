@@ -1,112 +1,172 @@
 import React, { useState, useEffect }  from "react";
 import { useParams } from "react-router-dom";
+import { Modal, Carousel } from "react-bootstrap";
+import "/workspaces/VenTu-project/src/front/styles/InfoTourPlans.css"
 
 const InfoTourPlans = () => { 
-    const { title } = useParams()
+    const { title, description,price,start_date, end_date, available_spots} = useParams()
+
+    const TourPlan = {
+        mainImage: "https://static.plusultra.com/media/1002/parque-nacional-canaima.jpg?cropmode=percentaje&width=480",
+        gallery: [
+            "https://conexioncp.org/wp-content/uploads/2023/09/Gran-Sabana.jpg",
+            "https://www.dviaje.com.ve/wp-content/uploads/2024/03/PARQUE-NACIONAL-CANAIMA.jpg",
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Kukenan_Tepuy_at_Sunset.jpg/500px-Kukenan_Tepuy_at_Sunset.jpg",
+        ]
+    };
 
     const [actividades, setActividades] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+    const [activeIndex, setActiveIndex] = useState(0);
 
-    useEffect (() => {
-        fetch(`${process.env.BACKEND_URL}/api/tourplans/`+ title)
-        .then((response) => response.json())
-        .then(data => { 
-            setActividades(data.result)
-        })
-        .catch(err => console.error(err))    
-    }, [title])
+
+    // useEffect (() => {
+    //     fetch(`${process.env.BACKEND_URL}/tourplans/`+ title)
+    //     .then((response) => response.json())
+    //     .then(data => { 
+    //         setActividades(data.result)
+    //     })
+    //     .catch(err => console.error(err))    
+    // }, [title])
+
+    const handleShowModal = (index) => {
+        setActiveIndex(index);
+        setShowModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+    };
+
 
     return (
-        <div className="container col-10 mt-5 pt-5"> 
-            <div> 
-                <h1> 
-                     {title}
-                </h1>
-                {/* Renderiza la información de las actividades */}
-                {actividades.map((actividad, index) => (
-                    <div key={index}>
-                        <h2>{actividad.title}</h2>
-                        <p>{actividad.descripcion}</p>
-                        {/* Otros detalles de la actividad */}
-                    </div>
-                ))}
-            </div>
-        </div>
-
-
-
-
-
-
-
-    // <div> 
-    //     <div className="contenedor mt-5 pt-5 ">
-    //     <div className=" ">
-    //         <div className="card text-black mb-3 mx-3 mx-md-5">
-    //             <div className=" g-0">
-    //                 <div className="col-md-8">
-    //                     <img src={"https://static.plusultra.com/media/1002/parque-nacional-canaima.jpg?cropmode=percentaje&width=480"} class="img-fluid rounded h-100" alt="Character" style={{ height: "100%" }} />
-    //                 </div>
-
-    //                 <div className="col-md-8">
-    //                     <div className="card-body">
-    //                     <h5 className="card-title fs-2 text-black m-3">Viaje a Canaima</h5>
-    //                     <p className="card-text m-5 fw-bold"> Descripcion: </p>
-    //                     <p className="card-text m-5 ">
-    //                         Embárcate en una aventura inolvidable al Parque Nacional Canaima, uno de los destinos más impresionantes de Venezuela. 
-    //                         Este viaje te llevará a través de paisajes espectaculares, donde podrás admirar la majestuosidad del Salto Ángel, la cascada más alta del mundo. 
-    //                         Explora la selva tropical, navega por ríos cristalinos y descubre la rica biodiversidad de la región. 
-    //                         Con guías expertos y alojamiento en campamentos ecológicos, este viaje a Canaima promete ser una experiencia única y enriquecedora.
-    //                     </p> 
-
-
-    //                     <div className="row mt-5 d-flex justify-content-between">
-    //                         <div className="col-3 mb-3">
-    //                         <div className="bg-gradient p-1 rounded h-100 text-center">
-    //                             <h6 className="text-black">FECHA DE INICIO</h6>
-    //                             <p className="mb-0">hola</p></div>
-    //                         </div>
-    //                         <div className="col-3 mb-3">
-    //                         <div className="bg-gradient p-1 rounded h-100 text-center">
-    //                             <h6 className="text-black">FECHA DE CULMINACIÓN </h6>
-    //                             <p className="mb-0">lalala</p></div>
-    //                         </div>
-    //                         <div className="col-3 mb-3">
-    //                         <div className="bg-gradient p-1 rounded h-100 text-center">
-    //                             <h6 className="text-black">CUPOS DISPONIBLES</h6>
-    //                             <p className="mb-0">opjo</p></div>
-    //                         </div>
-    //                         <div className="col-3 mb-3">
-    //                         <div className="bg-gradient p-1 rounded h-100 text-center">
-    //                             <h6 className="text-black">PROVEDOR</h6>
-    //                             <p className="mb-0">CanaimaTours</p></div>
-    //                         </div>
-
-    //                     <div className="card-footer">
-    //                         {/* <Link to="/"> */}
-    //                         <button className="border border-0 btn btn-secondary bg-gradient col-6" type="button"> RESERVA AQUI! <i className="fas fa-chevron-right"></i></button>
-    //                         {/* </Link> */}
-    //                     </div>
-
-    //                     </div>
-
-    //                     </div>
-    //                 </div>
-    //             </div>
-    //         </div>
-    //     </div>
-    //   </div>
-
-    
-        // {/* {actividades.map((actividad, index) => (
-        //     <div key={index}>
-        //         <h2>{actividad.title}</h2>
-        //         <p>{actividad.descripcion}</p>
-        //         hola
-        //     </div>
-        // ))} */}
         
-    // </div>
-    
+        <div className="container mt-1 p-3 "> 
+
+            <div className="row ">
+                
+                <div className="col-12 d-flex align-items-center">
+                    <i className="fa-solid fa-suitcase me-2" style={{ fontSize: '2rem'}}></i>
+                    <h2 className="text p-2 fw-bold"> Viaje a Canaima {TourPlan.title}</h2>
+                </div>
+
+                {/* Galería de imágenes */}
+                <div className="d-flex col-8 d-flex justify-content-center" > 
+                    <div className="col-8 m-1 ">
+                        <img 
+                            src={TourPlan.mainImage} 
+                            className="img-fluid rounded main-image " 
+                            alt={TourPlan.title}
+                            onClick={() => handleShowModal(0)} 
+                            style={{ cursor: 'pointer',transition: 'transform 0.2s' }}
+                        />
+                    </div>
+
+                    <div className="col-4 d-flex flex-column align-items-start gap-3 m-1"> 
+                        {TourPlan.gallery.map((image, index) => (
+                            <img 
+                                key={index} 
+                                src={image} 
+                                className="img-fluid rounded litle-image" 
+                                alt={`Gallery ${index}`} 
+                                onClick={() => handleShowModal(index + 1)}
+                                style={{ cursor: 'pointer' }}
+                            />
+                        ))}
+                    </div>
+                </div>
+                
+
+                {/* info del  TourPlan */}
+                <div className="col-12 mt-4 d-flex"> 
+                    
+                    <div className="col-4">
+
+                        
+                        <h5 className="fw-bold">Descripción:</h5>
+                        <p>{TourPlan.description}</p>
+                        
+                    
+                        <div>
+                            <p>Puestos Disponibles: </p>
+                            <p>{TourPlan.available_spots}</p> 
+                        </div>  
+
+                        <div>
+                            <h5 className="fw-bold">Provedor: </h5>
+                            <p>info del provedor</p> 
+                        </div>
+
+
+                    </div>
+
+                    
+                    <div className="col-sm-3 mb-3 mb-sm-0">
+                        <div className="card">
+                            <div className="card-body">
+                                <h5 className="fw-bold">$100 {TourPlan.price} Por persona</h5>
+ 
+                                <div className="d-flex justify-content-between">
+                                    <p className="fw-bold " >Inicio</p>
+                                    <p className=" text"> 10-10-2024{TourPlan.start_date} </p>
+                                </div>
+
+                                <div className="d-flex justify-content-between">
+                                    <p className="fw-bold">Culminación</p>
+                                    <p className=" text"> 10-10-2024{TourPlan.end_date} </p>
+                                </div>
+
+                                <div className="d-flex justify-content-between mb-2">
+                                    <p className="fw-bold ">Puestos Disponibles</p>
+                                    <p className=" text"> 10 {TourPlan.available_spots} </p>
+                                </div>
+
+                                {/* aqui agregar el link de whatsapp */}
+
+                                <a href="#" className="btn btn-success col-12"> 
+                                    <i className="fa-brands fa-whatsapp"></i> 
+                                    Reserva aquí! 
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+
+            </div>
+
+
+            {/* Modal de la galería de imágenes */}
+            <Modal show={showModal} onHide={handleCloseModal} size="lg" centered>
+                
+                <Modal.Header closeButton>
+                </Modal.Header>
+
+                <Modal.Body>
+                <Carousel activeIndex={activeIndex} onSelect={(selectedIndex) => setActiveIndex(selectedIndex)}>
+                    <Carousel.Item>
+                        <img
+                            className="d-block w-100"
+                            src={TourPlan.mainImage}
+                            alt="Main Image"
+                        />
+                    </Carousel.Item>
+
+                    {TourPlan.gallery.map((image, index) => (
+                        <Carousel.Item key={index}>
+                            <img
+                                className="d-block w-100"
+                                src={image}
+                                alt={`Slide ${index + 1}`}
+                            />
+                        </Carousel.Item>
+                    ))}
+
+                    </Carousel>
+                </Modal.Body>
+
+            </Modal>
+    </div>
 )}
 
 export default InfoTourPlans;

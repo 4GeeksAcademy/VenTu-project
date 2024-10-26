@@ -37,6 +37,7 @@ export const PackagesList = () => {
              <PackagesSlide actividades={actividades}/>  
 
             <SearchResultsList results={results} />
+            
             <div> 
                 <PackageCard actividades={actividades} />
             </div>
