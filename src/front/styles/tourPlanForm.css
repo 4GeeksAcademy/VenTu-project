@@ -1,0 +1,16 @@
+/* @media (max-width: 768px) {
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    .btn-block {
+        width: 100%;
+        margin-top: 1rem;
+    }
+}
+
+@media (min-width: 769px) {
+    .container {
+        max-width: 600px;
+    }
+} */

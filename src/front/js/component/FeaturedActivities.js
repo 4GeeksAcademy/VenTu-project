@@ -27,14 +27,16 @@ const FeaturedActivities = () => {
                         <div className="col-12 col-md-4" key={index}>
                             <div className="card-tour shadow" style={{ transition: 'transform 0.2s' }}>
                                 <img 
-                                    src={actividad.img || '/default-image.png'} 
+                                    src={actividad.image_url || '/default-image.png'} 
                                     className="card-img-top" 
                                     alt={actividad.title} 
                                     style={{ height: '200px', objectFit: 'cover' }}
                                 />
                                 <div className="card-body d-flex flex-column justify-content-between" style={{ textAlign: 'left' }}>
                                     <h5 className="card-title">{actividad.title}</h5>
-                                    <p className="card-text">{actividad.description || 'Sin descripción disponible'}</p>
+                                    <p className="card-text">
+                                        {actividad.description ? actividad.description.substring(0, 100) + '...' : 'Sin descripción disponible'}
+                                    </p>
                                     
                                     <div className="info-extra">
                                         <p><strong>Precio:</strong> {actividad.price} US$</p>
