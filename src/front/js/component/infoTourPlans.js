@@ -45,9 +45,19 @@ const InfoTourPlans = () => {
 
             <div className="row ">
                 
-                <div className="col-12 d-flex align-items-center">
-                    <i className="fa-solid fa-suitcase me-2" style={{ fontSize: '2rem'}}></i>
-                    <h2 className="text p-2 fw-bold"> Viaje a Canaima {TourPlan.title}</h2>
+                <div className="col-12 d-flex align-items-center"> 
+                    <div className="col-10 d-flex align-items-center">
+                    
+                        <i className="fa-solid fa-suitcase me-2" style={{ fontSize: '2rem'}}></i>
+                        <h2 className="text p-2 fw-bold"> Viaje a Canaima {TourPlan.title}</h2>
+                    </div>
+                        {/* Botón de favorito */}
+                    <div> 
+                        <button href="#" className="btn btn-primary ms-2 rounded-pill" 
+                        style={{ width: '3rem', backgroundColor: '#F2F4FF', borderColor: '#F2F4FF' }}> 
+                        <i className="text-black fa-solid fa-heart"></i>
+                        </button>
+                    </div>
                 </div>
 
                 {/* Galería de imágenes */}
