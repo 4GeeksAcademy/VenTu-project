@@ -175,10 +175,9 @@ const getState = ({ getStore, getActions, setStore }) => {
             },
 
 			// Función para crear tour plan
-			createTourPlan: async (formData) => {
+            createTourPlan: async (formData) => {
                 try {
                     const token = localStorage.getItem("token");
-
                     if (!token) {
                         toast.error("No token found, please log in first");
                         return;
@@ -194,16 +193,17 @@ const getState = ({ getStore, getActions, setStore }) => {
                         body: formData
                     });
             
+                    const data = await response.json();
+            
                     if (response.ok) {
-                        const data = await response.json();
                         toast.success("Tour plan creado con éxito! 🎉");
                         return data;
                     } else {
-                        const errorData = await response.json();
-                        toast.error(errorData.msg || "Error creando el Tour Plan");
+                        console.error("Error creando el Tour Plan:", data); // Aquí se muestra más información del error
+                        toast.error(data.msg || "Error creando el Tour Plan");
                     }
                 } catch (error) {
-                    console.error("Error creando el Tour Plan:", error);
+                    console.error("Error creando el Tour Plan:", error); // Aquí se captura el error del catch
                     toast.error("Ocurrió un problema al crear el Tour Plan.");
                 }
             },

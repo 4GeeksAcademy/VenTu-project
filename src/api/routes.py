@@ -193,7 +193,8 @@ def get_tour_plans():
             "start_date": plan.start_date,
             "end_date": plan.end_date,
             "provider_id": plan.provider_id,
-            "created_at": plan.created_at
+            "created_at": plan.created_at,
+            "image_url": plan.image_url
         } for plan in tour_plans
     ]
     return jsonify(result), 200
@@ -210,12 +211,19 @@ def create_tour_plan():
     if not user.provider:
         return jsonify({"msg": "No se encontró un proveedor asociado a este usuario"}), 404
 
+    print(user)
+    print(user.provider)
     data = request.form
     new_plan = TourPlan(
         title=data.get('title'),
         description=data.get('description'),
         price=data.get('price'),
-        provider_id=user.provider.id
+        available_spots=data.get('available_spots'),
+        start_date=data.get('start_date'),
+        end_date=data.get('end_date'),
+        provider_id=user.provider[0].id,
+        image_url=data.get('image_url')
+
     )
 
     db.session.add(new_plan)

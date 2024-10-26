@@ -11,32 +11,44 @@ export const CrearTourPlan = () => {
         available_spots: '',
         start_date: '',
         end_date: '',
-        image_url: ''  // Aquí almacenaremos la URL de la imagen
+        image_url: ''
     });
 
-    // Subir imagen al seleccionarla
-    const handleFileChange = async (e) => {
+    const [imageFile, setImageFile] = useState(null);
+    const handleFileChange = (e) => {
         const file = e.target.files[0];
-        const formData = new FormData();
-        formData.append('image', file);
+        setImageFile(file);
+    };
 
-        try {
-            const response = await fetch(`${process.env.BACKEND_URL}/api/upload`, {
-                method: 'POST',
-                body: formData
-            });
-            const data = await response.json();
-            if (response.ok) {
-                // Guardar la URL de la imagen en el estado
-                setFormData({
-                    ...formData,
-                    image_url: data.url  // Asumimos que la respuesta contiene la URL de la imagen
-                });
+    // Subir la imagen y obtener la URL
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        let imageUrl = formData.image_url;
+        if (imageFile) {
+            const imageUploadUrl = await actions.uploadImage(imageFile);
+            if (imageUploadUrl) {
+                imageUrl = imageUploadUrl;
+                console.log("Imagen subida correctamente: ", imageUrl);
             } else {
-                console.error('Error al subir la imagen:', data.msg);
+                alert('Error al subir la imagen.');
+                return;
             }
-        } catch (error) {
-            console.error('Error al subir la imagen:', error);
+        }
+
+        const data = new FormData();
+        data.append('title', formData.title);
+        data.append('description', formData.description);
+        data.append('price', formData.price);
+        data.append('available_spots', formData.available_spots);
+        data.append('start_date', formData.start_date);
+        data.append('end_date', formData.end_date);
+        data.append('image_url', imageUrl);
+
+        const created = await actions.createTourPlan(data);
+        if (created) {
+            alert('Tour plan creado con éxito');
+        } else {
+            alert('Error al crear el Tour Plan');
         }
     };
 
@@ -48,28 +60,12 @@ export const CrearTourPlan = () => {
         });
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        
-        // Crear un nuevo FormData solo con los datos del formulario
-        const data = new FormData();
-        data.append('title', formData.title);
-        data.append('description', formData.description);
-        data.append('price', formData.price);
-        data.append('available_spots', formData.available_spots);
-        data.append('start_date', formData.start_date);
-        data.append('end_date', formData.end_date);
-        data.append('image_url', formData.image_url);  // Enviamos solo la URL de la imagen
-
-        actions.createTourPlan(data);
-        alert('Tour plan creado con éxito');
-    };
-
     return (
         <div className="container mt-5 mb-5">
             <div className="card shadow-lg p-4 mb-5 bg-white rounded" style={{ border: '2px solid #00B4E7' }}>
                 <h1 className="text-center mb-4" style={{ color: '#00B4E7' }}>Crear Tour Plan</h1>
                 <form onSubmit={handleSubmit} className="needs-validation" noValidate>
+                    {/* Inputs controlados */}
                     <div className="form-group mb-3">
                         <label htmlFor="title" className="form-label">Nombre del Tour</label>
                         <input
@@ -152,6 +148,7 @@ export const CrearTourPlan = () => {
                         />
                     </div>
 
+                    {/* Subida de imagen */}
                     <div className="form-group mb-4">
                         <label htmlFor="image" className="form-label">Imagen del Tour</label>
                         <input
