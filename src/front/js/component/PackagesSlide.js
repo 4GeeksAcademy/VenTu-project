@@ -16,8 +16,8 @@ export const PackagesSlide = ({ actividades = [] }) => {
                     <div className={`carousel-item ${index === 0 ? 'active' : ''}`} key={index}>
                         <img src="https://www.hola.com/horizon/landscape/4430a9c300da-salto-del-angel-canaima-venezuela-t.jpg?im=Resize=(1200)" className="d-block w-100" alt="..." />
                         <div className="carousel-caption d-none d-md-block">
-                            <h5>{actividad.titulo}</h5>
-                            <p>{actividad.precio}</p>
+                            <h5>{actividad.title}</h5>
+                            <p>{actividad.price}</p>
                         </div>
                     </div>
                 ))}

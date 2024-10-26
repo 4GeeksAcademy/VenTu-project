@@ -10,6 +10,7 @@ import { Single } from "./pages/single";
 import { B2BPage } from "./pages/B2BPage";
 import { PackagesList } from "./pages/packages";
 import injectContext from "./store/appContext";
+import InfoTourPlans  from "./component/infoTourPlans";
 
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
@@ -31,8 +32,9 @@ const Layout = () => {
                         <Route element={<Home />} path="/" />
                         <Route element={<Demo />} path="/demo" />
                         <Route element={<Single />} path="/single/:theid" />
-                        <Route element={<Register />} path="/register" />
-                        <Route element={<PackagesList />} path="/tourplans" />
+                        <Route path="/register" element={<Register />} />
+                        <Route element= {<PackagesList/>} path= "/tourplans"/>
+                        <Route path="/tourplans/:title" element={<InfoTourPlans/>} />
                         <Route element={<B2BPage />} path="/b2b" />
                         <Route element={<h1>Not found!</h1>} path="*" />
                     </Routes>
