@@ -19,22 +19,14 @@ export const B2BPage = () => {
         );
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async(e) => {
         e.preventDefault();
 
-        // const formDataToSend = new FormData();
-        // formDataToSend.append('companyName', formData.companyName);
-        // formDataToSend.append('email', formData.email);
-        // formDataToSend.append('planDescription', formData.planDescription);
-        // formDataToSend.append('packageImage', formData.packageImage);
-
-        // console.log([...formDataToSend]);
         const imageUpload = await actions.uploadImage(formData);
-
         if (imageUpload) {
-            console.log('Imagen subida:', imageUpload);
-        }
-        alert('Formulario enviado');
+            console.log("imagen subida",  imageUpload);
+            
+        } 
     };
 
     return (
