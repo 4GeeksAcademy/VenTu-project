@@ -29,10 +29,10 @@ export const B2BPage = () => {
         // formDataToSend.append('packageImage', formData.packageImage);
 
         // console.log([...formDataToSend]);
-        const imageUploaded = await actions.uploadImage(formData);
+        const imageUpload = await actions.uploadImage(formData);
 
-        if (imageUploaded) {
-            console.log('Imagen subida:', imageUploaded);
+        if (imageUpload) {
+            console.log('Imagen subida:', imageUpload);
         }
         alert('Formulario enviado');
     };

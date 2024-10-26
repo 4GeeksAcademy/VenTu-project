@@ -83,7 +83,7 @@ const Register = () => {
             </div>
 
             <div className="mb-3">
-              <label htmlFor="formGroupExampleInput" className="form-label">Password</label>
+              <label htmlFor="formGroupExampleInput" className="form-label">Contraseña</label>
               <input
                 type="password"
                 className="form-control"
@@ -95,8 +95,11 @@ const Register = () => {
 
             <div className="mb-3">
               <select value={role} defaultValue={"client"} onChange={(e) => setRole(e.target.value)} className="form-select" aria-label="Default select example">
-                <option value="client">Client</option>
-                <option value="provider">Provider</option>
+                <option value="" disabled>
+                  Selecciona tipo de usuario
+                </option>
+                <option value="client">Usuario</option>
+                <option value="provider">Provedor</option>
               </select>
             </div>
 
