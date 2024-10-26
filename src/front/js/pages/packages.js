@@ -7,7 +7,6 @@ import SearchBarPrueba from "../component/SearchFormPackage";
 
 
 export const PackagesList = () => {
-    const [destino, setDestination] = useState('');
     const [actividades, setActividades] = useState([]);
     const [results, setResults] = useState([]);
     const [people, setPeople] = useState('');
@@ -35,15 +34,10 @@ export const PackagesList = () => {
                 
             </div> 
 
-             <PackagesSlide actividades={[
-                    { titulo: 'Excursión a Los Roques', precio: '250,00 US$', img: '../../static/images/actividad-los-roques.jpg' },
-                    { titulo: 'Tour por Canaima y Salto Ángel', precio: '320,00 US$', img: '../../static/images/actividad-canaima.jpg' },
-                    { titulo: 'Excursión al Teleférico de Mérida', precio: '45,00 US$', img: '../../static/images/actividad-merida.jpg' },
-                    { titulo: 'Tour por las playas de Margarita', precio: '150,00 US$', img: '../../static/images/actividad-margarita.jpg' },
-                ]}
-                />  
+             <PackagesSlide actividades={actividades}/>  
 
             <SearchResultsList results={results} />
+            
             <div> 
                 <PackageCard actividades={actividades} />
             </div>

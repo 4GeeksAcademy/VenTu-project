@@ -25,7 +25,7 @@ const FeaturedActivities = () => {
                 <div className="row">
                     {actividades.map((actividad, index) => (
                         <div className="col-12 col-md-4" key={index}>
-                            <div className="card shadow" style={{ transition: 'transform 0.2s' }}>
+                            <div className="card-tour shadow" style={{ transition: 'transform 0.2s' }}>
                                 <img 
                                     src={actividad.image_url || '/default-image.png'} 
                                     className="card-img-top" 

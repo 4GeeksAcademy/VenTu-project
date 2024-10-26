@@ -195,6 +195,7 @@ def get_tour_plans():
             "provider_id": plan.provider_id,
             "created_at": plan.created_at,
             "image_url": plan.image_url
+          
         } for plan in tour_plans
     ]
     return jsonify(result), 200
