@@ -15,6 +15,8 @@ class User(db.Model):
     role = db.Column(db.String(50), nullable=False)  # "provider" or "client"
     status = db.Column(db.String(50), default="active", nullable=False)
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+    phone = db.Column(db.String(50), nullable=True)
+    providers = db.relationship('Provider', back_populates='user', lazy=True)
     
     @validates('role')
     def validate_role(self, key, value):
@@ -42,7 +44,8 @@ class User(db.Model):
             "email": self.email,
             "role": self.role,
             "status": self.status,
-            "created_at": self.created_at.isoformat()  # Convierte a formato ISO para JSON
+            "created_at": self.created_at.isoformat(),  # Convierte a formato ISO para JSON
+            "phone": self.phone
         }   
 
 class Client(db.Model):
@@ -61,7 +64,8 @@ class Provider(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
-    user = db.relationship('User', backref='provider')
+    user = db.relationship(User)
+    tour_plans = db.relationship('TourPlan', back_populates='provider', lazy=True)
 
 class TourPlan(db.Model):
     __tablename__ = 'tour_plan'
@@ -75,7 +79,7 @@ class TourPlan(db.Model):
     provider_id = db.Column(db.Integer, db.ForeignKey('provider.id'), nullable=False)
     image_url = db.Column(db.String(255), nullable=True)
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
-    provider = db.relationship('Provider', backref='tour_plan')
+    provider = db.relationship(Provider)
 
     def __repr__(self):
         return f'<TourPlan {self.title}>'
@@ -91,7 +95,8 @@ class TourPlan(db.Model):
             "end_date": self.end_date,
             "provider_id": self.provider_id,
             "image_url": self.image_url,
-            "created_at": self.created_at
+            "created_at": self.created_at,
+            "phone": self.provider.user.phone
         }
 
 class ReservationStatus(Enum):

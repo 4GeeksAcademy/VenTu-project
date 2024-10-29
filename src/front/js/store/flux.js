@@ -89,7 +89,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
 
-            register: async (email, fullName, password, role) => {
+            register: async (email, fullName, password, role, phone) => {
                 const resp = await fetch(`${process.env.BACKEND_URL}/api/register/${role}`, {
                     method: "POST",
                     headers: {
@@ -99,13 +99,16 @@ const getState = ({ getStore, getActions, setStore }) => {
                         email: email,
                         username: fullName,
                         password: password,
+                        phone: phone
                     })
                 });
 
                 if (resp.ok) {
                     toast.success("Usuario registrado! Bienvenido!");
+                    return true;
                 } else {
                     toast.error("Error registrando al usuario!");
+                    return false;
                 }
             },
 

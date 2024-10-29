@@ -75,6 +75,7 @@ def register_provider():
         username=data.get('username'),
         email=data.get('email'),
         password_hash=generate_password_hash(data.get('password')),
+        phone=data.get('phone'),
         role='provider'
     )
     
@@ -118,6 +119,7 @@ def register_client():
         username=data.get('username'),
         email=data.get('email'),
         password_hash=generate_password_hash(data.get('password')),
+        phone=data.get('phone'),
         role='client'
     )
     
@@ -184,19 +186,7 @@ def delete_user(user_id):
 def get_tour_plans():
     tour_plans = TourPlan.query.all()
     result = [
-        {
-            "id": plan.id,
-            "title": plan.title,
-            "description": plan.description,
-            "price": plan.price,
-            "available_spots": plan.available_spots,
-            "start_date": plan.start_date,
-            "end_date": plan.end_date,
-            "provider_id": plan.provider_id,
-            "created_at": plan.created_at,
-            "image_url": plan.image_url
-          
-        } for plan in tour_plans
+        plan.serialize() for plan in tour_plans
     ]
     return jsonify(result), 200
 
@@ -209,12 +199,12 @@ def create_tour_plan():
     if not user or user.role != 'provider':
         return jsonify({"msg": "El usuario no es un proveedor válido"}), 403
     
-    if not user.provider:
-        return jsonify({"msg": "No se encontró un proveedor asociado a este usuario"}), 404
-
+    provider = Provider.query.filter_by(user_id=user.id).first()
+    if not provider:
+        return jsonify({"msg": "El usuario no es un proveedor válido"}), 403
     print(user)
-    print(user.provider)
-    data = request.form
+   
+    data = request.json
     new_plan = TourPlan(
         title=data.get('title'),
         description=data.get('description'),
@@ -222,7 +212,7 @@ def create_tour_plan():
         available_spots=data.get('available_spots'),
         start_date=data.get('start_date'),
         end_date=data.get('end_date'),
-        provider_id=user.provider[0].id,
+        provider_id=provider.id,
         image_url=data.get('image_url')
 
     )
