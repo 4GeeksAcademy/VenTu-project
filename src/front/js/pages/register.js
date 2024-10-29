@@ -94,11 +94,16 @@ const Register = () => {
             </div>
 
             <div className="mb-3">
-              <select value={role} defaultValue={"client"} onChange={(e) => setRole(e.target.value)} className="form-select" aria-label="Default select example">
-                <option value="" disabled>
+              <select
+                value={role}
+                defaultValue={"client"}
+                onChange={(e) => setRole(e.target.value)}
+                className="form-select"
+                aria-label="Default select example">
+                <option disabled>
                   Selecciona tipo de usuario
                 </option>
-                <option value="client">Usuario</option>
+                <option value="client">Cliente</option>
                 <option value="provider">Provedor</option>
               </select>
             </div>

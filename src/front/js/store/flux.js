@@ -26,19 +26,19 @@ const getState = ({ getStore, getActions, setStore }) => {
                 getActions().changeColor(0, "green");
             },
 
-			uploadImage: async (image) => {
-				const formData = new FormData();
-				formData.append("image", image);
-				const resp = await fetch(`${process.env.BACKEND_URL}/api/upload`, {
-					method: "POST",
-					body: formData
-				});
-				const data = await resp.json();
-				console.log(data);
-				if (resp.ok) {
-					return data.url;
-				}
-			},
+            uploadImage: async (image) => {
+                const formData = new FormData();
+                formData.append("image", image);
+                const resp = await fetch(`${process.env.BACKEND_URL}/api/upload`, {
+                    method: "POST",
+                    body: formData
+                });
+                const data = await resp.json();
+                console.log(data);
+                if (resp.ok) {
+                    return data.url;
+                }
+            },
             // Función para obtener los tour plans
             getTourPlans: async () => {
                 try {
@@ -87,22 +87,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 
             getClient: async () => {
                 const { register } = getActions();
-
                 try {
                     const response = await fetch(`${process.env.BACKEND_URL}/api/clients`);
-
-				const resp = await fetch(process.env.BACKEND_URL + "/api/register/" + role, {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json"
-					},
-					body: JSON.stringify({
-						email: email,
-						username: fullName,
-						password: password,
-					})
-				});
-            
                     if (response.status === 404) {
                         register();
                     } else {
@@ -113,6 +99,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                     console.error('Error al obtener los clientes:', error);
                 }
             },
+
 
             register: async (email, fullName, password, role) => {
                 const resp = await fetch(`${process.env.BACKEND_URL}/api/register/${role}`, {
@@ -159,7 +146,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                         },
                         body: JSON.stringify({ email, password })
                     });
-            
+
                     const data = await resp.json();
                     if (resp.ok) {
                         localStorage.setItem("token", data.token);
@@ -199,7 +186,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
 
-			// Función para crear tour plan
+            // Función para crear tour plan
             createTourPlan: async (formData) => {
                 try {
                     const token = localStorage.getItem("token");
@@ -207,9 +194,9 @@ const getState = ({ getStore, getActions, setStore }) => {
                         toast.error("No token found, please log in first");
                         return;
                     }
-            
+
                     const BACKEND_URL = process.env.BACKEND_URL.endsWith('/') ? process.env.BACKEND_URL.slice(0, -1) : process.env.BACKEND_URL;
-            
+
                     const response = await fetch(`${BACKEND_URL}/api/tourplans`, {
                         method: "POST",
                         headers: {
@@ -217,9 +204,9 @@ const getState = ({ getStore, getActions, setStore }) => {
                         },
                         body: formData
                     });
-            
+
                     const data = await response.json();
-            
+
                     if (response.ok) {
                         toast.success("Tour plan creado con éxito! 🎉");
                         return data;
