@@ -18,12 +18,12 @@ const DateSearch = () => {
 
     return (
         <div> 
+            
             <h2> Search by Date </h2>
             <input 
             type="date" 
             value={startDate} 
             onChange={(e) => setStartDate(e.target.value)} />
-
             <button onClick={handleSearch}> Search </button>
 
         </div>
