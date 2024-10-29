@@ -1,55 +1,38 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { Context } from "../store/appContext";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Link } from 'react-router-dom';
 
+// Importar el componente PhoneInput
+import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css'
+
+
 const Register = () => {
-  const { store, actions } = useContext(Context);
+  const { actions } = useContext(Context);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("");
+  const [phone, setPhone] = useState("");
+  const [role, setRole] = useState("client");
+  
 
-  const { contact_id } = useParams();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault(); // Evitar el comportamiento por defecto del formulario
 
-    const contact = {
-      username: name,
-      email: email,
-      password_hash: password,
-      role: role
-    };
-
-    // Cambia esto para usar la acción de registro
-    if (contact_id !== undefined) {
-      // Si estás editando un contacto existente
-      actions.updateContact(contact, contact_id);
-    } else {
-      // Aquí llamamos a la acción de registro
-      await actions.register(contact.email, contact.username, contact.password_hash, contact.role);
+    const result = await actions.register(email, name, password, role, phone);
+    if (result) {
+      setName("");
+      setEmail("");
+      setPassword("");
+      setPhone("");
+      setRole("");
+      navigate("/"); // Redirigir después del registro
     }
-
-    setName("");
-    setEmail("");
-    setPassword("");
-    setRole("");
-    navigate("/"); // Redirigir después del registro
+    
   };
-
-  useEffect(() => {
-    if (Array.isArray(store.user)) {
-      const contacts = [...store.user];
-      if (contact_id !== undefined) {
-        const contact = contacts.find((item) => item.id === parseInt(contact_id));
-        setName(contact?.username);
-        setEmail(contact?.email);
-        setPassword(contact?.password);
-      }
-    }
-  }, [store.user, contact_id]);
 
   return (
     <div className="container">
@@ -94,7 +77,16 @@ const Register = () => {
             </div>
 
             <div className="mb-3">
-              <select value={role} defaultValue={"client"} onChange={(e) => setRole(e.target.value)} className="form-select" aria-label="Default select example">
+              <label htmlFor="formGroupExampleInput" className="form-label">Phone</label>
+              <PhoneInput
+                country={'co'}
+                value={phone}
+                onChange={(phone) => setPhone(phone)}
+              />
+            </div>
+
+            <div className="mb-3">
+              <select defaultValue={"client"} onChange={(e) => setRole(e.target.value)} className="form-select" aria-label="Default select example">
                 <option value="client">Client</option>
                 <option value="provider">Provider</option>
               </select>
