@@ -181,6 +181,11 @@ def delete_user(user_id):
 # =====================================
 # Rutas para Tour Plans
 # =====================================
+@api.route('/tourplan/<int:id>', methods=['GET'])
+def tour_plan(id):
+    tour_plan = TourPlan.query.get(id)
+   
+    return jsonify(tour_plan.serialize()), 200
 
 @api.route('/tourplans', methods=['GET'])
 def get_tour_plans():

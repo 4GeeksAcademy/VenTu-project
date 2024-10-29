@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext} from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Context } from "../store/appContext";
 import { useParams } from "react-router-dom";
 import { Modal, Carousel } from "react-bootstrap";
@@ -14,16 +14,16 @@ const InfoTourPlans = () => {
     const [showModal, setShowModal] = useState(false);
     const [activeIndex, setActiveIndex] = useState(0);
 
+    // const selectedTourPlan = store.tourPlans.find((item) => item.id === id);
 
-    useEffect (() => {
-        if (store.tourPlans){
-            if (store.tourPlans.length > 0){
-                const selectedTourPlan = store.tourPlans.find((item) => item.id === id);
-                setTourPlan(selectedTourPlan);
-                // setActividades(tourPlan.activities);
-            }
-        }    
-    }, [store.tourPlans, id]);
+    useEffect(() => {
+        const getTourplan = async () => {
+            const response = await fetch(`${process.env.BACKEND_URL}/api/tourplan/${id}`);
+            const data = await response.json();
+            setTourPlan(data);
+        }
+        getTourplan();
+    }, []);
 
     const handleShowModal = (index) => {
         setActiveIndex(index);
@@ -129,10 +129,11 @@ const InfoTourPlans = () => {
 
                                 {/* aqui agregar el link de whatsapp */}
 
-                                <a href={`https://wa.me/+${tourPlan?.phone}`}className="btn btn-success col-12" target="_blank" rel="noopener noreferrer">
+                                <a href={`https://wa.me/+${tourPlan?.phone}`} className="btn btn-success col-12" target="_blank" rel="noopener noreferrer">
                                     <i className="fa-brands fa-whatsapp"></i>
-                                    Reserva aquí!
+                                    Reserva aquí! 
                                 </a>
+
                             </div>
                         </div>
                     </div>
@@ -157,7 +158,7 @@ const InfoTourPlans = () => {
                                 alt="Main Image"
                             />
                         </Carousel.Item>
-{/* 
+                        {/* 
                         {tourPlan.gallery.map((image, index) => (
                             <Carousel.Item key={index}>
                                 <img
