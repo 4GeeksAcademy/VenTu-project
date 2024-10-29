@@ -17,11 +17,11 @@ const PackageCard = ({ actividades= [] }) => {
         
 
             {/* Imagen de la tarjeta */}
-            <img 
-                src={actividad.img}
+             <img 
+                src={actividad.image_url || '/default-image.png'} 
                 className="card-img-top" 
-                alt="..." 
-                style={{ width: '100%', height: '180px', objectFit: 'cover' }}
+                alt={actividad.title} 
+                style={{ height: '200px', objectFit: 'cover'   }}
             />
 
             <div className="card-body">
