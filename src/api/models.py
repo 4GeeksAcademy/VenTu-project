@@ -31,7 +31,7 @@ class User(db.Model):
             provider = Provider(user_id=self.id)
             db.session.add(provider)
         elif self.role == 'client':
-            client = Client(user_id=self.id, username=self.username, email=self.email, role=self.role, status="active")
+            client = Client(user_id=self.id)
             db.session.add(client)
         db.session.commit()
 
@@ -48,13 +48,28 @@ class User(db.Model):
 class Client(db.Model):
     __tablename__ = 'client'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    status = db.Column(db.String(50), nullable=False)
     username = db.Column(db.String(255), nullable=False)
-    email = db.Column(db.String(255), unique=True, nullable=False)
-    role = db.Column(db.String(50), nullable=False)
-    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))    
     user = db.relationship('User', backref='client')
+    Favorite_tour_plan = db.relationship('Favorite_tour_plan', back_populates='client', lazy=True)
+ 
+        
+    def __repr__(self):
+        return f'<Client {self.username}>'
+    
+    def serialize(self):
+        return {
+            "id": self.id,
+            "username": self.username,
+            "user_id": self.user_id,
+            "created_at": self.created_at
+        }
+    
+    def serialize_favorites(self):
+        return [fav.serialize() for fav in self.Favorite_tour_plan]
+    
+
 class Provider(db.Model):
     __tablename__ = 'provider'
     id = db.Column(db.Integer, primary_key=True)
@@ -75,6 +90,7 @@ class TourPlan(db.Model):
     image_url = db.Column(db.String(255), nullable=True)
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
     provider = db.relationship('Provider', backref='tour_plan')
+    Favorite_tour_plan = db.relationship('Favorite_tour_plan', back_populates='tour_plan', lazy=True)
 
     def __repr__(self):
         return f'<TourPlan {self.title}>'
@@ -119,3 +135,26 @@ class Reservation(db.Model):
             'client_id': self.client_id,
             'tour_plan_id': self.tour_plan_id
         }
+
+    
+    
+class Favorite_tour_plan(db.Model):
+    __tablename__ = 'favorite_tour_plan'
+    id = db.Column(db.Integer, primary_key=True)
+    client_id = db.Column(db.Integer, db.ForeignKey('client.id'), nullable=False)
+    tour_plan_id = db.Column(db.Integer, db.ForeignKey('tour_plan.id'), nullable=False)
+    
+    # Relaciones
+    client = db.relationship(Client)
+    tour_plan = db.relationship(TourPlan)
+
+    def __init__(self, client_id, tour_plan_id):
+        self.client_id = client_id
+        self.tour_plan_id = tour_plan_id
+
+    def __repr__(self):
+        return f'<Favorite_tour_plan {self.id}>'
+    
+    def serialize(self):
+        return self.tour_plan.serialize()
+    

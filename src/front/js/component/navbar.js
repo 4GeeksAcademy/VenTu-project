@@ -55,6 +55,7 @@ export const Navbar = () => {
                 <Link to="/" className="btn">Inicio</Link>
                 <Link to="/tourplans" className="btn">Planes turisticos</Link>
                 <Link to="/about" className="btn">Sobre Nosotros</Link>
+                <Link to="/favorites" className="btn ">Favoritos</Link>
             </div>
             <div className="dropdown">
                 <button

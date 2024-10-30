@@ -28,6 +28,7 @@ const injectContext = PassedComponent => {
                 state.actions.me();
                 state.actions.getClient();
                 state.actions.getTourPlans();
+                state.actions.getFavorites();
             } else {
                 console.log("No token found, please login.");
             }

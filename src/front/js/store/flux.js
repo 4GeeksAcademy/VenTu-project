@@ -7,6 +7,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             user: null,
             token: localStorage.getItem("token") || null,
             tourPlans: [],
+            favorites: [],
             demo: [
                 {
                     title: "FIRST",
@@ -219,6 +220,93 @@ const getState = ({ getStore, getActions, setStore }) => {
                     toast.error("Ocurrió un problema al crear el Tour Plan.");
                 }
             },
+
+            // Función para agregar favoritos
+            addFavorite: async (tourPlanId) => {
+                const store = getStore();
+                try {
+                    const token = localStorage.getItem("token");
+                    if (!token) {
+                        toast.error("No token found, please log in first");
+                        return;
+                    }
+                    
+                    
+                    
+                    
+
+                    if (!store.favorites.some(fav => fav.id === tourPlanId)) {
+                        const response = await fetch(`${process.env.BACKEND_URL}/api/favorite/client/tourplan/${tourPlanId}`, {
+                            method: "POST",
+                            headers: {
+                                Authorization: `Bearer ${token}`
+                            }
+                        });
+
+                        if (response.ok) {
+                            const data = await response.json();
+                            const newFavorites = [...store.favorites, data];
+    
+                            console.log(tourPlanId);
+                            setStore({ favorites: newFavorites });
+                            
+                            toast.success("Agregado a favoritos! 🎉");
+                            
+                            console.log(data);
+                        }
+
+                    } else {
+                        toast.error("Ya está en favoritos!");
+                    }
+
+                } catch (error) {
+                    console.error("Error adding favorite:", error);
+                    toast.error("Error adding favorite");
+                }
+            },
+
+            // Función para quitar favoritos
+            removeFavorite: async (tourPlanId) => {
+                try {
+                    const store = getStore();
+                    const newFavorites = store.favorites.filter(fav => fav.id !== tourPlanId);
+                    setStore({ favorites: newFavorites });
+                    localStorage.setItem("favorites", JSON.stringify(newFavorites));
+                    toast.success("Quitado de favoritos! 🎉");
+                } catch (error) {
+                    console.error("Error removing favorite:", error);
+                    toast.error("Error removing favorite");
+                }
+            },
+
+            getFavorites: async () => {
+                try {
+                    const token = localStorage.getItem("token");
+                    if (!token) {
+                        toast.error("No token found, please log in first");
+                        return;
+                    }
+
+                    const response = await fetch(`${process.env.BACKEND_URL}/api/favorites/client`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        setStore({ favorites: data });
+                    } else {
+                        toast.error("Error getting favorites");
+                    }
+                } catch (error) {
+                    console.error("Error getting favorites:", error);
+                    toast.error("Error getting favorites");
+                }
+            },
+
+
+
 
             changeColor: (index, color) => {
                 const store = getStore();

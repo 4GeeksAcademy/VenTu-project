@@ -100,7 +100,7 @@ const Register = () => {
                 onChange={(e) => setRole(e.target.value)}
                 className="form-select"
                 aria-label="Default select example">
-                <option disabled>
+                <option>
                   Selecciona tipo de usuario
                 </option>
                 <option value="client">Cliente</option>
