@@ -369,4 +369,26 @@ def add_favorite(tour_plan_id):
     db.session.commit()
     return jsonify(favorite_tour_plan.tour_plan.serialize()), 201
 
+@api.route('/favorite/client/tourplan/<int:tour_plan_id>', methods=['DELETE'])
+@jwt_required()
+def delete_favorite(tour_plan_id):
+    current_user = get_jwt_identity()
+    
+    if current_user is None or tour_plan_id is None:
+        return jsonify({"error": "Client or tour plan not found"}), 404
+    
+    client = Client.query.filter_by(user_id=current_user["id"]).first()
+    tour_plan = TourPlan.query.get(tour_plan_id)
+
+    if client is None or tour_plan is None:
+        return jsonify({"error": "Client or tour plan not found"}), 404
+    
+    existing_favorite = Favorite_tour_plan.query.filter_by(client_id=client.id, tour_plan_id=tour_plan.id).first()
+    if not existing_favorite:
+        return jsonify({"error": "Favorite not found"}), 404
+
+    db.session.delete(existing_favorite)
+    db.session.commit()
+    return jsonify({"message": "Favorite deleted"}), 200
+
     

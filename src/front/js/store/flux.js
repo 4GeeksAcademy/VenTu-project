@@ -230,10 +230,6 @@ const getState = ({ getStore, getActions, setStore }) => {
                         toast.error("No token found, please log in first");
                         return;
                     }
-                    
-                    
-                    
-                    
 
                     if (!store.favorites.some(fav => fav.id === tourPlanId)) {
                         const response = await fetch(`${process.env.BACKEND_URL}/api/favorite/client/tourplan/${tourPlanId}`, {
@@ -246,12 +242,12 @@ const getState = ({ getStore, getActions, setStore }) => {
                         if (response.ok) {
                             const data = await response.json();
                             const newFavorites = [...store.favorites, data];
-    
+
                             console.log(tourPlanId);
                             setStore({ favorites: newFavorites });
-                            
+
                             toast.success("Agregado a favoritos! 🎉");
-                            
+
                             console.log(data);
                         }
 
@@ -267,12 +263,28 @@ const getState = ({ getStore, getActions, setStore }) => {
 
             // Función para quitar favoritos
             removeFavorite: async (tourPlanId) => {
+                const store = getStore();
                 try {
-                    const store = getStore();
-                    const newFavorites = store.favorites.filter(fav => fav.id !== tourPlanId);
-                    setStore({ favorites: newFavorites });
-                    localStorage.setItem("favorites", JSON.stringify(newFavorites));
-                    toast.success("Quitado de favoritos! 🎉");
+                    const token = localStorage.getItem("token");
+                    if (!token) {
+                        toast.error("No token found, please log in first");
+                        return;
+                    }
+
+                    const response = await fetch(`${process.env.BACKEND_URL}/api/favorite/client/tourplan/${tourPlanId}`, {
+                        method: "DELETE",
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    });
+
+                    if (response.ok) {
+                        const newFavorites = store.favorites.filter(fav => fav.id !== tourPlanId);
+                        setStore({ favorites: newFavorites });
+                        toast.success("Removido de favoritos! 🎉");
+                    } else {
+                        toast.error("Error removing favorite");
+                    }
                 } catch (error) {
                     console.error("Error removing favorite:", error);
                     toast.error("Error removing favorite");
