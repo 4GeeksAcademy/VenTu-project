@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Context } from '../store/appContext';
 import '../../styles/tourPlanForm.css';
 
@@ -13,6 +14,8 @@ export const CrearTourPlan = () => {
         end_date: '',
         image_url: ''
     });
+
+    const navigate = useNavigate();
 
     const [imageFile, setImageFile] = useState(null);
     const handleFileChange = (e) => {
@@ -49,7 +52,9 @@ export const CrearTourPlan = () => {
         const created = await actions.createTourPlan(data);
         if (created) {
             alert('Tour plan creado con éxito');
-        } else {
+            navigate('/');
+        }
+        else {
             alert('Error al crear el Tour Plan');
         }
     };
@@ -69,7 +74,7 @@ export const CrearTourPlan = () => {
             <div className="card shadow-lg p-4 mb-5 bg-white rounded" style={{ border: '2px solid #00B4E7' }}>
                 <h1 className="text-center mb-4" style={{ color: '#00B4E7' }}>Crear Tour Plan</h1>
                 <form onSubmit={handleSubmit} className="needs-validation" noValidate>
-                    {/* Inputs controlados */}
+                    
                     <div className="form-group mb-3">
                         <label htmlFor="title" className="form-label">Nombre del Tour</label>
                         <input
@@ -152,7 +157,6 @@ export const CrearTourPlan = () => {
                         />
                     </div>
 
-                    {/* Subida de imagen */}
                     <div className="form-group mb-4">
                         <label htmlFor="image" className="form-label">Imagen del Tour</label>
                         <input

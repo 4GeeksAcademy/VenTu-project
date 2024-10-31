@@ -33,17 +33,9 @@ const PackageCard = ({ actividades = [] }) => {
                 src={actividad.image_url || '/default-image.png'} 
                 className="card-img-top" 
                 alt={actividad.title} 
+                onClick={() => handleReserveClick(actividad.title)}
                 style={{ height: '200px', objectFit: 'cover'   }}
             />
-
-                    {/* Imagen de la tarjeta */}
-                    <img
-                        src={actividad.img}
-                        className="card-img-top"
-                        alt="..."
-                        onClick={() => handleReserveClick(actividad.title)}
-                        style={{ width: '100%', height: '180px', objectFit: 'cover' }}
-                    />
 
                     <div className="card-body">
 
@@ -76,9 +68,6 @@ const PackageCard = ({ actividades = [] }) => {
                                     }
                                 }}>
                                 <i className={`fas fa-heart ${isFavorite(actividad.id) ? 'text-danger' : 'text-white'}`}></i>
-
-
-
                             </p>
                         </div>
 

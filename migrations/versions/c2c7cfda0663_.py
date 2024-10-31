@@ -1,14 +1,8 @@
 """empty message
 
-<<<<<<<< HEAD:migrations/versions/18793a18675f_.py
-Revision ID: 18793a18675f
+Revision ID: c2c7cfda0663
 Revises: 
-Create Date: 2024-10-31 02:55:33.501748
-========
-Revision ID: ffe7506d9d7c
-Revises: 
-Create Date: 2024-10-31 03:55:18.520942
->>>>>>>> 93791242bdc60df5cf871d607ec5ad3b5d18908c:migrations/versions/ffe7506d9d7c_.py
+Create Date: 2024-10-31 15:57:35.534728
 
 """
 from alembic import op
@@ -16,11 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-<<<<<<<< HEAD:migrations/versions/18793a18675f_.py
-revision = '18793a18675f'
-========
-revision = 'ffe7506d9d7c'
->>>>>>>> 93791242bdc60df5cf871d607ec5ad3b5d18908c:migrations/versions/ffe7506d9d7c_.py
+revision = 'c2c7cfda0663'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -41,15 +31,11 @@ def upgrade():
     )
     op.create_table('client',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('user_id', sa.Integer(), nullable=False),
-    sa.Column('status', sa.String(length=50), nullable=False),
     sa.Column('username', sa.String(length=255), nullable=False),
-    sa.Column('email', sa.String(length=255), nullable=False),
-    sa.Column('role', sa.String(length=50), nullable=False),
+    sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('email')
+    sa.PrimaryKeyConstraint('id')
     )
     op.create_table('provider',
     sa.Column('id', sa.Integer(), nullable=False),

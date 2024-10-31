@@ -32,14 +32,13 @@ export const PackagesList = () => {
             <div className="p-5"> 
                 <SearchBarPrueba setResults={setResults}/>
             </div>  
-
+            
             <SearchResultsList results={results} />
+            <PackagesSlide/>
             
             <div> 
                 <PackageCard actividades={actividades} />
             </div>
-            
-            {/* <Filters filters={filters} setFilters={setFilters} /> */}
                 
         </div>
     );
