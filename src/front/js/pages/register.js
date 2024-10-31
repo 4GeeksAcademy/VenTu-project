@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { Link } from 'react-router-dom';
 
 // Importar el componente PhoneInput
-import PhoneInput from 'react-phone-input-2'
-import 'react-phone-input-2/lib/style.css'
+// import PhoneInput from 'react-phone-input-2'
+// import 'react-phone-input-2/lib/style.css'
 
 
 const Register = () => {
@@ -13,7 +13,7 @@ const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [phone, setPhone] = useState("");
+  // const [phone, setPhone] = useState("");
   const [role, setRole] = useState("client");
   
 
@@ -22,12 +22,12 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault(); // Evitar el comportamiento por defecto del formulario
 
-    const result = await actions.register(email, name, password, role, phone);
+    const result = await actions.register(email, name, password, role );
     if (result) {
       setName("");
       setEmail("");
       setPassword("");
-      setPhone("");
+      // setPhone("");
       setRole("");
       navigate("/"); // Redirigir después del registro
     }
@@ -76,14 +76,14 @@ const Register = () => {
               />
             </div>
 
-            <div className="mb-3">
+            {/* <div className="mb-3">
               <label htmlFor="formGroupExampleInput" className="form-label">Phone</label>
               <PhoneInput
                 country={'co'}
                 value={phone}
                 onChange={(phone) => setPhone(phone)}
               />
-            </div>
+            </div> */}
 
             <div className="mb-3">
               <select defaultValue={"client"} onChange={(e) => setRole(e.target.value)} className="form-select" aria-label="Default select example">

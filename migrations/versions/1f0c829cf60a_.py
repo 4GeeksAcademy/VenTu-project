@@ -26,7 +26,7 @@ def upgrade():
     sa.Column('role', sa.String(length=50), nullable=False),
     sa.Column('status', sa.String(length=50), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=True),
-    sa.Column('phone', sa.String(length=50), nullable=True),
+    # sa.Column('phone', sa.String(length=50), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email')
     )

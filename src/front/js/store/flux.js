@@ -89,7 +89,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
 
-            register: async (email, fullName, password, role, phone) => {
+            register: async (email, fullName, password, role) => {
                 const resp = await fetch(`${process.env.BACKEND_URL}/api/register/${role}`, {
                     method: "POST",
                     headers: {
@@ -99,7 +99,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                         email: email,
                         username: fullName,
                         password: password,
-                        phone: phone
+                        // phone: phone
                     })
                 });
 

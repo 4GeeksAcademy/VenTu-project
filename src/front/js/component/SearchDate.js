@@ -18,7 +18,7 @@ const DateSearch = () => {
 
     return (
         <div> 
-            
+
             <h2> Search by Date </h2>
             <input 
             type="date" 
@@ -27,8 +27,7 @@ const DateSearch = () => {
             <button onClick={handleSearch}> Search </button>
 
         </div>
-    )
-
-}
+    );
+};
 
 export default DateSearch;
