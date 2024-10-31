@@ -36,11 +36,11 @@ const SearchBarPrueba = ({ setResults }) => {
   };
 
    return (
-    <div className="container col-4 p-3 rounded-3" style={{ backgroundColor: '#F2F4FF', borderColor: '#F2F4FF' }}>
+    <div className="container p-3 rounded-3" style={{ backgroundColor: '#F2F4FF', borderColor: '#F2F4FF', maxWidth: '1200px',}}>
             
       <div className="row m-1">
         
-        <div className="col-6">
+        <div className="col-4">
           <Form.Group controlId="formDestination">
             <Form.Label> ¿A donde vas? </Form.Label>
               <Form.Control
@@ -54,7 +54,7 @@ const SearchBarPrueba = ({ setResults }) => {
         </div>
 
 
-        <div className="col-6">
+        <div className="col-4">
           <Form.Group controlId="formStartDate">
             <Form.Label> ¿Cuando vas? </Form.Label>
             <Form.Control
@@ -67,16 +67,13 @@ const SearchBarPrueba = ({ setResults }) => {
               required
             />
           </Form.Group>
+          
         </div>
 
-        <div className="row mt-3">
-          <div className="row text-center d-flex justify-content-center">
-
-            <Button onClick={handleSearch} className="btn-primary rounded-pill col-6" style={{ backgroundColor: "#242B47", borderColor: "#242B47" }}>
-              BUSCAR 
-            </Button>
-
-          </div>
+        <div className="col-4 d-flex align-items-end">
+          <Button onClick={handleSearch} className="btn-primary rounded-pill w-100" style={{ backgroundColor: "#242B47", borderColor: "#242B47" }}>
+            BUSCAR 
+          </Button>
         </div>
 
         {message && (

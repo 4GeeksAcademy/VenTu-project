@@ -21,16 +21,16 @@ export const Footer = () => (
                 </div>
 
                 {/* Columna derecha */}
-                <div className="col-12 col-md-6 text-center mt-4 mt-md-0">
+                <div className="col-12 col-md-6 mt-4 mt-4 md-0 text-end pe-0">
                     {/* Título del menú */}
-                    <h4 className="mb-3">Menú</h4>
+                    <h4 className="mb-1 col-11 pe-2">Menú</h4>
 
                     {/* Menú */}
-                    <nav className="d-flex flex-column">
-                        <Link to="/" className="btn btn-link text-white">Inicio</Link>
-                        <Link to="/tourplans" className="btn btn-link text-white">Planes Turísticos</Link>
-                        <Link to="/about" className="btn btn-link text-white">Sobre Nosotros</Link>
-                        <Link to="/creartourplan" className="btn btn-link text-white">Crear Plan Turístico</Link>
+                    <nav className="d-flex flex-column col-11 pe-0">
+                        <Link to="/" className="btn btn-link text-white text-end">Inicio</Link>
+                        <Link to="/tourplans" className="btn btn-link text-white text-end">Planes Turísticos</Link>
+                        <Link to="/about" className="btn btn-link text-white text-end">Sobre Nosotros</Link>
+                        <Link to="/creartourplan" className="btn btn-link text-white text-end">Crear Plan Turístico</Link>
                     </nav>
                 </div>
             </div>
