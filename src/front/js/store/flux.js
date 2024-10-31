@@ -102,7 +102,8 @@ const getState = ({ getStore, getActions, setStore }) => {
             },
 
 
-            register: async (email, fullName, password, role) => {
+            register: async (email, fullName, password, role, phone) => {
+
                 const resp = await fetch(`${process.env.BACKEND_URL}/api/register/${role}`, {
                     method: "POST",
                     headers: {
@@ -112,13 +113,16 @@ const getState = ({ getStore, getActions, setStore }) => {
                         email: email,
                         username: fullName,
                         password: password,
+                        phone: phone
                     })
                 });
 
                 if (resp.ok) {
                     toast.success("Usuario registrado! Bienvenido!");
+                    return true;
                 } else {
                     toast.error("Error registrando al usuario!");
+                    return false;
                 }
             },
 
@@ -203,7 +207,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                     const response = await fetch(`${BACKEND_URL}/api/tourplans`, {
                         method: "POST",
                         headers: {
-                            Authorization: `Bearer ${token}`
+                            'Authorization': `Bearer ${token}`
                         },
                         body: formData
                     });
@@ -214,11 +218,11 @@ const getState = ({ getStore, getActions, setStore }) => {
                         toast.success("Tour plan creado con éxito! 🎉");
                         return data;
                     } else {
-                        console.error("Error creando el Tour Plan:", data); // Aquí se muestra más información del error
+                        console.error("Error creando el Tour Plan:", data);
                         toast.error(data.msg || "Error creando el Tour Plan");
                     }
                 } catch (error) {
-                    console.error("Error creando el Tour Plan:", error); // Aquí se captura el error del catch
+                    console.error("Error creando el Tour Plan:", error);
                     toast.error("Ocurrió un problema al crear el Tour Plan.");
                 }
             },

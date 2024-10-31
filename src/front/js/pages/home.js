@@ -25,9 +25,6 @@ export const Home = () => {
                     { nombre: 'Los Roques', img: 'https://images.unsplash.com/photo-1637407414190-dfc2d02b2435?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
                     { nombre: 'Canaima', img: 'https://images.unsplash.com/photo-1697551574084-6854f3c0ca9c?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
                     { nombre: 'Mérida', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/El_cruce_de_las_bandas._Merida..jpg/330px-El_cruce_de_las_bandas._Merida..jpg' },
-                    { nombre: 'Isla de Margarita', img: 'https://images.unsplash.com/photo-1637407414190-dfc2d02b2435?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
-                    { nombre: 'Los Roques', img: 'https://images.unsplash.com/photo-1721846527498-8b6d5e6e573f?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
-                    { nombre: 'Canaima', img: 'https://images.unsplash.com/photo-1576419343255-956024f1ad8f?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
                 ]}
             />
 
