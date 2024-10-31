@@ -39,7 +39,7 @@ const Register = () => {
       <div className="row">
         <div className="col-m-12 ">
           <h1 className="text-center">Bienvenido!</h1>
-          <h3 className="text-center">Inicia sesión o regístrate</h3>
+          <h3 className="text-center">Regístrate</h3>
         </div>
         <div className="col-m-12">
           <form onSubmit={handleSubmit}> {/* Agregar el evento onSubmit al formulario */}
@@ -66,7 +66,7 @@ const Register = () => {
             </div>
 
             <div className="mb-3">
-              <label htmlFor="formGroupExampleInput" className="form-label">Password</label>
+              <label htmlFor="formGroupExampleInput" className="form-label">Contraseña</label>
               <input
                 type="password"
                 className="form-control"
@@ -86,9 +86,17 @@ const Register = () => {
             </div> */}
 
             <div className="mb-3">
-              <select defaultValue={"client"} onChange={(e) => setRole(e.target.value)} className="form-select" aria-label="Default select example">
-                <option value="client">Client</option>
-                <option value="provider">Provider</option>
+              <select
+                value={role}
+                defaultValue={"client"}
+                onChange={(e) => setRole(e.target.value)}
+                className="form-select"
+                aria-label="Default select example">
+                <option>
+                  Selecciona tipo de usuario
+                </option>
+                <option value="client">Cliente</option>
+                <option value="provider">Provedor</option>
               </select>
             </div>
 
@@ -99,9 +107,7 @@ const Register = () => {
           </form>
 
           {/* Enlace para regresar a contactos */}
-          <Link to="/" className="text-decoration-underline" onClick={() => navigate("/")}>
-            Or get back to contacts
-          </Link>
+
         </div>
       </div>
     </div>
