@@ -32,11 +32,17 @@ export const PackagesList = () => {
             <div className="p-5"> 
                 <SearchBarPrueba setResults={setResults}/>
             </div>  
-            
-            <SearchResultsList results={results} />
-            <PackagesSlide/>
+
+            <div>   
+                <SearchResultsList results={results} />
+            </div> 
+
+            <div className= "mb-4 mt-4"> 
+                <PackagesSlide/>
+            </div>
             
             <div> 
+                <h5 className= "mb-4 mt-4 ms-5 ps-5"> Chequea Todos Nuestros Tours! </h5> 
                 <PackageCard actividades={actividades} />
             </div>
                 
