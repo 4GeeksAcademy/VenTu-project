@@ -93,8 +93,12 @@ class TourPlan(db.Model):
     provider_id = db.Column(db.Integer, db.ForeignKey('provider.id'), nullable=False)
     image_url = db.Column(db.String(255), nullable=True)
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+
     provider = db.relationship('Provider', backref='tour_plan')
     Favorite_tour_plan = db.relationship('Favorite_tour_plan', back_populates='tour_plan', lazy=True)
+
+    provider = db.relationship(Provider)
+
 
     def __repr__(self):
         return f'<TourPlan {self.title}>'

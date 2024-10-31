@@ -86,6 +86,7 @@ const Register = () => {
             </div> */}
 
             <div className="mb-3">
+
               <select
                 value={role}
                 defaultValue={"client"}

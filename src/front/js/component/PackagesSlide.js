@@ -1,41 +1,66 @@
 import React from 'react';
+import { Carousel } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 export const PackagesSlide = ({ actividades = [] }) => {
     return (
-        <div id="carouselExampleCaptions" className="carousel slide" style={{ height: "70%" , width: '50%', margin: '20px auto', borderRadius: '15px', overflow: 'hidden' }}>
-
-            <div className="carousel-indicators">
-                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" className="active" aria-current="true" aria-label="Slide 1"></button>
-                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
-            </div>
-
-
-            <div className="carousel-inner">
+        <div style={{ width: '100%', backgroundColor: '#f8f9fa', padding: '10px 0' }}>
+            <Carousel
+                id="carouselExampleCaptions"
+                style={{
+                    width: '100%',
+                    maxWidth: '1200px',
+                    height: '70vh',
+                    margin: '0 auto',
+                    overflow: 'hidden',
+                    position: 'relative'
+                }}
+            >
                 {actividades.map((actividad, index) => (
-                    <div className={`carousel-item ${index === 0 ? 'active' : ''}`} key={index}>
-                        <img src="https://www.hola.com/horizon/landscape/4430a9c300da-salto-del-angel-canaima-venezuela-t.jpg?im=Resize=(1200)" className="d-block w-100" alt="..." />
-                        <div className="carousel-caption d-none d-md-block">
-                            <h5>{actividad.title}</h5>
-                            <p>{actividad.price}</p>
-                        </div>
-                    </div>
+                    <Carousel.Item key={index} style={{ height: '70vh' }}>
+                        <Link to={`/tourplans/${actividad.id}`}>
+                            <img
+                                src={actividad.image_url}
+                                className="d-block w-100"
+                                alt={actividad.title}
+                                style={{ objectFit: 'cover', height: '70vh' }}
+                            />
+                            <Carousel.Caption className="overlay">
+                                <h5>{actividad.title}</h5>
+                                <p>{`Price: ${actividad.price}`}</p>
+                            </Carousel.Caption>
+                        </Link>
+                    </Carousel.Item>
                 ))}
-            </div>
-
-
-            <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-                <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span className="visually-hidden">Previous</span>
-            </button>
-
-            <button className="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-                <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                <span className="visually-hidden">Next</span>
-            </button>
-
-
+            </Carousel>
+            
+            <style>{`
+                .overlay {
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    right: 0;
+                    background: rgba(0, 0, 0, 0.6);
+                    color: #fff;
+                    padding: 20px;
+                    opacity: 0;
+                    transition: opacity 0.3s ease;
+                }
+                .carousel-item:hover .overlay {
+                    opacity: 1;
+                }
+                .carousel-control-prev-icon,
+                .carousel-control-next-icon {
+                    background-color: rgba(0, 0, 0, 0.5);
+                    border-radius: 50%;
+                    padding: 10px;
+                    transition: background-color 0.3s ease;
+                }
+                .carousel-control-prev-icon:hover,
+                .carousel-control-next-icon:hover {
+                    background-color: rgba(0, 0, 0, 0.8);
+                }
+            `}</style>
         </div>
     );
-
-}
+};

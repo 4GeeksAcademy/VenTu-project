@@ -214,7 +214,8 @@ def create_tour_plan():
         return jsonify({"msg": "El usuario no es un proveedor válido"}), 403
     print(user)
    
-    data = request.json
+    data = request.form
+    print("Received data:", data)
     new_plan = TourPlan(
         title=data.get('title'),
         description=data.get('description'),

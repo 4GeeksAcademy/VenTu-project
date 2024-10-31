@@ -24,8 +24,10 @@ export const CrearTourPlan = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         let imageUrl = formData.image_url;
+        console.log(imageFile);
         if (imageFile) {
             const imageUploadUrl = await actions.uploadImage(imageFile);
+            console.log(imageUploadUrl);
             if (imageUploadUrl) {
                 imageUrl = imageUploadUrl;
                 console.log("Imagen subida correctamente: ", imageUrl);
@@ -51,6 +53,8 @@ export const CrearTourPlan = () => {
             alert('Error al crear el Tour Plan');
         }
     };
+    console.log(FormData);
+
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
