@@ -189,6 +189,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 
             // Función para crear tour plan
             createTourPlan: async (formData) => {
+                console.log(formData);
+                
                 try {
                     const token = localStorage.getItem("token");
                     if (!token) {

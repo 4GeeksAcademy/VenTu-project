@@ -51,6 +51,8 @@ export const CrearTourPlan = () => {
             alert('Error al crear el Tour Plan');
         }
     };
+    console.log(FormData);
+
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
