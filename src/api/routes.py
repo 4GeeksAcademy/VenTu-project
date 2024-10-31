@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, Blueprint, jsonify, request, app
-from api.models import db, TourPlan, Client, Provider, User, Reservation
+from api.models import db, TourPlan, Client, Provider, User, Reservation , ReservationStatus, Favorite_tour_plan
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from datetime import datetime
@@ -9,7 +9,7 @@ import os
 import cloudinary
 import cloudinary.uploader
 from datetime import datetime, timezone
-from api.models import ReservationStatus
+
 
 
 api = Blueprint('api', __name__)
@@ -46,15 +46,15 @@ def create_token():
         return jsonify({"msg": "Correo electrónico o contraseña incorrectos"}), 401
 
 
-    access_token = create_access_token(identity=email)
+    access_token = create_access_token(identity={"email": user.email , "role": user.role, "id": user.id})
     return jsonify(token=access_token, user=user.serialize()), 200
 
 
 @api.route('/me', methods=['GET'])
 @jwt_required()
 def get_me():
-    email = get_jwt_identity()
-    user = User.query.filter_by(email=email).first()
+    current_user = get_jwt_identity()
+    user = User.query.filter_by(email=current_user["email"]).first()
     if not user:
         return jsonify({"error": "User not found"}), 404
     return jsonify(user.serialize()), 200
@@ -122,14 +122,19 @@ def register_client():
         phone=data.get('phone'),
         role='client'
     )
-    
-    new_user.save()  # Se utiliza el método save para manejar la creación
-    return jsonify({"message": "Client registered", "id": new_user.id}), 201
+    db.session.add(new_user)
+    db.session.commit()
+
+    new_client = Client(user_id=new_user.id, username=new_user.username)
+    db.session.add(new_client)
+    db.session.commit()
+    #new_user.save()  # Se utiliza el método save para manejar la creación
+    return jsonify({"message": "Client registered"}), 201
 
 @api.route('/clients', methods=['GET'])
 def get_clients():
     clients = Client.query.all()
-    result = [{"id": client.id, "user_id": client.user_id, "status": client.status} for client in clients]
+    result = [{"id": client.id, "user_id": client.user_id} for client in clients]
     return jsonify(result), 200
 
 @api.route('/clients/<int:client_id>', methods=['DELETE'])
@@ -198,8 +203,8 @@ def get_tour_plans():
 @api.route('/tourplans', methods=['POST'])
 @jwt_required()
 def create_tour_plan():
-    user_email = get_jwt_identity()
-    user = User.query.filter_by(email=user_email).first()
+    current_user= get_jwt_identity()
+    user = User.query.filter_by(email=current_user["email"]).first()
     
     if not user or user.role != 'provider':
         return jsonify({"msg": "El usuario no es un proveedor válido"}), 403
@@ -322,3 +327,64 @@ def upload_image():
         # Aquí puedes relacionar el tour con la imagen cargada (ej. buscando el tour por ID)
         
         return jsonify({"msg": "File uploaded", "filename": filename, "url": image_url}), 201
+
+
+############################################################################################################
+# Favoritos
+############################################################################################################
+
+@api.route('/favorites/client', methods=['GET']) 
+@jwt_required()
+def get_favorites():
+    current_user = get_jwt_identity()
+    client = Client.query.filter_by(user_id=current_user["id"]).first()
+    if not client:
+        return jsonify({"error": "Client not found"}), 404
+    return jsonify(client.serialize_favorites()), 200
+
+@api.route('/favorite/client/tourplan/<int:tour_plan_id>', methods=['POST'])
+@jwt_required()
+def add_favorite(tour_plan_id):
+    current_user = get_jwt_identity()
+    
+    if current_user is None or tour_plan_id is None:
+        return jsonify({"error": "Client or tour plan not found"}), 404
+    
+    client = Client.query.filter_by(user_id=current_user["id"]).first()
+    tour_plan = TourPlan.query.get(tour_plan_id)
+
+    if client is None or tour_plan is None:
+        return jsonify({"error": "Client or tour plan not found"}), 404
+    
+    existing_favorite = Favorite_tour_plan.query.filter_by(client_id=client.id, tour_plan_id=tour_plan.id).first()
+    if existing_favorite:
+        return jsonify({"error": "Favorite already exists"}), 400
+
+    favorite_tour_plan = Favorite_tour_plan(client_id=client.id, tour_plan_id=tour_plan_id)
+    db.session.add(favorite_tour_plan)
+    db.session.commit()
+    return jsonify(favorite_tour_plan.tour_plan.serialize()), 201
+
+@api.route('/favorite/client/tourplan/<int:tour_plan_id>', methods=['DELETE'])
+@jwt_required()
+def delete_favorite(tour_plan_id):
+    current_user = get_jwt_identity()
+    
+    if current_user is None or tour_plan_id is None:
+        return jsonify({"error": "Client or tour plan not found"}), 404
+    
+    client = Client.query.filter_by(user_id=current_user["id"]).first()
+    tour_plan = TourPlan.query.get(tour_plan_id)
+
+    if client is None or tour_plan is None:
+        return jsonify({"error": "Client or tour plan not found"}), 404
+    
+    existing_favorite = Favorite_tour_plan.query.filter_by(client_id=client.id, tour_plan_id=tour_plan.id).first()
+    if not existing_favorite:
+        return jsonify({"error": "Favorite not found"}), 404
+
+    db.session.delete(existing_favorite)
+    db.session.commit()
+    return jsonify({"message": "Favorite deleted"}), 200
+
+    
