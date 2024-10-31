@@ -31,7 +31,7 @@ const PackageCard = ({ actividades = [] }) => {
 
                     {/* Imagen de la tarjeta */}
                     <img
-                        src={actividad.img}
+                        src={actividad.image_url}
                         className="card-img-top"
                         alt="..."
                         onClick={() => handleReserveClick(actividad.title)}
