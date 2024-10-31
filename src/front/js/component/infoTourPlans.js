@@ -4,9 +4,12 @@ import { useParams } from "react-router-dom";
 import { Modal, Carousel } from "react-bootstrap";
 import "/workspaces/VenTu-project/src/front/styles/InfoTourPlans.css"
 
+import PackageCard from "../component/PackageCard";
+
+
 const InfoTourPlans = () => {
     const { id } = useParams()
-    const { store } = useContext(Context);
+    const { store, actions } = useContext(Context);
     const [tourPlan, setTourPlan] = useState({});
 
 
@@ -32,6 +35,11 @@ const InfoTourPlans = () => {
 
     const handleCloseModal = () => {
         setShowModal(false);
+    };
+
+    const isFavorite = (actividadId) => {
+
+        return store.favorites && store.favorites.some(favorite => favorite.id === actividadId);
     };
 
 
@@ -131,7 +139,7 @@ const InfoTourPlans = () => {
 
                                 <a href={`https://wa.me/+${tourPlan?.phone}`} className="btn btn-success col-12" target="_blank" rel="noopener noreferrer">
                                     <i className="fa-brands fa-whatsapp"></i>
-                                    Reserva aquí! 
+                                    Reserva aquí!
                                 </a>
 
                             </div>
