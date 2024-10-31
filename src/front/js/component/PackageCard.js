@@ -36,7 +36,6 @@ const PackageCard = ({ actividades = [] }) => {
                 onClick={() => handleReserveClick(actividad.title)}
                 style={{ height: '200px', objectFit: 'cover'   }}
             />
-
                     <div className="card-body">
 
                         {/* Título del paquete */}

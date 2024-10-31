@@ -15,7 +15,7 @@ const Register = () => {
   const [password, setPassword] = useState("");
   // const [phone, setPhone] = useState("");
   const [role, setRole] = useState("client");
-  
+
 
   const navigate = useNavigate();
 
@@ -31,7 +31,7 @@ const Register = () => {
       setRole("");
       navigate("/"); // Redirigir después del registro
     }
-    
+
   };
 
   return (
@@ -89,15 +89,14 @@ const Register = () => {
 
               <select
                 value={role}
-                defaultValue={"client"}
                 onChange={(e) => setRole(e.target.value)}
                 className="form-select"
-                aria-label="Default select example">
-                <option>
-                  Selecciona tipo de usuario
-                </option>
+                aria-label="Default select example"
+              >
+                <option value="">Selecciona tipo de usuario</option>
                 <option value="client">Cliente</option>
-                <option value="provider">Provedor</option>
+                <option value="provider">Proveedor</option>
+
               </select>
             </div>
 
