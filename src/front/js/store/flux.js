@@ -191,7 +191,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                     const response = await fetch(`${BACKEND_URL}/api/tourplans`, {
                         method: "POST",
                         headers: {
-                            Authorization: `Bearer ${token}`
+                            'Authorization': `Bearer ${token}`
                         },
                         body: formData
                     });
@@ -202,11 +202,11 @@ const getState = ({ getStore, getActions, setStore }) => {
                         toast.success("Tour plan creado con éxito! 🎉");
                         return data;
                     } else {
-                        console.error("Error creando el Tour Plan:", data); // Aquí se muestra más información del error
+                        console.error("Error creando el Tour Plan:", data);
                         toast.error(data.msg || "Error creando el Tour Plan");
                     }
                 } catch (error) {
-                    console.error("Error creando el Tour Plan:", error); // Aquí se captura el error del catch
+                    console.error("Error creando el Tour Plan:", error);
                     toast.error("Ocurrió un problema al crear el Tour Plan.");
                 }
             },
