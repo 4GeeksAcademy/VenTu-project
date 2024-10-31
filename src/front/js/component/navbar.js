@@ -17,6 +17,7 @@ export const Navbar = () => {
     const handleLogout = () => {
         actions.logout();
         navigate("/");
+        window.location.reload();
     };
 
     const handleLogin = async () => {
@@ -30,9 +31,11 @@ export const Navbar = () => {
                 }
                 if (store.user.role === 'provider') {
                     navigate("/");
+                    window.location.reload();
                 } else {
-                
+
                     navigate("/");
+                    window.location.reload();
 
                 }
             } else {
@@ -45,17 +48,22 @@ export const Navbar = () => {
 
 
     return (
-        <nav className="navbar navbar-light" style={{ backgroundColor: '#00B4E7' }}>
+        <nav className="navbar navbar-light p-0" style={{ backgroundColor: '#00B4E7' }}>
             <Toaster /> {/* Renderiza los mensajes toast */}
-            <div className="container">
-                <Link to="/" className="navbar-brand text-white">
-                    <img src={logo} alt="Ventu Logo" style={{ width: '120px', height: 'auto' }} />
-                </Link>
+
+            <div className="container d-flex justify-content-between">
+
                 <div>
+
+                    <Link to="/" className="navbar-brand text-white">
+                        <img src={logo} alt="Ventu Logo" style={{ width: '120px', height: 'auto' }} />
+                    </Link>
                     <Link to="/" className="btn">Inicio</Link>
                     <Link to="/tourplans" className="btn">Planes turisticos</Link>
                     <Link to="/about" className="btn">Sobre Nosotros</Link>
+                    <Link to="/favorites" className="btn ">Favoritos</Link>
                 </div>
+
                 <div className="dropdown">
                     <button
                         className="btn dropdown-toggle"
@@ -66,7 +74,7 @@ export const Navbar = () => {
                         {store.user ? `${store.user.username}` : "Iniciar / Registrarse"}
                     </button>
                     {!store.token ? (
-                        <ul className="dropdown-menu">
+                        <ul className="dropdown-menu dropdown-menu-end">
                             <li>
                                 <button
                                     className="dropdown-item"

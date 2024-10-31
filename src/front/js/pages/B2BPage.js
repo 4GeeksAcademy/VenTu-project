@@ -15,7 +15,7 @@ export const B2BPage = () => {
 
     const handleFileChange = (e) => {
         setFormData(
-           e.target.files[0]
+            e.target.files[0]
         );
     };
 
