@@ -56,7 +56,7 @@ const Register = () => {
       <div className="row">
         <div className="col-m-12 ">
           <h1 className="text-center">Bienvenido!</h1>
-          <h3 className="text-center">Inicia sesión o regístrate</h3>
+          <h3 className="text-center">Regístrate</h3>
         </div>
         <div className="col-m-12">
           <form onSubmit={handleSubmit}> {/* Agregar el evento onSubmit al formulario */}
@@ -115,9 +115,7 @@ const Register = () => {
           </form>
 
           {/* Enlace para regresar a contactos */}
-          <Link to="/" className="text-decoration-underline" onClick={() => navigate("/")}>
-            Or get back to contacts
-          </Link>
+
         </div>
       </div>
     </div>
