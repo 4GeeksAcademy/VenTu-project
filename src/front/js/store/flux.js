@@ -113,7 +113,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                         email: email,
                         username: fullName,
                         password: password,
-                        phone: phone
+                        // phone: phone
                     })
                 });
 

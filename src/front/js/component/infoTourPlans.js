@@ -103,7 +103,18 @@ const InfoTourPlans = () => {
                             <p>info del provedor</p>
                         </div>
 
-
+                        <div className="col-4 d-flex flex-column align-items-start gap-3 m-1"> 
+                            {/* {actividad.gallery.map((image, index) => (
+                                <img 
+                                    key={index} 
+                                    src={image} 
+                                    className="img-fluid rounded litle-image" 
+                                    alt={`Gallery ${index}`} 
+                                    onClick={() => handleShowModal(index + 1)}
+                                    style={{ cursor: 'pointer' }}
+                                />
+                            ))} */}
+                        </div>
                     </div>
 
 
@@ -136,45 +147,42 @@ const InfoTourPlans = () => {
 
                             </div>
                         </div>
+                        
                     </div>
 
                 </div>
-
-            </div>
-
+            
 
             {/* Modal de la galería de imágenes */}
             <Modal show={showModal} onHide={handleCloseModal} size="lg" centered>
-
                 <Modal.Header closeButton>
+                    <Modal.Title>Galería</Modal.Title>
                 </Modal.Header>
-
                 <Modal.Body>
                     <Carousel activeIndex={activeIndex} onSelect={(selectedIndex) => setActiveIndex(selectedIndex)}>
                         <Carousel.Item>
                             <img
                                 className="d-block w-100"
-                                src={tourPlan?.image_url}
+                                src={tourPlan.mainImage}
                                 alt="Main Image"
                             />
                         </Carousel.Item>
-                        {/* 
                         {tourPlan.gallery.map((image, index) => (
                             <Carousel.Item key={index}>
                                 <img
                                     className="d-block w-100"
                                     src={image}
-                                    alt={`Slide ${index + 1}`}
+                                    alt={` ${index + 1}`}
                                 />
                             </Carousel.Item>
-                        ))} */}
-
+                        ))}
                     </Carousel>
                 </Modal.Body>
-
             </Modal>
         </div>
+        </div> 
     )
+    
 }
 
 export default InfoTourPlans;
