@@ -8,9 +8,7 @@ const InfoTourPlans = () => {
     const { id } = useParams()
     const { store } = useContext(Context);
     const [tourPlan, setTourPlan] = useState({});
-
-
-    const [actividades, setActividades] = useState([]);
+    const [actividades, setActividades] = useState({});
     const [showModal, setShowModal] = useState(false);
     const [activeIndex, setActiveIndex] = useState(0);
 
@@ -18,12 +16,20 @@ const InfoTourPlans = () => {
 
     useEffect(() => {
         const getTourplan = async () => {
-            const response = await fetch(`${process.env.BACKEND_URL}/api/tourplan/${id}`);
-            const data = await response.json();
-            setTourPlan(data);
-        }
+            try {
+                const response = await fetch(`${process.env.BACKEND_URL}/api/tourplan/${id}`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                setTourPlan(data);
+                setActividades(data.actividades || []);
+            } catch (error) {
+                console.error('There has been a problem with your fetch operation:', error);
+            }
+        };
         getTourplan();
-    }, []);
+    }, [id]);
 
     const handleShowModal = (index) => {
         setActiveIndex(index);
@@ -45,7 +51,7 @@ const InfoTourPlans = () => {
                     <div className="col-10 d-flex align-items-center">
 
                         <i className="fa-solid fa-suitcase me-2" style={{ fontSize: '2rem' }}></i>
-                        <h2 className="text p-2 fw-bold"> Viaje a Canaima {tourPlan?.title}</h2>
+                        <h2 className="text p-2 fw-bold"> Viaje a Canaima {tour.title}</h2>
                     </div>
                     {/* Botón de favorito */}
                     <div>
@@ -60,9 +66,9 @@ const InfoTourPlans = () => {
                 <div className="d-flex col-8 d-flex justify-content-center" >
                     <div className="col-8 m-1 ">
                         <img
-                            src={tourPlan?.image_url}
+                            src={actividades.image_url}
                             className="img-fluid rounded main-image "
-                            alt={tourPlan?.title}
+                            alt={actividades.title}
                             onClick={() => handleShowModal(0)}
                             style={{ cursor: 'pointer', transition: 'transform 0.2s' }}
                         />
@@ -90,12 +96,12 @@ const InfoTourPlans = () => {
 
 
                         <h5 className="fw-bold">Descripción:</h5>
-                        <p>{tourPlan?.description}</p>
+                        <p>{actividades.description}</p>
 
 
                         <div>
                             <p>Puestos Disponibles: </p>
-                            <p>{tourPlan?.available_spots}</p>
+                            <p>{actividades.available_spots}</p>
                         </div>
 
                         <div>
@@ -121,21 +127,21 @@ const InfoTourPlans = () => {
                     <div className="col-sm-3 mb-3 mb-sm-0">
                         <div className="card">
                             <div className="card-body">
-                                <h5 className="fw-bold">$100 {tourPlan?.price} Por persona</h5>
+                                <h5 className="fw-bold">$100 {actividades.price} Por persona</h5>
 
                                 <div className="d-flex justify-content-between">
                                     <p className="fw-bold " >Inicio</p>
-                                    <p className=" text"> 10-10-2024{tourPlan?.start_date} </p>
+                                    <p className=" text"> 10-10-2024{actividades.start_date} </p>
                                 </div>
 
                                 <div className="d-flex justify-content-between">
                                     <p className="fw-bold">Culminación</p>
-                                    <p className=" text"> 10-10-2024{tourPlan?.end_date} </p>
+                                    <p className=" text"> 10-10-2024{actividades.end_date} </p>
                                 </div>
 
                                 <div className="d-flex justify-content-between mb-2">
                                     <p className="fw-bold ">Puestos Disponibles</p>
-                                    <p className=" text"> 10 {tourPlan?.available_spots} </p>
+                                    <p className=" text"> 10 {actividades.available_spots} </p>
                                 </div>
 
                                 {/* aqui agregar el link de whatsapp */}
@@ -153,33 +159,20 @@ const InfoTourPlans = () => {
                 </div>
             
 
-            {/* Modal de la galería de imágenes */}
-            <Modal show={showModal} onHide={handleCloseModal} size="lg" centered>
-                <Modal.Header closeButton>
-                    <Modal.Title>Galería</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Carousel activeIndex={activeIndex} onSelect={(selectedIndex) => setActiveIndex(selectedIndex)}>
-                        <Carousel.Item>
-                            <img
-                                className="d-block w-100"
-                                src={tourPlan.mainImage}
-                                alt="Main Image"
-                            />
-                        </Carousel.Item>
-                        {tourPlan.gallery.map((image, index) => (
-                            <Carousel.Item key={index}>
+                {/* Modal de la galería de imágenes */}
+                <Modal show={showModal} onHide={handleCloseModal} size="lg" centered>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Galería</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
                                 <img
                                     className="d-block w-100"
-                                    src={image}
-                                    alt={` ${index + 1}`}
+                                    src={actividades.mainImage}
+                                    alt="Main Image"
                                 />
-                            </Carousel.Item>
-                        ))}
-                    </Carousel>
-                </Modal.Body>
-            </Modal>
-        </div>
+                    </Modal.Body>
+                </Modal>
+            </div>
         </div> 
     )
     

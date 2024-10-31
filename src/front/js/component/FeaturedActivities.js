@@ -25,9 +25,9 @@ const FeaturedActivities = () => {
     };
 
     return (
-        <section className="actividades-destacadas py-5" style={{ backgroundColor: '#FFF' }}>
-            <div className="container text-center">
-                <h2>Actividades destacadas en Venezuela</h2>
+        <section className="actividades-destacadas py-3" style={{ backgroundColor: '#FFF' }}>
+            <div className="container text-center ">
+                <h2 className= "mb-4">Actividades destacadas en Venezuela</h2>
                 <div className="row">
                     {actividades.map((actividad, index) => (
                         <div className="col-12 col-md-4" key={index}>

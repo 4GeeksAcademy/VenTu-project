@@ -12,9 +12,6 @@ const PackageCard = ({ actividades = [] }) => {
     };
 
 
-
-
-
     const isFavorite = (actividadId) => {
 
         return store.favorites && store.favorites.some(favorite => favorite.id === actividadId);
@@ -24,7 +21,7 @@ const PackageCard = ({ actividades = [] }) => {
 
     return (
         // Tarjeta de paquete
-        <div className="d-flex flex-wrap gap-4 justify-content-center">
+        <div className="d-flex flex-wrap gap-4 mb-4 justify-content-center">
             {actividades.map((actividad, index) => (
                 <div key={index} className="card-tour card shadow" style={{ width: '24rem', backgroundColor: '#F2F4FF', borderColor: '#F2F4FF', transition: 'transform 0.2s' }}>
 
