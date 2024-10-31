@@ -4,6 +4,7 @@ import { PackagesSlide } from "../component/PackagesSlide";
 import { SearchBar } from "../component/SearchBar";
 import { SearchResultsList } from "../component/SearchResultsList";
 import SearchBarPrueba from "../component/SearchFormPackage";
+import DateSearch from "../component/SearchDate";
 
 
 export const PackagesList = () => {
@@ -29,20 +30,15 @@ export const PackagesList = () => {
         <div> 
 
             <div className="p-5"> 
-                <SearchBar setResults={setResults}/>
-                <SearchBarPrueba/>
-                
-            </div> 
-
-             <PackagesSlide actividades={actividades}/>  
-
+                <SearchBarPrueba setResults={setResults}/>
+            </div>  
+            
             <SearchResultsList results={results} />
+            <PackagesSlide/>
             
             <div> 
                 <PackageCard actividades={actividades} />
             </div>
-            
-            {/* <Filters filters={filters} setFilters={setFilters} /> */}
                 
         </div>
     );

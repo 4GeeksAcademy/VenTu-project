@@ -39,11 +39,8 @@ const Layout = () => {
                         <Route element={<Register />} path="/register" />
                         <Route element={<PackagesList />} path="/tourplans" />
                         <Route element={<CrearTourPlan />} path="/creartourplan" />
-
                         <Route element={<InfoTourPlans />} path="/tourplans/:title" />
-
                         <Route path="/tourplans/:id" element={<InfoTourPlans/>} />
-
                         <Route element={<B2BPage />} path="/b2b" />
                         <Route element={<h1>Not found!</h1>} path="*" />
                     </Routes>
