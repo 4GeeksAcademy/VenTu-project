@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Context } from "../store/appContext";
 import toast, { Toaster } from 'react-hot-toast';
 import logo from '../../static/images/ventu-logo.png';
+import ventu from '../../static/images/ventu.png';
+import '../../styles/navbar.css'
 
 export const Navbar = () => {
     const navigate = useNavigate();
@@ -47,26 +49,27 @@ export const Navbar = () => {
     };
 
 
+
     return (
-        <nav className="navbar navbar-light p-0" style={{ backgroundColor: '#00B4E7' }}>
+        <nav className="navbar navbar-light p-2" style={{ backgroundColor: '#00B4E7' }}>
             <Toaster /> {/* Renderiza los mensajes toast */}
 
-            <div className="container d-flex justify-content-between">
+            <div className="container d-flex justify-content-between navBar">
 
-                <div>
+                <div >
 
-                    <Link to="/" className="navbar-brand text-white">
-                        <img src={logo} alt="Ventu Logo" style={{ width: '120px', height: 'auto' }} />
+                    <Link to="/" className="navbar-brand ">
+                        <img src={ventu} alt="Ventu Logo" style={{ width: '120px', height: 'auto' }} />
                     </Link>
-                    <Link to="/" className="btn">Inicio</Link>
-                    <Link to="/tourplans" className="btn">Planes turisticos</Link>
-                    <Link to="/about" className="btn">Sobre Nosotros</Link>
-                    <Link to="/favorites" className="btn ">Favoritos</Link>
+                    <Link to="/" className="btn text-white fs-5 custom-link">Inicio</Link>
+                    <Link to="/tourplans" className="btn text-white fs-5 custom-link">Planes turisticos</Link>
+                    <Link to="/about" className="btn text-white fs-5 custom-link">Sobre Nosotros</Link>
+
                 </div>
 
-                <div className="dropdown">
+                <div className="dropdown ">
                     <button
-                        className="btn dropdown-toggle"
+                        className="btn dropdown-toggle text-white fs-5 custom-link"
                         type="button"
                         data-bs-toggle="dropdown"
                         aria-expanded="false"
@@ -80,6 +83,7 @@ export const Navbar = () => {
                                     className="dropdown-item"
                                     data-bs-toggle="modal"
                                     data-bs-target="#exampleModal"
+
                                 >
                                     Iniciar sesión
                                 </button>
@@ -100,11 +104,20 @@ export const Navbar = () => {
                                     Cerrar sesión
                                 </button>
                             </li>
-                            <li>
-                                <Link to="/favorites" className="btn btn-outline-light dropdown-item">
-                                    Favoritos
-                                </Link>
-                            </li>
+                            {store.user && store.user.role === 'client' ? (
+                                <li>
+                                    <Link to="/favorites" className="btn btn-outline-light dropdown-item">
+                                        <i className='fas fa-heart text-danger'></i>
+                                        Favoritos
+                                    </Link>
+                                </li>
+                            ) : store.user && store.user.role === 'provider' ? (
+                                <li>
+                                    {/* <Link to="/tour-plans" className="btn btn-outline-light dropdown-item">
+                                        Mis Tour Plans
+                                    </Link> */}
+                                </li>
+                            ) : null}
                         </ul>
                     )}
                     {/* Modal para iniciar sesión */}
@@ -161,12 +174,13 @@ export const Navbar = () => {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className='btn btn-link'>Olvidaste tu contraseña?</div>
+                                        {/* <div className='btn btn-link'>Olvidaste tu contraseña?</div> */}
                                     </div>
                                 </div>
                                 <div className="d-flex">
                                     <div className='d-flex flex-column w-100 mx-3 py-2'>
-                                        <button onClick={handleLogin} className="btn btn-success mt-2">
+                                        <button onClick={handleLogin} className="btn btn-success mt-2"
+                                            style={{ backgroundColor: '#00B4E7' }}>
                                             Iniciar Sesión
                                         </button>
                                         <button
