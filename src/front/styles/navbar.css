@@ -1,0 +1,30 @@
+.custom-link {
+    position: relative;
+    text-decoration: none;
+    color: white; /* Para mantener el color blanco */
+  }
+  
+  .custom-link::after {
+    content: '';
+    position: absolute;
+    background: #ffffff;
+    width: 100%;
+    height: 5px;
+    left: 0;
+    bottom: -1px;
+    transform: scaleX(0); /* Oculta la línea inicialmente */
+    transform-origin: right;
+    transition: transform 0.2s ease;
+  }
+  
+  
+  .custom-link:hover::after {
+    transform: scaleX(1); /* Muestra la línea al hacer hover */
+    transform-origin: left;
+    
+  }
+  
+
+
+
+

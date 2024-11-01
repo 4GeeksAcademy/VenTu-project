@@ -194,11 +194,11 @@ const getState = ({ getStore, getActions, setStore }) => {
             // Función para crear tour plan
             createTourPlan: async (formData) => {
                 console.log(formData);
-                
+
                 try {
                     const token = localStorage.getItem("token");
                     if (!token) {
-                        toast.error("No token found, please log in first");
+                        toast.error("Por favor inicia sesión para crear un Tour Plan.");
                         return;
                     }
 
@@ -233,7 +233,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 try {
                     const token = localStorage.getItem("token");
                     if (!token) {
-                        toast.error("No token found, please log in first");
+                        toast.error("por favor inicia sesión para agregar favoritos");
                         return;
                     }
 
@@ -273,7 +273,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 try {
                     const token = localStorage.getItem("token");
                     if (!token) {
-                        toast.error("No token found, please log in first");
+                        //toast.error("No token found, please log in first");
                         return;
                     }
 
@@ -301,7 +301,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 try {
                     const token = localStorage.getItem("token");
                     if (!token) {
-                        toast.error("No token found, please log in first");
+                        toast.error("Por favor inicia sesión para ver tus favoritos.");
                         return;
                     }
 
@@ -314,12 +314,13 @@ const getState = ({ getStore, getActions, setStore }) => {
                     if (response.ok) {
                         const data = await response.json();
                         setStore({ favorites: data });
-                    } else {
-                        toast.error("Error getting favorites");
                     }
+                    //else {
+                    //     toast.error("Error getting favorites");
+                    // }
                 } catch (error) {
                     console.error("Error getting favorites:", error);
-                    toast.error("Error getting favorites");
+                    //toast.error("Error getting favorites");
                 }
             },
 
