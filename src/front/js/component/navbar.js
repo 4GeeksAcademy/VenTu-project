@@ -107,7 +107,7 @@ export const Navbar = () => {
                             {store.user && store.user.role === 'client' ? (
                                 <li>
                                     <Link to="/favorites" className="btn btn-outline-light dropdown-item">
-                                        <i className='fas fa-heart text-danger'></i>
+                                        <i className='fas fa-heart text-danger me-2'></i>
                                         Favoritos
                                     </Link>
                                 </li>
