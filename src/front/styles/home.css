@@ -39,3 +39,12 @@
 .hero-background.active {
     opacity: 1;
 }
+
+
+/* gallery de viajeros  */
+
+.gallery-img {
+    height: 250px;
+    object-fit: cover;
+    width: 100%;
+}
