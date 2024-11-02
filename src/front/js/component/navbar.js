@@ -61,15 +61,15 @@ export const Navbar = () => {
                     <Link to="/" className="navbar-brand ">
                         <img src={ventu} alt="Ventu Logo" style={{ width: '120px', height: 'auto' }} />
                     </Link>
-                    <Link to="/" className="btn text-white fs-5 custom-link">Inicio</Link>
-                    <Link to="/tourplans" className="btn text-white fs-5 custom-link">Planes turisticos</Link>
-                    <Link to="/about" className="btn text-white fs-5 custom-link">Sobre Nosotros</Link>
+                    <Link to="/" className="btn text-black fs-5 custom-link">Inicio</Link>
+                    <Link to="/tourplans" className="btn text-black fs-5 custom-link">Planes turisticos</Link>
+                    <Link to="/about" className="btn text-black fs-5 custom-link">Sobre Nosotros</Link>
 
                 </div>
 
                 <div className="dropdown ">
                     <button
-                        className="btn dropdown-toggle text-white fs-5 custom-link"
+                        className="btn dropdown-toggle text-black fs-5 custom-link"
                         type="button"
                         data-bs-toggle="dropdown"
                         aria-expanded="false"
@@ -107,7 +107,7 @@ export const Navbar = () => {
                             {store.user && store.user.role === 'client' ? (
                                 <li>
                                     <Link to="/favorites" className="btn btn-outline-light dropdown-item">
-                                        <i className='fas fa-heart text-danger'></i>
+                                        <i className='fas fa-heart text-danger me-2'></i>
                                         Favoritos
                                     </Link>
                                 </li>

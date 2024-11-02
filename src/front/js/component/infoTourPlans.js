@@ -1,21 +1,14 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Context } from "../store/appContext";
 import { useParams } from "react-router-dom";
-import { Modal, Carousel } from "react-bootstrap";
-import "/workspaces/VenTu-project/src/front/styles/InfoTourPlans.css"
-
-import PackageCard from "../component/PackageCard";
-
+import { Modal } from "react-bootstrap";
+import "/workspaces/VenTu-project/src/front/styles/InfoTourPlans.css";
 
 const InfoTourPlans = () => {
-    const { id } = useParams()
-    const { store, actions } = useContext(Context);
+    const { id } = useParams();
+    const { store } = useContext(Context);
     const [tourPlan, setTourPlan] = useState({});
-    const [actividades, setActividades] = useState([]);
     const [showModal, setShowModal] = useState(false);
-    const [activeIndex, setActiveIndex] = useState(0);
-
-    // const selectedTourPlan = store.tourPlans.find((item) => item.id === id);
 
     useEffect(() => {
         const getTourplan = async () => {
@@ -25,17 +18,15 @@ const InfoTourPlans = () => {
                     throw new Error('Network response was not ok');
                 }
                 const data = await response.json();
-                setTourPlan(data);
-                setActividades(data.actividades || []);
+                setTourPlan(data); // Guardamos los datos completos en tourPlan
             } catch (error) {
-                console.error('There has been a problem with your fetch operation:', error);
+                console.error('Error fetching tour plan data:', error);
             }
         };
         getTourplan();
     }, [id]);
 
-    const handleShowModal = (index) => {
-        setActiveIndex(index);
+    const handleShowModal = () => {
         setShowModal(true);
     };
 
@@ -43,69 +34,51 @@ const InfoTourPlans = () => {
         setShowModal(false);
     };
 
-    const isFavorite = (actividadId) => {
-
-        return store.favorites && store.favorites.some(favorite => favorite.id === actividadId);
-    };
-
-
     return (
-        <div className="container mt-1 p-3">
+        <div className="container mt-4 p-3">
             <div className="row">
                 <div className="col-12 d-flex align-items-center">
-                    <h2 className="text p-2 fw-bold">{tourPlan.title || 'Detalle del Tour'}</h2>
+                    <h2 className="fw-bold">{tourPlan.title || 'Detalle del Tour'}</h2>
                 </div>
 
                 {/* Galería de imágenes */}
-                <div className="col-8 d-flex justify-content-center">
-                    <div className="col-8 m-1">
-                        <img
-                            src={tourPlan.image_url || "default-image.jpg"}
-                            className="img-fluid rounded main-image"
-                            alt={tourPlan.title}
-                            onClick={handleShowModal}
-                            style={{ cursor: 'pointer' }}
-                        />
-                    </div>
+                <div className="col-8 d-flex justify-content-center mb-4">
+                    <img
+                        src={tourPlan.image_url || "https://res.cloudinary.com/desmcxb1y/image/upload/v1730486962/bizledoxipc6nqdi83np.jpg"}
+                        className="img-fluid rounded main-image"
+                        alt={tourPlan.title}
+                        onClick={handleShowModal}
+                        style={{ cursor: 'pointer', transition: 'transform 0.2s' }}
+                    />
                 </div>
 
                 {/* Información del TourPlan */}
                 <div className="col-12 mt-4 d-flex">
-                    <div className="col-8">
+                    <div className="col-md-8">
                         <h5 className="fw-bold">Descripción:</h5>
                         <p>{tourPlan.description || 'Descripción no disponible.'}</p>
-
-                        <div>
-                            <p>Puestos Disponibles: {tourPlan.available_spots || 'N/A'}</p>
-                        </div>
-                        <div>
-                            <h5 className="fw-bold">Proveedor: </h5>
-                            <p>{tourPlan.provider ? tourPlan.provider.name : 'Información del proveedor no disponible.'}</p>
-                        </div>
+                        <p><strong>Puestos Disponibles:</strong> {tourPlan.available_spots}</p>
                     </div>
 
-                    <div className="col-sm-4 mb-3">
+                    <div className="col-md-4">
                         <div className="card">
                             <div className="card-body">
                                 <h5 className="fw-bold">${tourPlan.price} por persona</h5>
-
                                 <div className="d-flex justify-content-between">
-                                    <p className="fw-bold">Inicio</p>
-                                    <p>{tourPlan.start_date || 'No disponible'}</p>
+                                    <p className="fw-bold mb-0">Inicio</p>
+                                    <p>{tourPlan.start_date ? new Date(tourPlan.start_date).toLocaleDateString() : 'No disponible'}</p>
                                 </div>
                                 <div className="d-flex justify-content-between">
-                                    <p className="fw-bold">Culminación</p>
-                                    <p>{tourPlan.end_date || 'No disponible'}</p>
+                                    <p className="fw-bold mb-0">Culminación</p>
+                                    <p>{tourPlan.end_date ? new Date(tourPlan.end_date).toLocaleDateString() : 'No disponible'}</p>
                                 </div>
-
                                 <a
                                     href={`https://wa.me/${tourPlan.provider?.phone}`}
-                                    className="btn btn-success col-12"
+                                    className="btn btn-success col-12 mt-3"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
-                                    <i className="fa-brands fa-whatsapp"></i>
-                                    Reserva aquí!
+                                    <i className="fa-brands fa-whatsapp"></i> Reserva aquí!
                                 </a>
                             </div>
                         </div>
@@ -115,12 +88,12 @@ const InfoTourPlans = () => {
                 {/* Modal de la imagen principal */}
                 <Modal show={showModal} onHide={handleCloseModal} size="lg" centered>
                     <Modal.Header closeButton>
-                        <Modal.Title>Galería</Modal.Title>
+                        <Modal.Title>Imagen del Tour</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <img
                             className="d-block w-100"
-                            src={tourPlan.image_url || "default-image.jpg"}
+                            src={tourPlan.image_url || "https://res.cloudinary.com/desmcxb1y/image/upload/v1730486962/bizledoxipc6nqdi83np.jpg"}
                             alt="Main Image"
                         />
                     </Modal.Body>
