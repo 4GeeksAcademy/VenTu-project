@@ -2,6 +2,12 @@ import React, { useContext, useState } from "react";
 import { Context } from "../store/appContext";
 import { useNavigate } from "react-router-dom";
 import { FaUser, FaEnvelope, FaLock, FaUserTag } from "react-icons/fa";
+import { Link } from 'react-router-dom';
+import logo from '../../static/images/plan-pais-turismo.jpg';
+// Importar el componente PhoneInput
+// import PhoneInput from 'react-phone-input-2'
+// import 'react-phone-input-2/lib/style.css'
+
 
 const Register = () => {
   const { actions } = useContext(Context);
