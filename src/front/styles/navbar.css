@@ -1,18 +1,18 @@
 .custom-link {
     position: relative;
     text-decoration: none;
-    color: white; /* Para mantener el color blanco */
+    color: white;
   }
   
   .custom-link::after {
     content: '';
     position: absolute;
-    background: #ffffff;
+    background: #ffffff6f;
     width: 100%;
-    height: 5px;
+    height: 2px;
     left: 0;
     bottom: -2px;
-    transform: scaleX(0); /* Oculta la línea inicialmente */
+    transform: scaleX(0);
     transform-origin: right;
     transition: transform 0.2s ease;
   }

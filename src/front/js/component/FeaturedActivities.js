@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import '../../styles/featuredActivities.css';
 import { Context } from '../store/appContext';
 
 const FeaturedActivities = () => {
-    const { store, actions } = React.useContext(Context);
+    const { store, actions } = useContext(Context);
     const [actividades, setActividades] = useState([]);
+    const [visibleTours, setVisibleTours] = useState(6); // Número inicial de tours visibles
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -19,19 +22,27 @@ const FeaturedActivities = () => {
 
         fetchData();
     }, []);
-    const isFavorite = (actividadId) => {
 
+    const isFavorite = (actividadId) => {
         return store.favorites && store.favorites.some(favorite => favorite.id === actividadId);
     };
 
+    const handleShowMore = () => {
+        setVisibleTours(prevVisibleTours => prevVisibleTours + 6); // Mostrar 6 tours adicionales
+    };
+
     return (
-        <section className="actividades-destacadas py-3" style={{ backgroundColor: '#FFF' }}>
-            <div className="container text-center ">
-                <h2 className= "mb-4">Actividades destacadas en Venezuela</h2>
+        <section className="actividades-destacadas py-5" style={{ backgroundColor: '#FFF', margin: '50px 10px' }}>
+            <div className="container text-center">
+                <h2 className="mb-4">Actividades destacadas</h2>
                 <div className="row">
-                    {actividades.map((actividad, index) => (
-                        <div className="col-12 col-md-4" key={index}>
-                            <div className="card-tour shadow" style={{ transition: 'transform 0.2s' }}>
+                    {actividades.slice(0, visibleTours).map((actividad, index) => (
+                        <div className="col-12 col-md-6 col-lg-4 mb-4 row-gap-3" key={index}>
+                            <div 
+                                className="card-tour shadow" 
+                                style={{ transition: 'transform 0.2s', cursor: 'pointer' }} 
+                                onClick={() => navigate(`/tourplans/${actividad.id}`)}
+                            >
                                 <img
                                     src={actividad.image_url || '/default-image.png'}
                                     className="card-img-top"
@@ -50,22 +61,28 @@ const FeaturedActivities = () => {
                                         <p><strong>Fechas:</strong> {new Date(actividad.start_date).toLocaleDateString()} - {new Date(actividad.end_date).toLocaleDateString()}</p>
                                     </div>
 
-                                    <div className="d-flex justify-content-between align-items-center">
-                                        <button className="btn btn-primary" style={{ backgroundColor: '#00B4E7' }}>
+                                    <div className="d-flex justify-content-between align-items-center mt-3">
+                                        <button 
+                                            className="btn btn-primary" 
+                                            style={{ backgroundColor: '#ef377e' }}
+                                            onClick={(e) => {
+                                                e.stopPropagation(); // Prevenir que el clic en el botón afecte el onClick del contenedor
+                                                navigate(`/tourplans/${actividad.id}`);
+                                            }}
+                                        >
                                             Reserva Ya!
                                         </button>
                                         <button className="btn btn-light"
-                                            onClick={() => {
+                                            onClick={(e) => {
+                                                e.stopPropagation(); // Prevenir que el clic en el botón afecte el onClick del contenedor
                                                 if (isFavorite(actividad.id)) {
                                                     actions.removeFavorite(actividad.id);
                                                 } else {
                                                     actions.addFavorite(actividad.id);
-
                                                 }
                                             }}
                                         >
                                             <i className={`fas fa-heart ${isFavorite(actividad.id) ? 'text-danger' : 'text-black'}`}></i>
-
                                         </button>
                                     </div>
                                 </div>
@@ -73,6 +90,11 @@ const FeaturedActivities = () => {
                         </div>
                     ))}
                 </div>
+                {visibleTours < actividades.length && (
+                    <button className="btn btn-secondary mt-4" onClick={handleShowMore} style={{ backgroundColor: '#ef377e', color: '#fff' }}>
+                        Mostrar más
+                    </button>
+                )}
             </div>
         </section>
     );
