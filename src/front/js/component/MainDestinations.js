@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import Slider from 'react-slick';
-import "slick-carousel/slick/slick.css"; 
-import "slick-carousel/slick/slick-theme.css";
+//import Slider from 'react-slick';
+//import "slick-carousel/slick/slick.css";
+//import "slick-carousel/slick/slick-theme.css";
 import '../../styles/MainDestinations.css';
 
 const MainDestinations = () => {
@@ -56,10 +56,10 @@ const MainDestinations = () => {
                     {destinos.map((destino) => (
                         <div key={destino.id} className="destination-slide">
                             <Link to={`/tourplans/${destino.id}`}>
-                                <img 
-                                    src={destino.image_url || 'default-image.jpg'} 
-                                    alt={destino.title} 
-                                    className="img-fluid destination-image" 
+                                <img
+                                    src={destino.image_url || 'default-image.jpg'}
+                                    alt={destino.title}
+                                    className="img-fluid destination-image"
                                 />
                                 <p className="destination-title">{destino.title}</p>
                             </Link>

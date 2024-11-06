@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Context } from "../store/appContext";
 import { useNavigate } from "react-router-dom";
-import { FaUser, FaEnvelope, FaLock, FaUserTag } from "react-icons/fa";
+//import { FaUser, FaEnvelope, FaLock, FaUserTag } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import logo from '../../static/images/plan-pais-turismo.jpg';
 // Importar el componente PhoneInput

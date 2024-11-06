@@ -10,7 +10,7 @@ import viajero4 from '../../static/people/viajeros4.webp';
 import viajero5 from '../../static/people/viajeros5.webp';
 import viajero6 from '../../static/people/viajeros7.jpeg';
 
-import { FaCampground, FaUmbrellaBeach, FaMapMarkedAlt, FaMountain } from 'react-icons/fa';
+//import { FaCampground, FaUmbrellaBeach, FaMapMarkedAlt, FaMountain } from 'react-icons/fa';
 import '../../styles/home.css';
 
 export const Home = () => {
