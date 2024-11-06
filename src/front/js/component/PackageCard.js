@@ -25,14 +25,14 @@ const PackageCard = ({ actividades = [] }) => {
             {actividades.map((actividad, index) => (
                 <div key={index} className="card-tour card shadow" style={{ width: '24rem', backgroundColor: '#F2F4FF', borderColor: '#F2F4FF', transition: 'transform 0.2s' }}>
 
-            {/* Imagen de la tarjeta */}
-             <img 
-                src={actividad.image_url || '/default-image.png'} 
-                className="card-img-top" 
-                alt={actividad.title} 
-                onClick={() => handleReserveClick(actividad.title)}
-                style={{ height: '200px', objectFit: 'cover'   }}
-            />
+                    {/* Imagen de la tarjeta */}
+                    <img
+                        src={actividad.image_url}
+                        className="card-img-top"
+                        alt={actividad.title}
+                        onClick={() => handleReserveClick(actividad.title)}
+                        style={{ height: '200px', objectFit: 'cover' }}
+                    />
                     <div className="card-body">
 
                         {/* Título del paquete */}

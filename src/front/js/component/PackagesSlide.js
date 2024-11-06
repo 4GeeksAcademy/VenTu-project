@@ -33,7 +33,7 @@ export const PackagesSlide = ({ actividades = [] }) => {
                     </Carousel.Item>
                 ))}
             </Carousel>
-            
+
             <style>{`
                 .overlay {
                     position: absolute;

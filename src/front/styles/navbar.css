@@ -11,7 +11,7 @@
     width: 100%;
     height: 5px;
     left: 0;
-    bottom: -1px;
+    bottom: -2px;
     transform: scaleX(0); /* Oculta la línea inicialmente */
     transform-origin: right;
     transition: transform 0.2s ease;
