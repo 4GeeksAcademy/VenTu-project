@@ -15,8 +15,8 @@ class User(db.Model):
     role = db.Column(db.String(50), nullable=False)  # "provider" or "client"
     status = db.Column(db.String(50), default="active", nullable=False)
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
-    # phone = db.Column(db.String(50), nullable=True)
-    # providers = db.relationship('Provider', back_populates='user', lazy=True)
+    phone = db.Column(db.String(50), nullable=True)
+    providers = db.relationship('Provider', back_populates='user', lazy=True)
     
     @validates('role')
     def validate_role(self, key, value):
@@ -45,7 +45,7 @@ class User(db.Model):
             "role": self.role,
             "status": self.status,
             "created_at": self.created_at.isoformat(),  # Convierte a formato ISO para JSON
-            # "phone": self.phone
+            "phone": self.phone
         }   
 
 class Client(db.Model):
@@ -94,7 +94,7 @@ class TourPlan(db.Model):
     image_url = db.Column(db.String(255), nullable=True)
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
 
-    provider = db.relationship('Provider', backref='tour_plan')
+    provider = db.relationship('Provider')
     Favorite_tour_plan = db.relationship('Favorite_tour_plan', back_populates='tour_plan', lazy=True)
 
     provider = db.relationship(Provider)
@@ -114,8 +114,8 @@ class TourPlan(db.Model):
             "end_date": self.end_date,
             "provider_id": self.provider_id,
             "image_url": self.image_url,
-            # "created_at": self.created_at,
-            # "phone": self.provider.user.phone
+            "created_at": self.created_at,
+            "phone": self.provider.user.phone
         }
 
 class ReservationStatus(Enum):

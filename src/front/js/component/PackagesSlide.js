@@ -2,7 +2,9 @@ import React from 'react';
 import { Carousel } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-export const PackagesSlide = ({ actividades = [] }) => {
+export const PackagesSlide = ({ actividades }) => {
+    console.log(actividades);
+    
     return (
         <div style={{ width: '100%', backgroundColor: '#f8f9fa', padding: '10px 0' }}>
             <Carousel
@@ -16,7 +18,7 @@ export const PackagesSlide = ({ actividades = [] }) => {
                     position: 'relative'
                 }}
             >
-                {actividades.map((actividad, index) => (
+                {actividades && actividades.length > 0 && actividades.map((actividad, index) => (
                     <Carousel.Item key={index} style={{ height: '70vh' }}>
                         <Link to={`/tourplans/${actividad.id}`}>
                             <img
@@ -33,7 +35,7 @@ export const PackagesSlide = ({ actividades = [] }) => {
                     </Carousel.Item>
                 ))}
             </Carousel>
-            
+
             <style>{`
                 .overlay {
                     position: absolute;

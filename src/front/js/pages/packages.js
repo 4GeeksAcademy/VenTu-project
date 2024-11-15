@@ -38,7 +38,7 @@ export const PackagesList = () => {
             </div> 
 
             <div className= "mb-4 mt-4"> 
-                <PackagesSlide/>
+                <PackagesSlide actividades={actividades}/>
             </div>
             
             <div> 

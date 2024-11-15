@@ -47,6 +47,8 @@ const InfoTourPlans = () => {
 
         return store.favorites && store.favorites.some(favorite => favorite.id === actividadId);
     };
+    console.log(tourPlan, actividades);
+
 
 
     return (
@@ -59,7 +61,7 @@ const InfoTourPlans = () => {
                     <div className="col-10 d-flex align-items-center">
 
                         <i className="fa-solid fa-suitcase me-2" style={{ fontSize: '2rem' }}></i>
-                        <h2 className="text p-2 fw-bold"> Viaje a Canaima {tour.title}</h2>
+                        <h2 className="text p-2 fw-bold"> Viaje a Canaima {tourPlan.title}</h2>
                     </div>
                     {/* Botón de favorito */}
                     <div>
@@ -74,9 +76,9 @@ const InfoTourPlans = () => {
                 <div className="d-flex col-8 d-flex justify-content-center" >
                     <div className="col-8 m-1 ">
                         <img
-                            src={actividades.image_url}
+                            src={tourPlan.image_url}
                             className="img-fluid rounded main-image "
-                            alt={actividades.title}
+                            alt={tourPlan.title}
                             onClick={() => handleShowModal(0)}
                             style={{ cursor: 'pointer', transition: 'transform 0.2s' }}
                         />
@@ -104,12 +106,12 @@ const InfoTourPlans = () => {
 
 
                         <h5 className="fw-bold">Descripción:</h5>
-                        <p>{actividades.description}</p>
+                        <p>{tourPlan.description}</p>
 
 
                         <div>
                             <p>Puestos Disponibles: </p>
-                            <p>{actividades.available_spots}</p>
+                            <p>{tourPlan.available_spots}</p>
                         </div>
 
                         <div>
@@ -117,7 +119,7 @@ const InfoTourPlans = () => {
                             <p>info del provedor</p>
                         </div>
 
-                        <div className="col-4 d-flex flex-column align-items-start gap-3 m-1"> 
+                        <div className="col-4 d-flex flex-column align-items-start gap-3 m-1">
                             {/* {actividad.gallery.map((image, index) => (
                                 <img 
                                     key={index} 
@@ -135,21 +137,21 @@ const InfoTourPlans = () => {
                     <div className="col-sm-3 mb-3 mb-sm-0">
                         <div className="card">
                             <div className="card-body">
-                                <h5 className="fw-bold">$100 {actividades.price} Por persona</h5>
+                                <h5 className="fw-bold">${tourPlan.price} Por persona</h5>
 
-                                <div className="d-flex justify-content-between">
-                                    <p className="fw-bold " >Inicio</p>
-                                    <p className=" text"> 10-10-2024{actividades.start_date} </p>
+                                <div className="d-flex flex-column">
+                                    <p className="fw-bold " >Inicio: </p>
+                                    <p className=" text">{" " + tourPlan.start_date} </p>
                                 </div>
 
-                                <div className="d-flex justify-content-between">
-                                    <p className="fw-bold">Culminación</p>
-                                    <p className=" text"> 10-10-2024{actividades.end_date} </p>
+                                <div className="d-flex flex-column">
+                                    <p className="fw-bold">Culminación: </p>
+                                    <p className=" text"> {" " + tourPlan.end_date} </p>
                                 </div>
 
                                 <div className="d-flex justify-content-between mb-2">
-                                    <p className="fw-bold ">Puestos Disponibles</p>
-                                    <p className=" text"> 10 {actividades.available_spots} </p>
+                                    <p className="fw-bold ">Puestos Disponibles:</p>
+                                    <p className=" text"> {tourPlan.available_spots} </p>
                                 </div>
 
                                 {/* aqui agregar el link de whatsapp */}
@@ -161,11 +163,11 @@ const InfoTourPlans = () => {
 
                             </div>
                         </div>
-                        
+
                     </div>
 
                 </div>
-            
+
 
                 {/* Modal de la galería de imágenes */}
                 <Modal show={showModal} onHide={handleCloseModal} size="lg" centered>
@@ -173,17 +175,17 @@ const InfoTourPlans = () => {
                         <Modal.Title>Galería</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                                <img
-                                    className="d-block w-100"
-                                    src={actividades.mainImage}
-                                    alt="Main Image"
-                                />
+                        <img
+                            className="d-block w-100"
+                            src={tourPlan.image_url}
+                            alt="Main Image"
+                        />
                     </Modal.Body>
                 </Modal>
             </div>
-        </div> 
+        </div>
     )
-    
+
 }
 
 export default InfoTourPlans;

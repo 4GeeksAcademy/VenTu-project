@@ -75,7 +75,7 @@ def register_provider():
         username=data.get('username'),
         email=data.get('email'),
         password_hash=generate_password_hash(data.get('password')),
-        # phone=data.get('phone'),
+        phone=data.get('phone'),
         role='provider'
     )
     
@@ -119,7 +119,7 @@ def register_client():
         username=data.get('username'),
         email=data.get('email'),
         password_hash=generate_password_hash(data.get('password')),
-        # phone=data.get('phone'),
+        phone=data.get('phone'),
         role='client'
     )
     db.session.add(new_user)
@@ -186,11 +186,11 @@ def delete_user(user_id):
 # =====================================
 # Rutas para Tour Plans
 # =====================================
-# @api.route('/tourplan/<int:id>', methods=['GET'])
-# def tour_plan(id):
-#     tour_plan = TourPlan.query.get(id)
+@api.route('/tourplan/<int:id>', methods=['GET'])
+def tour_plan(id):
+    tour_plan = TourPlan.query.get(id)
    
-#     return jsonify(tour_plan.serialize()), 200
+    return jsonify(tour_plan.serialize()), 200
 
 @api.route('/tourplans', methods=['GET'])
 def get_tour_plans():

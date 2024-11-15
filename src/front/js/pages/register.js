@@ -6,8 +6,8 @@ import { Link } from 'react-router-dom';
 import logo from '../../static/images/plan-pais-turismo.jpg';
 
 // Importar el componente PhoneInput
-// import PhoneInput from 'react-phone-input-2'
-// import 'react-phone-input-2/lib/style.css'
+import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css'
 
 
 const Register = () => {
@@ -15,7 +15,7 @@ const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  // const [phone, setPhone] = useState("");
+  const [phone, setPhone] = useState("");
   const [role, setRole] = useState("client");
 
 
@@ -24,12 +24,12 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault(); // Evitar el comportamiento por defecto del formulario
 
-    const result = await actions.register(email, name, password, role);
+    const result = await actions.register(email, name, password, role, phone);
     if (result) {
       setName("");
       setEmail("");
       setPassword("");
-      // setPhone("");
+      setPhone("");
       setRole("");
       navigate("/"); // Redirigir después del registro
     }
@@ -44,7 +44,7 @@ const Register = () => {
           <h1 >Bienvenido a Ventu</h1>
           <p >Regístrate y encuentra los mejores planes turísticos en Venezuela</p>
           <div className="featured-image mb-3">
-            <img src={logo} className="img-fluid" style={{ width: '100%', height: '450px'  }} alt="logo" />
+            <img src={logo} className="img-fluid" style={{ width: '100%', height: '450px' }} alt="logo" />
           </div>
         </div>
 
@@ -89,14 +89,14 @@ const Register = () => {
                 />
               </div>
 
-              {/* <div className="mb-3">
-              <label htmlFor="formGroupExampleInput" className="form-label">Phone</label>
-              <PhoneInput
-                country={'co'}
-                value={phone}
-                onChange={(phone) => setPhone(phone)}
-              />
-            </div> */}
+              <div className="mb-3">
+                <label htmlFor="formGroupExampleInput" className="form-label">Phone</label>
+                <PhoneInput
+                  country={'co'}
+                  value={phone}
+                  onChange={(phone) => setPhone(phone)}
+                />
+              </div>
 
               <div className="mb-3">
 

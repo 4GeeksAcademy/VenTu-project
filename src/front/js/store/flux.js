@@ -113,7 +113,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                         email: email,
                         username: fullName,
                         password: password,
-                        // phone: phone
+                        phone: phone
                     })
                 });
 
@@ -202,7 +202,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                         return;
                     }
 
-                    const BACKEND_URL = process.env.BACKEND_URL.endsWith('/') ? process.env.BACKEND_URL.slice(0, -1) : process.env.BACKEND_URL;
+                     const BACKEND_URL = process.env.BACKEND_URL.endsWith('/') ? process.env.BACKEND_URL.slice(0, -1) : process.env.BACKEND_URL;
 
                     const response = await fetch(`${BACKEND_URL}/api/tourplans`, {
                         method: "POST",
