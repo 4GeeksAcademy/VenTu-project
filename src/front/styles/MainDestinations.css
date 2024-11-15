@@ -1,0 +1,22 @@
+.main-destinations {
+    background-color: #F9FAFB;
+    padding: 2rem 0;
+}
+
+.destination-slide {
+    padding: 1rem;
+    text-align: center;
+}
+
+.destination-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.destination-title {
+    margin-top: 10px;
+    font-weight: bold;
+    color: #333;
+}

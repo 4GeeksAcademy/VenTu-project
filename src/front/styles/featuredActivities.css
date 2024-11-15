@@ -1,14 +1,13 @@
-.card-tour:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+.actividades-destacadas {
+    margin: 50px 10px;
 }
 
-.info-extra p {
-    margin: 0;
+.card-tour {
+    border-radius: 10px;
+    overflow: hidden;
 }
 
-.btn-light {
-    background-color: #e3f2fd;
-    border-radius: 50%;
-    padding: 0.5rem;
+.card-tour .card-img-top {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
 }

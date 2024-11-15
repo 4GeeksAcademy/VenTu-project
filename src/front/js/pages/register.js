@@ -1,10 +1,9 @@
 import React, { useContext, useState } from "react";
 import { Context } from "../store/appContext";
 import { useNavigate } from "react-router-dom";
+import { FaUser, FaEnvelope, FaLock, FaUserTag } from "react-icons/fa";
 import { Link } from 'react-router-dom';
-
 import logo from '../../static/images/plan-pais-turismo.jpg';
-
 // Importar el componente PhoneInput
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
@@ -17,12 +16,10 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
   const [role, setRole] = useState("client");
-
-
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Evitar el comportamiento por defecto del formulario
+    e.preventDefault();
 
     const result = await actions.register(email, name, password, role, phone);
     if (result) {
@@ -33,7 +30,6 @@ const Register = () => {
       setRole("");
       navigate("/"); // Redirigir después del registro
     }
-
   };
 
   return (
@@ -121,22 +117,150 @@ const Register = () => {
 
             {/* Enlace para regresar a contactos */}
 
+          <div className="form-group">
+            <label className="form-label">
+              <FaEnvelope className="input-icon" /> Correo electrónico
+            </label>
+            <input
+              type="email"
+              className="form-control"
+              placeholder="tucorreo@ejemplo.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </div>
-          <p>¿Ya tienes una cuenta?
-            <button
-              className="btn btn-link p-0"
-              data-bs-toggle="modal"
-              data-bs-target="#exampleModal"
+
+          <div className="form-group">
+            <label className="form-label">
+              <FaLock className="input-icon" /> Contraseña
+            </label>
+            <input
+              type="password"
+              className="form-control"
+              placeholder="Escribe una contraseña segura"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">
+              <FaUserTag className="input-icon" /> Tipo de usuario
+            </label>
+            <select
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              className="form-select"
             >
-              Inicia sesión
-            </button>
-          </p>
+              <option value="">Selecciona tu rol</option>
+              <option value="client">Cliente</option>
+              <option value="provider">Proveedor</option>
+            </select>
+          </div>
 
-        </div>
-
-
-
+          <button type="submit" className="btn-submit">
+            ¡Regístrate!
+          </button>
+        </form>
       </div>
+
+      <style>{`
+        .register-container {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          min-height: 100vh;
+          background: #f0f2f5;
+          padding: 20px;
+        }
+
+        .register-card {
+          max-width: 500px;
+          width: 100%;
+          background: white;
+          padding: 30px;
+          border-radius: 15px;
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+          text-align: center;
+        }
+
+        .register-title {
+          font-size: 2rem;
+          color: #007bff;
+          margin-bottom: 10px;
+        }
+
+        .register-description {
+          font-size: 1rem;
+          color: #666;
+          margin-bottom: 30px;
+        }
+
+        .register-form .form-group {
+          margin-bottom: 20px;
+          text-align: left;
+        }
+
+        .form-label {
+          display: block;
+          font-size: 0.9rem;
+          color: #333;
+          font-weight: 600;
+          margin-bottom: 5px;
+          position: relative;
+        }
+
+        .input-icon {
+          margin-right: 5px;
+          color: #007bff;
+        }
+
+        .form-control {
+          width: 100%;
+          padding: 10px;
+          font-size: 1rem;
+          border: 1px solid #ccc;
+          border-radius: 8px;
+          outline: none;
+          transition: border-color 0.2s;
+        }
+
+        .form-control:focus {
+          border-color: #007bff;
+        }
+
+        .form-select {
+          width: 100%;
+          padding: 10px;
+          font-size: 1rem;
+          border: 1px solid #ccc;
+          border-radius: 8px;
+          outline: none;
+          transition: border-color 0.2s;
+        }
+
+        .form-select:focus {
+          border-color: #007bff;
+        }
+
+        .btn-submit {
+          width: 100%;
+          padding: 12px;
+          background-color: #007bff;
+          color: white;
+          font-size: 1.1rem;
+          font-weight: bold;
+          border: none;
+          border-radius: 8px;
+          cursor: pointer;
+          transition: background-color 0.3s;
+          margin-top: 20px;
+        }
+
+        .btn-submit:hover {
+          background-color: #0056b3;
+        }
+      `}</style>
     </div>
   );
 };
