@@ -38,7 +38,7 @@ const InfoTourPlans = () => {
 
         return store.favorites && store.favorites.some(favorite => favorite.id === actividadId);
     };
-    console.log(tourPlan, actividades);
+    console.log(tourPlan);
 
 
 

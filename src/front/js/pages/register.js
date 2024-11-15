@@ -46,12 +46,8 @@ const Register = () => {
 
         {/* Right Box */}
         <div className="col-md-6 d-flex justify-content-center align-items-center flex-column right-box ">
-
-
-
-
           <div className=" my-2 col-md-6 col-lg-10">
-            <form onSubmit={handleSubmit}> {/* Agregar el evento onSubmit al formulario */}
+            <form onSubmit={handleSubmit}>
               <div className="mb-3">
                 <label htmlFor="formGroupExampleInput" className="form-label">Nombre completo</label>
                 <input
@@ -109,62 +105,63 @@ const Register = () => {
                 </select>
               </div>
 
-              {/* Cambiar Link a un botón normal que llama a handleSubmit */}
+
               <button type="submit" className="btn btn-primary w-100 " >
                 Registrate
               </button>
             </form>
 
-            {/* Enlace para regresar a contactos */}
 
-          <div className="form-group">
-            <label className="form-label">
-              <FaEnvelope className="input-icon" /> Correo electrónico
-            </label>
-            <input
-              type="email"
-              className="form-control"
-              placeholder="tucorreo@ejemplo.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
+            {/* <form onSubmit={handleSubmit}>
 
-          <div className="form-group">
-            <label className="form-label">
-              <FaLock className="input-icon" /> Contraseña
-            </label>
-            <input
-              type="password"
-              className="form-control"
-              placeholder="Escribe una contraseña segura"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
 
-          <div className="form-group">
-            <label className="form-label">
-              <FaUserTag className="input-icon" /> Tipo de usuario
-            </label>
-            <select
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-              className="form-select"
-            >
-              <option value="">Selecciona tu rol</option>
-              <option value="client">Cliente</option>
-              <option value="provider">Proveedor</option>
-            </select>
-          </div>
+              <div className="form-group">
+                <label className="form-label">
+                  <FaEnvelope className="input-icon" /> Correo electrónico
+                </label>
+                <input
+                  type="email"
+                  className="form-control"
+                  placeholder="tucorreo@ejemplo.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
 
-          <button type="submit" className="btn-submit">
-            ¡Regístrate!
-          </button>
-        </form>
-      </div>
+              <div className="form-group">
+                <label className="form-label">
+                  <FaLock className="input-icon" /> Contraseña
+                </label>
+                <input
+                  type="password"
+                  className="form-control"
+                  placeholder="Escribe una contraseña segura"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
 
-      <style>{`
+              <div className="form-group">
+                <label className="form-label">
+                  <FaUserTag className="input-icon" /> Tipo de usuario
+                </label>
+                <select
+                  value={role}
+                  onChange={(e) => setRole(e.target.value)}
+                  className="form-select"
+                >
+                  <option value="">Selecciona tu rol</option>
+                  <option value="client">Cliente</option>
+                  <option value="provider">Proveedor</option>
+                </select>
+              </div>
+
+              <button type="submit" className="btn-submit">
+                ¡Regístrate!
+              </button>
+
+
+              <style>{`
         .register-container {
           display: flex;
           justify-content: center;
@@ -261,6 +258,10 @@ const Register = () => {
           background-color: #0056b3;
         }
       `}</style>
+            </form> */}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
